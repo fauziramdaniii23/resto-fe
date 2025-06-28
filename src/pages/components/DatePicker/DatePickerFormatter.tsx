@@ -28,12 +28,7 @@ const DatePickerFormatter = ({label, value, onChange, sx}: DatePickerFormatter) 
                 slotProps={{
                     openPickerButton: {
                         sx: {
-                            margin: '0 8px',
-                            backgroundColor: '#32b2c3 !important',
                             borderRadius: 4,
-                            '&:hover': {
-                                backgroundColor: '#b6bebf',
-                            },
                         },
                     }
                 }}

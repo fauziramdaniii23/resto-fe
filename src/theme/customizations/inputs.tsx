@@ -1,7 +1,6 @@
 import { alpha } from '@mui/material/styles';
 import type { Components, Theme } from '@mui/material';
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
-import { svgIconClasses } from '@mui/material/SvgIcon';
 import { toggleButtonGroupClasses } from '@mui/material/ToggleButtonGroup';
 import { toggleButtonClasses } from '@mui/material/ToggleButton';
 import CheckBoxOutlineBlankRoundedIcon from '@mui/icons-material/CheckBoxOutlineBlankRounded';
@@ -220,61 +219,6 @@ export const inputsCustomizations: Components<Theme> = {
       }),
     },
   },
-  // MuiIconButton: {
-  //   styleOverrides: {
-  //     root: ({ theme }) => ({
-  //       boxShadow: 'none',
-  //       borderRadius: (theme.vars || theme).shape.borderRadius,
-  //       textTransform: 'none',
-  //       fontWeight: theme.typography.fontWeightMedium,
-  //       letterSpacing: 0,
-  //       color: (theme.vars || theme).palette.text.primary,
-  //       border: '1px solid ',
-  //       borderColor: gray[200],
-  //       backgroundColor: alpha(gray[50], 0.3),
-  //       '&:hover': {
-  //         backgroundColor: gray[100],
-  //         borderColor: gray[300],
-  //       },
-  //       '&:active': {
-  //         backgroundColor: gray[200],
-  //       },
-  //       ...theme.applyStyles('dark', {
-  //         backgroundColor: gray[800],
-  //         borderColor: gray[700],
-  //         '&:hover': {
-  //           backgroundColor: gray[900],
-  //           borderColor: gray[600],
-  //         },
-  //         '&:active': {
-  //           backgroundColor: gray[900],
-  //         },
-  //       }),
-  //       variants: [
-  //         {
-  //           props: {
-  //             size: 'small',
-  //           },
-  //           style: {
-  //             width: '2.25rem',
-  //             height: '2.25rem',
-  //             padding: '0.25rem',
-  //             [`& .${svgIconClasses.root}`]: { fontSize: '1rem' },
-  //           },
-  //         },
-  //         {
-  //           props: {
-  //             size: 'medium',
-  //           },
-  //           style: {
-  //             width: '2.5rem',
-  //             height: '2.5rem',
-  //           },
-  //         },
-  //       ],
-  //     }),
-  //   },
-  // },
   MuiToggleButtonGroup: {
     styleOverrides: {
       root: ({ theme }) => ({
@@ -358,77 +302,6 @@ export const inputsCustomizations: Components<Theme> = {
             outline: `3px solid ${alpha(brand[500], 0.5)}`,
             outlineOffset: '2px',
           },
-        }),
-      }),
-    },
-  },
-  MuiInputBase: {
-    styleOverrides: {
-      root: {
-        border: 'none',
-      },
-      input: {
-        '&::placeholder': {
-          opacity: 0.7,
-          color: gray[500],
-        },
-      },
-    },
-  },
-  MuiOutlinedInput: {
-    styleOverrides: {
-      input: {
-        padding: 0,
-      },
-      root: ({ theme }) => ({
-        padding: '8px 12px',
-        color: (theme.vars || theme).palette.text.primary,
-        borderRadius: (theme.vars || theme).shape.borderRadius,
-        border: `1px solid ${(theme.vars || theme).palette.divider}`,
-        backgroundColor: (theme.vars || theme).palette.background.default,
-        transition: 'border 120ms ease-in',
-        '&:hover': {
-          borderColor: gray[400],
-        },
-        [`&.${outlinedInputClasses.focused}`]: {
-          outline: `3px solid ${alpha(brand[500], 0.5)}`,
-          borderColor: brand[400],
-        },
-        ...theme.applyStyles('dark', {
-          '&:hover': {
-            borderColor: gray[500],
-          },
-        }),
-        variants: [
-          {
-            props: {
-              size: 'small',
-            },
-            style: {
-              height: '2.25rem',
-            },
-          },
-          {
-            props: {
-              size: 'medium',
-            },
-            style: {
-              height: '2.5rem',
-            },
-          },
-        ],
-      }),
-      notchedOutline: {
-        border: 'none',
-      },
-    },
-  },
-  MuiInputAdornment: {
-    styleOverrides: {
-      root: ({ theme }) => ({
-        color: (theme.vars || theme).palette.grey[500],
-        ...theme.applyStyles('dark', {
-          color: (theme.vars || theme).palette.grey[400],
         }),
       }),
     },

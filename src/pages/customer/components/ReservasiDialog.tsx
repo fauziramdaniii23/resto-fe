@@ -9,6 +9,8 @@ import type {TransitionProps} from '@mui/material/transitions';
 import SendIcon from "@mui/icons-material/Send";
 import DatePickerFormatter from "@/pages/components/DatePicker/DatePickerFormatter.tsx";
 import TimePickerFormatter from "@/pages/components/DatePicker/TimePickerForrmatter.tsx";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -60,20 +62,24 @@ export default function ReservasiDialog() {
                 fullWidth={true}
                 maxWidth="sm"
             >
-                <DialogTitle>{"Reservasi Sekarang?"}</DialogTitle>
+                <DialogTitle>{"Reservation Now?"}</DialogTitle>
                 <DialogContent>
-                    <DatePickerFormatter
-                        value={date}
-                        onChange={(newValue) => setDate(newValue)}
-                        label="Tanggal Reservasi"
-                        sx={{width: '100%'}}
-                    />
-                    <TimePickerFormatter
-                        value={time}
-                        onChange={(newValue) => setTime(newValue)}
-                        label="Waktu Reservasi"
-                        sx={{width: '100%'}}
-                    />
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1}}>
+                        <DatePickerFormatter
+                            value={date}
+                            onChange={(newValue) => setDate(newValue)}
+                            label="Reservasi Date"
+                            sx={{width: '100%'}}
+                        />
+                        <TimePickerFormatter
+                            value={time}
+                            onChange={(newValue) => setTime(newValue)}
+                            label="Reservasi Time"
+                            sx={{width: '100%'}}
+                        />
+                        <TextField type="number" id="outlined-basic" label="number of guests" variant="outlined" />
+                    </Box>
+
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>

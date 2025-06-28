@@ -75,7 +75,7 @@ export default function Hero() {
                         color="text.secondary"
                         sx={{ textAlign: 'center'}}
                     >
-                        Selamat Datang {name}
+                        Welcome {name}
                     </Typography>
                     <Typography
                         variant="h1"
@@ -86,7 +86,7 @@ export default function Hero() {
                             fontSize: 'clamp(3rem, 10vw, 3.5rem)',
                         }}
                     >
-                        Reservasi&nbsp;
+                        Reservation&nbsp;
                         <Typography
                             component="span"
                             variant="h1"
@@ -98,7 +98,7 @@ export default function Hero() {
                                 }),
                             })}
                         >
-                            Sekarang
+                            Now
                         </Typography>
                     </Typography>
                     <Stack

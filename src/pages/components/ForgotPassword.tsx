@@ -9,8 +9,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from "@mui/material/Box";
 import Loader from "./Loader.tsx";
 import {useState} from "react";
-import {requestPost} from "../../api/api.ts";
-import type {TApiResponse, Void} from "../../type/type.ts";
+import {requestPost} from "@/api/api.ts";
+import type {TApiResponse, Void} from "@/type/type.ts";
 import {showToast} from "../util/toast.ts";
 
 interface ForgotPasswordProps {

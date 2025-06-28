@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import Logo from './SitemarkIcon';
+import Logo from './Logo.tsx';
 import ColorModeIconDropdown from "@/theme/ColorModeIconDropdown.tsx";
 import {Link as RouterLink, useNavigate} from "react-router-dom";
 import {useAuthStore} from "@/store/useAuthStore.ts";
@@ -22,6 +22,7 @@ import Avatar from "@mui/material/Avatar";
 import Menu from '@mui/material/Menu';
 import ShoppingCart from "./ShoppingCart.tsx";
 import {SUPER_ADMIN} from "@/constant";
+import Typography from "@mui/material/Typography";
 
 const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
@@ -144,9 +145,21 @@ export default function AppAppBar() {
         >
             <Container maxWidth={false}>
                 <StyledToolbar variant="dense" disableGutters>
-                    <Box sx={{flexGrow: 1, display: 'flex', alignItems: 'center', px: 0}}>
+                    <Box sx={{flexGrow: 1, display: 'flex', alignItems: 'center'}}>
                         <Logo/>
-                        <Box sx={{display: {xs: 'none', md: 'flex', gap: 1}}}>
+                        <Typography
+                            color="text.primary"
+                            sx={{
+                                fontSize: '1.8rem',
+                                fontWeight: 500,
+                                ml: 1,
+                                fontFamily: '"Lovers Quarrel", cursive',
+                                letterSpacing: '.2rem',
+                            }}
+                        >
+                            Resto Bahari
+                        </Typography>
+                        <Box sx={{display: {xs: 'none', md: 'flex', gap: 1, marginLeft: 10}}}>
                             {buttons.map((label) => (
                                 <Button
                                     key={label}

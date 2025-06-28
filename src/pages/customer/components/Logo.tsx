@@ -1,10 +1,7 @@
 import SvgIcon from '@mui/material/SvgIcon';
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 
-export default function SitemarkIcon() {
+export default function Logo() {
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', mr:2 }}>
         <SvgIcon sx={{height: 40, width: 50}}>
             <svg
                 height="800px"
@@ -103,18 +100,5 @@ export default function SitemarkIcon() {
                     d="M127.714,137.45c-37.58,0-68.152,38.794-68.152,86.479c0,34.9,16.354,65.998,41.235,79.48v33.256 c-5.747,5.06-9.163,12.397-9.163,20.132v45.817c0,4.744,3.846,8.591,8.591,8.591c4.744,0,8.591-3.846,8.591-8.591v-45.817 c0-3.451,1.829-6.577,4.893-8.36c2.644-1.538,4.27-4.366,4.27-7.425v-42.991c0-3.452-2.066-6.568-5.246-7.913 c-21.19-8.958-35.989-36.172-35.989-66.18c0-38.211,22.865-69.298,50.971-69.298s50.971,31.087,50.971,69.298 c0,30.008-14.799,57.221-35.989,66.18c-3.18,1.345-5.246,4.461-5.246,7.913v42.991c0,3.058,1.626,5.886,4.27,7.425 c3.064,1.783,4.893,4.909,4.893,8.36v82.47c0,4.744,3.846,8.591,8.591,8.591c4.744,0,8.591-3.846,8.591-8.591v-82.47 c0-7.735-3.417-15.071-9.163-20.132v-33.256c24.881-13.483,41.235-44.581,41.235-79.48 C195.866,176.244,165.294,137.45,127.714,137.45z"/>
             </svg>
         </SvgIcon>
-            <Typography
-                color="text.primary"
-                sx={{
-                    fontSize: '1.8rem',
-                    fontWeight: 500,
-                    ml: 1,
-                    fontFamily: '"Lovers Quarrel", cursive',
-                    letterSpacing: '.2rem',
-                }}
-            >
-                Resto Bahari
-            </Typography>
-        </Box>
     );
 }

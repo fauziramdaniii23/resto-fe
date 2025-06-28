@@ -1,6 +1,6 @@
 import api from "./axios.ts";
 import {showToast} from "../pages/util/toast.ts";
-import {redirectTo} from "../pages/util/navigation.ts";
+import {redirectTo} from "../pages/util/navigation.tsx";
 
 let logoutHandler: (() => void) | null = null;
 

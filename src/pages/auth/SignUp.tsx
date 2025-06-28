@@ -18,7 +18,7 @@ import {Link as RouterLink} from 'react-router-dom';
 import {useState} from "react";
 import {redirectToGoogle, requestPost} from "../../api/api.ts";
 import type {TApiResponse, TUser} from "../../type/type.ts";
-import {redirectTo} from "../util/navigation.ts";
+import {redirectTo} from "../util/navigation.tsx";
 import {showToast} from "../util/toast.ts";
 import Loader from "../components/Loader.tsx";
 import DialogVerifyEmail from "../components/DialogVerifyEmail.tsx";

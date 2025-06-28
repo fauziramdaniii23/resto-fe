@@ -2,7 +2,7 @@ import AppRoutes from "./route/AppRoute.tsx";
 import Toast from "./pages/components/Toast.tsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
-import {setNavigate} from "./pages/util/navigation.ts";
+import {setNavigate} from "./pages/util/navigation.tsx";
 import {useAuthStore} from "./store/useAuthStore.ts";
 import {injectLogoutHandler} from "./api/api.ts";
 

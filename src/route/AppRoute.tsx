@@ -23,8 +23,8 @@ const AppRoutes = () => {
             <Route path="/SignUp" element={<SignUp/>}/>
             <Route path="/login-google" element={<OAuth/>}/>
             <Route path="/Home" element={<Home/>}/>
-            <Route path="/Dashboard" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
-            <Route path="/Dashboard2" element={<SuperAdmin><MiniDrawer/></SuperAdmin>}/>
+            <Route path="/Dashboard2" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
+            <Route path="/Dashboard" element={<SuperAdmin><MiniDrawer/></SuperAdmin>}/>
         </Routes>
     );
 };
