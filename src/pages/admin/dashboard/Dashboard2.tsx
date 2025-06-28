@@ -134,7 +134,18 @@ export default function MiniDrawer(props: { disableCustomTheme?: boolean }) {
                             width: '100%'
                         }}>
                             <Logo/>
-                            {open && <Typography>Resto Bahari</Typography>}
+                            {open && <Typography
+                                color="text.primary"
+                                sx={{
+                                    fontSize: '1.8rem',
+                                    fontWeight: 500,
+                                    ml: 1,
+                                    fontFamily: '"Lovers Quarrel", cursive',
+                                    letterSpacing: '.1rem',
+                                }}
+                            >
+                                Resto Bahari
+                            </Typography>}
                         </Box>
                     </DrawerHeader>
                     <Divider/>
@@ -145,7 +156,6 @@ export default function MiniDrawer(props: { disableCustomTheme?: boolean }) {
                                     sx={[
                                         {
                                             minHeight: 48,
-                                            px: 2.5,
                                         },
                                         open
                                             ? {
@@ -160,14 +170,7 @@ export default function MiniDrawer(props: { disableCustomTheme?: boolean }) {
                                         sx={[
                                             {
                                                 justifyContent: 'center',
-                                            },
-                                            open
-                                                ? {
-                                                    mr: 3,
-                                                }
-                                                : {
-                                                    // mr: 'auto',
-                                                },
+                                            }
                                         ]}
                                     >
                                         {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
@@ -181,7 +184,7 @@ export default function MiniDrawer(props: { disableCustomTheme?: boolean }) {
                                                 }
                                                 : {
                                                     opacity: 0,
-                                                display: 'none'
+                                                    display: 'none'
                                                 },
                                         ]}
                                     />
@@ -195,35 +198,19 @@ export default function MiniDrawer(props: { disableCustomTheme?: boolean }) {
                 <AppBar color="transparent" position="fixed" open={open}>
                     <Toolbar>
                         <IconButton
-                            aria-label="open drawer"
-                            onClick={handleDrawerOpen}
-                            sx={[
-                                {
-                                    marginLeft: 3,
-                                    marginTop: 8,
-                                    backgroundColor: theme.palette.primary.main,
-                                    position: 'absolute',
-                                },
-                                open && {display: 'none'},
-                            ]}
+                            size="small"
+                            onClick={open ? handleDrawerClose : handleDrawerOpen}
+                            sx={{
+                                marginLeft: open ? -5 : 3,
+                                marginTop: 8,
+                                backgroundColor: theme.palette.primary.main,
+                                position: 'absolute',
+                                transition: 'all 0.3s ease-in-out'
+                            }}
                         >
-                            <ChevronRightIcon/>
+                            {open ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                         </IconButton>
-                        <IconButton
-                            aria-label="open drawer"
-                            onClick={handleDrawerClose}
-                            sx={[
-                                {
-                                    marginLeft: -6,
-                                    marginTop: 8,
-                                    backgroundColor: theme.palette.primary.main,
-                                    position: 'absolute',
-                                },
-                                !open && {display: 'none'},
-                            ]}
-                        >
-                            <ChevronLeftIcon/>
-                        </IconButton>
+
                         <Typography sx={{
                             marginLeft: 10,
                         }} variant="h6" noWrap component="div">

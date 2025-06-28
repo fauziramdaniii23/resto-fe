@@ -393,9 +393,3 @@ export const typography = {
 export const shape = {
   borderRadius: 8,
 };
-
-export const shadows = [
-  'none',
-  'var(--template-palette-baseShadow)',
-  ...defaultTheme.shadows.slice(2),
-];
