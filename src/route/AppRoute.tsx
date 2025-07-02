@@ -7,9 +7,8 @@ import VerifyEmail from "../pages/components/VerifyEmail.tsx";
 import ResetPassword from "../pages/components/ResetPassword.tsx";
 import PageNotFound from "@/pages/PageNotFound.tsx";
 import OAuth from "@/pages/auth/OAuth.tsx";
-import Dashboard from "@/pages/admin/dashboard/Dashboard.tsx";
 import SuperAdmin from "@/route/middleware/SuperAdmin.tsx";
-import MiniDrawer from "@/pages/admin/dashboard/Dashboard2.tsx";
+import Dashboard from "@/pages/admin/dashboard/Dashboard.tsx";
 
 const AppRoutes = () => {
     return (
@@ -23,8 +22,7 @@ const AppRoutes = () => {
             <Route path="/SignUp" element={<SignUp/>}/>
             <Route path="/login-google" element={<OAuth/>}/>
             <Route path="/Home" element={<Home/>}/>
-            <Route path="/Dashboard2" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
-            <Route path="/Dashboard" element={<SuperAdmin><MiniDrawer/></SuperAdmin>}/>
+            <Route path="/Dashboard" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
         </Routes>
     );
 };

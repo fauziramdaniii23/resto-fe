@@ -1,6 +1,5 @@
 import { alpha } from '@mui/material/styles';
 import type { Components, Theme } from '@mui/material';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import { toggleButtonGroupClasses } from '@mui/material/ToggleButtonGroup';
 import { toggleButtonClasses } from '@mui/material/ToggleButton';
 import CheckBoxOutlineBlankRoundedIcon from '@mui/icons-material/CheckBoxOutlineBlankRounded';
@@ -303,6 +302,35 @@ export const inputsCustomizations: Components<Theme> = {
             outlineOffset: '2px',
           },
         }),
+      }),
+    },
+  },
+  MuiIconButton: {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        border: '1px solid ',
+        borderColor: gray[200],
+        backgroundColor: 'oklch(98.4% 0.003 247.858)',
+        '&:hover': {
+          backgroundColor: gray[100],
+          borderColor: gray[300],
+        },
+        '&:active': {
+          backgroundColor: gray[200],
+        },
+        ...theme.applyStyles('dark', {
+          backgroundColor: 'oklch(12.9% 0.042 264.695)',
+          borderColor: gray[700],
+          color: gray[400],
+          '&:hover': {
+            backgroundColor: gray[900],
+            borderColor: gray[600],
+            color: gray[50],
+          },
+          '&:active': {
+            backgroundColor: gray[900],
+          },
+        })
       }),
     },
   },

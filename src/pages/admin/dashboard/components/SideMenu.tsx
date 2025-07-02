@@ -1,86 +1,76 @@
-import {styled} from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
-import MuiDrawer, {drawerClasses} from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import SelectContent from './SelectContent';
-import MenuContent from './MenuContent';
-import CardAlert from './CardAlert';
-import OptionsMenu from './OptionsMenu';
+import React from 'react';
+import {
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import HomeIcon from '@mui/icons-material/Home';
+import SettingsIcon from '@mui/icons-material/Settings';
 
-const drawerWidth = 240;
+const iconMap: Record<string, React.ReactElement> = {
+    home: <HomeIcon />,
+    settings: <SettingsIcon />,
+};
 
-const Drawer = styled(MuiDrawer)({
-    width: drawerWidth,
-    flexShrink: 0,
-    boxSizing: 'border-box',
-    mt: 10,
-    [`& .${drawerClasses.paper}`]: {
-        width: drawerWidth,
-        boxSizing: 'border-box',
-    },
-});
-
-export default function SideMenu() {
-    return (
-        <Drawer
-            variant="permanent"
-            sx={{
-                display: {xs: 'none', md: 'block'},
-                [`& .${drawerClasses.paper}`]: {
-                    backgroundColor: 'background.paper',
-                },
-            }}
-        >
-            <Box
-                sx={{
-                    display: 'flex',
-                    mt: 'calc(var(--template-frame-height, 0px) + 4px)',
-                    p: 1.5,
-                }}
-            >
-                <SelectContent/>
-            </Box>
-            <Divider/>
-            <Box
-                sx={{
-                    overflow: 'auto',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                }}
-            >
-                <MenuContent/>
-                {/*<CardAlert/>*/}
-            </Box>
-            <Stack
-                direction="row"
-                sx={{
-                    p: 2,
-                    gap: 1,
-                    alignItems: 'center',
-                    borderTop: '1px solid',
-                    borderColor: 'divider',
-                }}
-            >
-                <Avatar
-                    sizes="small"
-                    alt="Riley Carter"
-                    src="/static/images/avatar/7.jpg"
-                    sx={{width: 36, height: 36}}
-                />
-                <Box sx={{mr: 'auto'}}>
-                    <Typography variant="body2" sx={{fontWeight: 500, lineHeight: '16px'}}>
-                        Riley Carter
-                    </Typography>
-                    <Typography variant="caption" sx={{color: 'text.secondary'}}>
-                        riley@email.com
-                    </Typography>
-                </Box>
-                <OptionsMenu/>
-            </Stack>
-        </Drawer>
-    );
+export interface ExtendedTreeItemProps {
+    id: string;
+    label: string;
+    icon?: string;
+    children?: ExtendedTreeItemProps[];
 }
+
+interface SideMenuProps {
+    items: ExtendedTreeItemProps[];
+    selectedId: string | null;
+    onItemClick?: (id: string) => void;
+}
+
+export const SideMenu: React.FC<SideMenuProps> = ({ items, selectedId, onItemClick }) => {
+
+    const handleListItemClick = (id: string) => {
+        onItemClick?.(id);
+    };
+
+    return (
+        <>
+            {items.map((item) => {
+                const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+                const icon = item.icon && iconMap[item.icon];
+
+                if (hasChildren) {
+                    return (
+                        <Accordion key={item.id} disableGutters elevation={0}>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                <Typography>{item.label}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <List disablePadding>
+                                    <SideMenu items={item.children!} onItemClick={onItemClick} selectedId={selectedId} />
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
+                    );
+                } else {
+                    return (
+                        <ListItem key={item.id} component="div" disablePadding>
+                            <ListItemButton
+                                selected={selectedId === item.id}
+                                onClick={() => handleListItemClick(item.id)}
+                            >
+                                {icon && <ListItemIcon>{icon}</ListItemIcon>}
+                                <ListItemText primary={item.label} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+            })}
+        </>
+    );
+};

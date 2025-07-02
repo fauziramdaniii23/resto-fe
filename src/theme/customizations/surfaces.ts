@@ -13,7 +13,7 @@ export const surfacesCustomizations: Components<Theme> = {
         padding: 4,
         overflow: 'clip',
         backgroundColor: (theme.vars || theme).palette.background.default,
-        border: '1px solid',
+        border: 'none',
         borderColor: (theme.vars || theme).palette.divider,
         ':before': {
           backgroundColor: 'transparent',
@@ -40,7 +40,7 @@ export const surfacesCustomizations: Components<Theme> = {
         '&:hover': { backgroundColor: gray[50] },
         '&:focus-visible': { backgroundColor: 'transparent' },
         ...theme.applyStyles('dark', {
-          '&:hover': { backgroundColor: gray[800] },
+          '&:hover': { backgroundColor: alpha(theme.palette.primary.main, 0.1), },
         }),
       }),
     },
@@ -110,4 +110,49 @@ export const surfacesCustomizations: Components<Theme> = {
       },
     },
   },
+  MuiList: {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        backgroundColor: 'transparent',
+        padding: 0,
+      }),
+    },
+  },
+  MuiListItem: {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        backgroundColor: 'transparent',
+        border: 'none',
+        '&:hover': {
+          backgroundColor: 'rgba(0, 0, 0, 0.04)', // opsional: hover transparan ringan
+        },
+      }),
+    },
+  },
+  MuiListItemButton: {
+      styleOverrides: {
+          root: ({theme}) => ({
+              borderRadius: 8,
+            marginRight: 8,
+            marginLeft: 8,
+              '&:hover': {
+                  backgroundColor: alpha(theme.palette.primary.main, 0.1), // opsional efek hover ringan
+              },
+              '&.Mui-selected': {
+
+              },
+          }),
+      },
+  },
+  MuiListItemIcon:{
+    styleOverrides: {
+      root: ({ theme }) => ({
+        minWidth: 40,
+        color: (theme.vars || theme).palette.text.secondary,
+        '&.Mui-selected': {
+          color: (theme.vars || theme).palette.primary.main,
+        },
+      }),
+    },
+  }
 };
