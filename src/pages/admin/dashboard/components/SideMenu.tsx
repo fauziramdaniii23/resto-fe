@@ -46,9 +46,10 @@ export const SideMenu: React.FC<SideMenuProps> = ({ items, selectedId, onItemCli
 
                 if (hasChildren) {
                     return (
-                        <Accordion key={item.id} disableGutters elevation={0}>
+                        <Accordion key={item.id} defaultExpanded disableGutters elevation={0}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                <Typography>{item.label}</Typography>
+                                <Typography color="text.secondary"
+                                >{item.label}</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List disablePadding>

@@ -123,9 +123,6 @@ export const surfacesCustomizations: Components<Theme> = {
       root: ({ theme }) => ({
         backgroundColor: 'transparent',
         border: 'none',
-        '&:hover': {
-          backgroundColor: 'rgba(0, 0, 0, 0.04)', // opsional: hover transparan ringan
-        },
       }),
     },
   },
@@ -139,7 +136,7 @@ export const surfacesCustomizations: Components<Theme> = {
                   backgroundColor: alpha(theme.palette.primary.main, 0.1), // opsional efek hover ringan
               },
               '&.Mui-selected': {
-
+                backgroundColor: alpha(theme.palette.primary.main, 0.5),
               },
           }),
       },

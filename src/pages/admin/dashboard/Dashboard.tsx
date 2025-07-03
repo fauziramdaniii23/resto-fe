@@ -106,7 +106,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
     const [open, setOpen] = React.useState(true);
-    const [selectedId, setSelectedId] = useState<string | null>(null);
+    const [selectedId, setSelectedId] = useState<string | null>('1.1');
 
     const handleClick = () => {
         setOpen(!open);
@@ -124,9 +124,9 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
                         sx={{
                             '& .MuiDrawer-paper': {
                                 overflowY: 'scroll',
-                                scrollbarWidth: 'none', // Firefox
+                                scrollbarWidth: 'none',
                                 '&::-webkit-scrollbar': {
-                                    display: 'none',       // Chrome, Safari
+                                    display: 'none',
                                 },
                             },
                         }}
