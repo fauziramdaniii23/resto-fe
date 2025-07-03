@@ -1,11 +1,11 @@
-export type ExtendedTreeItemProps = {
-    icon?: string;
+export type MenusExtended = {
     id: string;
     label: string;
-    children?: ExtendedTreeItemProps[];
+    icon?: string;
+    children?: MenusExtended[];
 };
 
-export const Menus: ExtendedTreeItemProps[] = [
+export const Menus: MenusExtended[] = [
     {
         id: '1',
         label: 'Dashboard',
@@ -29,3 +29,38 @@ export const Menus: ExtendedTreeItemProps[] = [
     {id: '3', label: 'Catatan Keuangan', icon: 'folder'},
     {id: '4', label: 'Pengelolaan', icon: 'trash'},
 ];
+
+export function getMenuById(
+    menus: MenusExtended[],
+    id: string
+): MenusExtended | undefined {
+    for (const menu of menus) {
+        if (menu.id === id) return menu;
+        if (menu.children) {
+            const found = getMenuById(menu.children, id);
+            if (found) return found;
+        }
+    }
+    return undefined;
+}
+
+export function getBreadcrumbPath(
+    menus: MenusExtended[],
+    id?: string,
+    path: MenusExtended[] = []
+): MenusExtended[] | undefined {
+    if( !id) return undefined;
+    for (const menu of menus) {
+        const newPath = [...path, menu];
+
+        if (menu.id === id) {
+            return newPath;
+        }
+        if (menu.children) {
+            const found = getBreadcrumbPath(menu.children, id, newPath);
+            if (found) return found;
+        }
+    }
+    return undefined;
+}
+

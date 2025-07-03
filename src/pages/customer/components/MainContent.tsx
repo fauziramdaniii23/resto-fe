@@ -15,8 +15,8 @@ import {styled} from '@mui/material/styles';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import RssFeedRoundedIcon from '@mui/icons-material/RssFeedRounded';
 import {useEffect, useState} from "react";
-import type {Menus, TApiResponse} from "../../../type/type.ts";
-import {requestGet} from "../../../api/api.ts";
+import type {Menus, TApiResponse} from "@/type/type.ts";
+import {requestGet} from "@/api/api.ts";
 import Loader from "../../components/Loader.tsx";
 
 const cardData = [

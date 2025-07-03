@@ -13,21 +13,15 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
+import type {MenusExtended} from "@/pages/admin/util/navigation.tsx";
 
 const iconMap: Record<string, React.ReactElement> = {
     home: <HomeIcon />,
     settings: <SettingsIcon />,
 };
 
-export interface ExtendedTreeItemProps {
-    id: string;
-    label: string;
-    icon?: string;
-    children?: ExtendedTreeItemProps[];
-}
-
 interface SideMenuProps {
-    items: ExtendedTreeItemProps[];
+    items: MenusExtended[];
     selectedId: string | null;
     onItemClick?: (id: string) => void;
 }

@@ -11,10 +11,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AppTheme from "@/theme/AppTheme.tsx";
 import Logo from "@/pages/customer/components/Logo.tsx";
-import {Menus} from "@/pages/admin/util/navigation.tsx";
+import {getMenuById, Menus, type MenusExtended} from "@/pages/admin/util/navigation.tsx";
 import {SideMenu} from "@/pages/admin/dashboard/components/SideMenu.tsx";
 import {List} from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useTheme} from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import {DashboardAppBarr} from "@/pages/admin/dashboard/components/AppBarr.tsx";
@@ -78,17 +78,22 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
     const [open, setOpen] = React.useState(true);
-    const [selectedId, setSelectedId] = useState<string | null>('1.1');
+    const [selectedId, setSelectedId] = useState<string>('1.1');
+    const [selectedMenu, setSelectedMenu] = useState<MenusExtended | undefined>();
     const theme = useTheme();
 
     const handleClick = () => {
         setOpen(!open);
     };
 
-    const handleSelectedItemsChange = (selectedItem: string) => {
-        console.log("Selected items:", selectedItem);
-        setSelectedId(selectedItem);
+    const handleSelectedMenus = (id: string) => {
+        console.log("Selected items:", id);
+        setSelectedId(id);
     };
+
+    useEffect(() => {
+        setSelectedMenu(getMenuById(Menus, selectedId));
+    }, [selectedId]);
 
     const getIconButtonPosition = () => {
         if (open) {
@@ -143,7 +148,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
                     <List>
                         <SideMenu
                             items={Menus}
-                            onItemClick={(id) => handleSelectedItemsChange(id)}
+                            onItemClick={(id) => handleSelectedMenus(id)}
                             selectedId={selectedId}
                         />
                     </List>
@@ -168,7 +173,9 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
                 </IconButton>
 
                 <Box>
-                    <DashboardAppBarr/>
+                    <DashboardAppBarr
+                        items={selectedMenu}
+                    />
                     <Container maxWidth={false}
                         sx={{p:2}}
                     >
