@@ -24,7 +24,7 @@ import ShoppingCart from "./ShoppingCart.tsx";
 import {SUPER_ADMIN} from "@/constant";
 import Typography from "@mui/material/Typography";
 
-const StyledToolbar = styled(Toolbar)(({theme}) => ({
+export const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
