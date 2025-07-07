@@ -6,6 +6,11 @@ import {getBreadcrumbPath, Menus, type MenusExtended} from "@/pages/admin/util/n
 import {Breadcrumbs} from "@mui/material";
 import Box from "@mui/material/Box";
 import { Search } from "@/pages/customer/components/MainContent"
+import IconButton from "@mui/material/IconButton";
+import PersonIcon from '@mui/icons-material/Person';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import {Link as RouterLink} from "react-router-dom";
 
 type AppBarrProps = {
     items?: MenusExtended
@@ -36,6 +41,15 @@ export const DashboardAppBarr: React.FC<AppBarrProps> = ({ items }) => {
         );
     });
 
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Container
             maxWidth={false}
@@ -64,6 +78,19 @@ export const DashboardAppBarr: React.FC<AppBarrProps> = ({ items }) => {
             >
                 <Search/>
                 <ColorModeIconDropdown size="medium"/>
+                <IconButton onClick={handleClick}>
+                    <PersonIcon/>
+                </IconButton>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                >
+                    <MenuItem component={RouterLink} to="/Home">Home</MenuItem>
+                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                </Menu>
             </Box>
         </Container>
     )

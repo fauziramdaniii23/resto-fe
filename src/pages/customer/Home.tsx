@@ -5,7 +5,7 @@ import MainContent from './components/MainContent';
 import Latest from './components/Latest';
 import Footer from './components/Footer';
 import AppTheme from "../../theme/AppTheme.tsx";
-import Hero from "./components/Hero.tsx";
+import {Hero} from "./components/Hero.tsx";
 
 export default function Home(props: { disableCustomTheme?: boolean }) {
     return (

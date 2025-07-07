@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {alpha, styled} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
@@ -18,11 +17,9 @@ import {useAuthStore} from "@/store/useAuthStore.ts";
 import {requestPost} from "@/api/api.ts";
 import type {TApiResponse, Void} from "@/type/type.ts";
 import {useState} from "react";
-import Avatar from "@mui/material/Avatar";
-import Menu from '@mui/material/Menu';
 import ShoppingCart from "./ShoppingCart.tsx";
-import {SUPER_ADMIN} from "@/constant";
 import Typography from "@mui/material/Typography";
+import {Profile} from "@/pages/components/Profile.tsx";
 
 export const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
@@ -45,90 +42,20 @@ export default function AppAppBar() {
 
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const logout = useAuthStore((state) => state.logout);
-    const user = useAuthStore((state) => state.user);
     const navigate = useNavigate();
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const openDialogAvatar = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+
     const handleLogout = () => {
         requestPost<TApiResponse<Void>>('/logout')
             .then(() => {
                 logout();
+            }).finally(() => {
                 navigate('/SignIn');
-            }).finally()
+        })
     };
 
-    const Profile = () => {
-        return (
-            <Box
-                sx={{
-                    display: {xs: 'none', md: 'flex'},
-                    gap: 1,
-                    alignItems: 'center',
-                }}
-            >
-                <Box sx={{mr: 4}}>
-                    <ShoppingCart/>
-                </Box>
-                {isAuthenticated ? (
-                    <>
-                        <IconButton
-                            sx={{
-                                p: 0,
-                                outline: 'none',
-                                border: 'none',
-                                boxShadow: 'none',
-                            }}
-                            onClick={handleClick} size="small">
-                            <Avatar sx={{width: 32, height: 32}}>{user?.name?.charAt(0).toUpperCase() || 'U'}</Avatar>
-                        </IconButton>
-                        <Menu anchorEl={anchorEl} open={openDialogAvatar} onClose={handleClose}>
-                            {user?.role === SUPER_ADMIN && (
-                                <MenuItem component={RouterLink} to="/Dashboard">Dashboard</MenuItem>
-                            )}
-                            <MenuItem component={RouterLink} to="/profile">Profile</MenuItem>
-                            <MenuItem onClick={() => {
-                                handleLogout();
-                            }}>
-                                Logout
-                            </MenuItem>
-                        </Menu>
-                    </>
-                ) : (
-                    <>
-                        <Button
-                            component={RouterLink}
-                            to="/SignIn"
-                            color="primary"
-                            variant="text"
-                            size="small"
-                        >
-                            Sign in
-                        </Button>
-
-                        <Button
-                            component={RouterLink}
-                            to="/SignUp"
-                            color="primary"
-                            variant="contained"
-                            size="small"
-                        >
-                            Sign up
-                        </Button>
-                    </>
-                )}
-                <ColorModeIconDropdown/>
-            </Box>
-        )
-    };
     const [active, setActive] = useState<string>('Menus');
 
     const buttons = ['Menus', 'Pesanan', 'Riwayat'];
@@ -163,7 +90,7 @@ export default function AppAppBar() {
                             {buttons.map((label) => (
                                 <Button
                                     key={label}
-                                    sx={{mx:1}}
+                                    sx={{mx: 1}}
                                     variant={active === label ? 'contained' : 'text'}
                                     color={active === label ? 'primary' : 'info'}
                                     size="small"
@@ -174,7 +101,7 @@ export default function AppAppBar() {
                             ))}
                         </Box>
                     </Box>
-                    {Profile()}
+                    <Profile/>
 
                     <Box sx={{display: {xs: 'flex', md: 'none'}, gap: 1}}>
                         <ShoppingCart/>

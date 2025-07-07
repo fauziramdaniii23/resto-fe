@@ -35,7 +35,6 @@ export const navigationCustomizations: Components<Theme> = {
         },
       },
       paper: ({ theme }) => ({
-        marginTop: '4px',
         borderRadius: (theme.vars || theme).shape.borderRadius,
         border: `1px solid ${(theme.vars || theme).palette.divider}`,
         backgroundImage: 'none',

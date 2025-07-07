@@ -12,12 +12,14 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HomeIcon from '@mui/icons-material/Home';
+import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import type {MenusExtended} from "@/pages/admin/util/navigation.tsx";
 
 const iconMap: Record<string, React.ReactElement> = {
     home: <HomeIcon />,
     settings: <SettingsIcon />,
+    reservation: <BookmarkAddIcon />,
 };
 
 interface SideMenuProps {

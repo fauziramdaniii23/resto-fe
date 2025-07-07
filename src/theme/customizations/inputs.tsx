@@ -319,8 +319,8 @@ export const inputsCustomizations: Components<Theme> = {
           backgroundColor: gray[200],
         },
         ...theme.applyStyles('dark', {
-          backgroundColor: 'oklch(12.9% 0.042 264.695)',
           borderColor: gray[700],
+          backgroundColor: 'oklch(12.9% 0.042 264.695)',
           color: gray[400],
           '&:hover': {
             backgroundColor: gray[900],

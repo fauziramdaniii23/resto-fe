@@ -4,7 +4,6 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import image1 from '@/assets/image1.jpg';
 import image2 from '@/assets/image2.jpg';
 import ReservasiDialog from "@/pages/customer/components/ReservasiDialog.tsx";
 import {useAuthStore} from "@/store/useAuthStore.ts";
@@ -19,7 +18,7 @@ const StyledBox = styled('div')(({ theme }) => ({
     border: '1px solid',
     borderColor: (theme.vars || theme).palette.grey[200],
     boxShadow: '0 0 12px 8px hsla(220, 25%, 80%, 0.2)',
-    backgroundImage: `url(${image1})`,
+    backgroundImage: `url(${image2})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -36,7 +35,7 @@ const StyledBox = styled('div')(({ theme }) => ({
     }),
 }));
 
-export default function Hero() {
+export const Hero = () => {
     const name = useAuthStore((state) => state.user?.name);
     return (
         <Box
