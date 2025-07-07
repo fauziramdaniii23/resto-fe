@@ -117,6 +117,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
           useAuthStore.getState().login({
             token,
+            id: user.id,
             name: user.name,
             username: user.username,
             email: user.email,

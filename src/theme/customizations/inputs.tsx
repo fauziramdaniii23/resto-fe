@@ -310,7 +310,7 @@ export const inputsCustomizations: Components<Theme> = {
       root: ({ theme }) => ({
         border: '1px solid ',
         borderColor: gray[200],
-        backgroundColor: 'oklch(98.4% 0.003 247.858)',
+        // backgroundColor: 'oklch(98.4% 0.003 247.858)',
         '&:hover': {
           backgroundColor: gray[100],
           borderColor: gray[300],
@@ -320,7 +320,6 @@ export const inputsCustomizations: Components<Theme> = {
         },
         ...theme.applyStyles('dark', {
           borderColor: gray[700],
-          backgroundColor: 'oklch(12.9% 0.042 264.695)',
           color: gray[400],
           '&:hover': {
             backgroundColor: gray[900],

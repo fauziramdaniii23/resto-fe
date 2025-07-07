@@ -165,6 +165,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
                         top: 45,
                         borderRadius: '50%',
                         transition: 'all 0.2s ease',
+                        backgroundColor: 'oklch(12.9% 0.042 264.695)',
                     }}
                 >
                     {open ? <ChevronLeftIcon/> : <ChevronRightIcon/>}

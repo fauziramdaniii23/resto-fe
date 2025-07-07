@@ -8,9 +8,9 @@ export const injectLogoutHandler = (logout: () => void) => {
     logoutHandler = logout;
 };
 
-export const requestGet = async <T>(url: string): Promise<T> => {
+export const requestGet = async <T>(url: string, params?: Record<string, unknown>): Promise<T> => {
     try {
-        const response = await api.get<T>(url);
+        const response = await api.get<T>(url, {params});
         return response.data;
     } catch (error: unknown) {
         handleError(error);
@@ -56,10 +56,6 @@ const handleError = (error: any) => {
 
         case 403:
             message = 'Anda tidak memiliki izin untuk mengakses.';
-            break;
-
-        case 404:
-            message = 'Sumber daya tidak ditemukan.';
             break;
 
         default:

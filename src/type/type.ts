@@ -15,7 +15,7 @@ export type TLoginResponse = {
 }
 
 export type TUser = {
-    id: bigint;
+    id: number;
     name: string;
     username: string;
     email: string;
