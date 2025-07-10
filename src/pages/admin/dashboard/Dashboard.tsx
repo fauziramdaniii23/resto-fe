@@ -11,10 +11,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AppTheme from "@/theme/AppTheme.tsx";
 import Logo from "@/pages/customer/components/Logo.tsx";
-import {getMenuById, Menus, type MenusExtended} from "@/pages/admin/util/navigation.tsx";
+import {getMenuById, DashboardMenus} from "@/pages/admin/util/navigation.tsx";
 import {SideMenu} from "@/pages/admin/dashboard/components/SideMenu.tsx";
 import {List} from "@mui/material";
-import {useEffect, useState} from "react";
 import {useTheme} from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import {DashboardAppBarr} from "@/pages/admin/dashboard/components/AppBarr.tsx";
@@ -77,24 +76,19 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 );
 
-export default function Dashboard(props: { disableCustomTheme?: boolean }) {
+type DashboardProps = {
+    id: string;
+    disableCustomTheme?: boolean;
+}
+
+
+export default function Dashboard(props: DashboardProps) {
     const [open, setOpen] = React.useState(true);
-    const [selectedId, setSelectedId] = useState<string>('1.1');
-    const [selectedMenu, setSelectedMenu] = useState<MenusExtended | undefined>();
     const theme = useTheme();
 
     const handleClick = () => {
         setOpen(!open);
     };
-
-    const handleSelectedMenus = (id: string) => {
-        console.log("Selected items:", id);
-        setSelectedId(id);
-    };
-
-    useEffect(() => {
-        setSelectedMenu(getMenuById(Menus, selectedId));
-    }, [selectedId]);
 
     const getIconButtonPosition = () => {
         if (open) {
@@ -148,9 +142,9 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
                     <Divider/>
                     <List>
                         <SideMenu
-                            items={Menus}
-                            onItemClick={(id) => handleSelectedMenus(id)}
-                            selectedId={selectedId}
+                            items={DashboardMenus}
+                            // onItemClick={(id) => handleSelectedMenus(id)}
+                            selectedId={props.id}
                         />
                     </List>
                     <Divider sx={{marginTop: '1rem'}}/>
@@ -165,7 +159,9 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
                         top: 45,
                         borderRadius: '50%',
                         transition: 'all 0.2s ease',
-                        backgroundColor: 'oklch(12.9% 0.042 264.695)',
+                        // backgroundColor: mode === 'dark'
+                        //     ? 'oklch(12.9% 0.042 264.695)'
+                        //     : 'oklch(98.4% 0.003 247.858)',
                     }}
                 >
                     {open ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
@@ -173,16 +169,17 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
 
                 <Box
                     sx={{
-                        width: '100%',
+                        width:'100%',
                     }}
                 >
                     <DashboardAppBarr
-                        items={selectedMenu}
+                        items={getMenuById(DashboardMenus,props.id)}
                     />
-                    <Container maxWidth={false}
-                        sx={{p:2}}
+                    <Container
+                        maxWidth={false}
+                        sx={{p:2, ml: 0, mr: 0}}
                     >
-                        <MainContent id={selectedId}/>
+                        <MainContent id={props.id} openSideNav={open}/>
                     </Container>
                 </Box>
             </Box>

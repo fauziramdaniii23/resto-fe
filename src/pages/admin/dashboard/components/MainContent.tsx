@@ -2,17 +2,19 @@ import {MainDashboard} from "@/pages/admin/dashboard/Main.tsx";
 import {Reservation} from "@/pages/admin/dashboard/customers/Reservation.tsx";
 import PageNotFound from "@/pages/PageNotFound.tsx";
 
-interface Props {
+export type TPropsSideNav = {
     id: string;
+    openSideNav: boolean;
 }
 
-const MapMainComponent: Record<string, React.ComponentType<Props>> = {
+const MapMainComponent: Record<string, React.ComponentType<TPropsSideNav>> = {
     '1.1': MainDashboard,
     '2.1': Reservation
 }
 
-export const MainContent = ({ id }: Props) => {
+export const MainContent = ({ id, openSideNav }: TPropsSideNav) => {
     const Component = MapMainComponent[id];
+    console.log(openSideNav)
 
     if (!Component) {
         return (
@@ -20,6 +22,5 @@ export const MainContent = ({ id }: Props) => {
         )
     }
 
-    return <Component id={id}/>;
-
+    return <Component id={id} openSideNav={openSideNav}/>;
 }

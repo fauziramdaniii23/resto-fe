@@ -15,7 +15,7 @@ import {styled} from '@mui/material/styles';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import RssFeedRoundedIcon from '@mui/icons-material/RssFeedRounded';
 import {useEffect, useState} from "react";
-import type {Menus, TApiResponse} from "@/type/type.ts";
+import type {TMenus, TApiResponse} from "@/type/type.ts";
 import {requestGet} from "@/api/api.ts";
 import Loader from "../../components/Loader.tsx";
 
@@ -144,7 +144,7 @@ export default function MainContent() {
     const [focusedCardIndex, setFocusedCardIndex] = useState<number | null>(
         null,
     );
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const handleFocus = (index: number) => {
         setFocusedCardIndex(index);
@@ -158,15 +158,15 @@ export default function MainContent() {
         console.info('You clicked the filter chip.');
     };
 
-    const [menus, setMenus] = useState<Menus[]>([]);
-    useEffect(() => {
-        setLoading(true);
-        requestGet<TApiResponse<Menus[]>>('/menus')
-            .then((res) => setMenus(res.data))
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
+    const [menus, setMenus] = useState<TMenus[]>([]);
+    // useEffect(() => {
+    //     setLoading(true);
+    //     requestGet<TApiResponse<Menus[]>>('/menus')
+    //         .then((res) => setMenus(res.data))
+    //         .finally(() => {
+    //             setLoading(false);
+    //         });
+    // }, []);
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', gap: 4}}>
             <Loader show={loading}/>

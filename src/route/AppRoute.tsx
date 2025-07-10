@@ -9,6 +9,7 @@ import PageNotFound from "@/pages/PageNotFound.tsx";
 import OAuth from "@/pages/auth/OAuth.tsx";
 import SuperAdmin from "@/route/middleware/SuperAdmin.tsx";
 import Dashboard from "@/pages/admin/dashboard/Dashboard.tsx";
+import {DASHBOARD_HOME, DASHBOARD_RESERVATION} from "@/pages/admin/util/navigation.tsx";
 
 const AppRoutes = () => {
     return (
@@ -22,7 +23,8 @@ const AppRoutes = () => {
             <Route path="/SignUp" element={<SignUp/>}/>
             <Route path="/login-google" element={<OAuth/>}/>
             <Route path="/Home" element={<Home/>}/>
-            <Route path="/Dashboard" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
+            <Route path="/Dashboard" element={<SuperAdmin><Dashboard id={DASHBOARD_HOME}/></SuperAdmin>}/>
+            <Route path="/Dashboard/Reservation" element={<SuperAdmin><Dashboard id={DASHBOARD_RESERVATION}/></SuperAdmin>}/>
         </Routes>
     );
 };

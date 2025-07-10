@@ -60,19 +60,19 @@ export const Profile = () => {
                         <Avatar sx={{width: 32, height: 32}}>{user?.name?.charAt(0).toUpperCase() || 'U'}</Avatar>
                     </IconButton>
                     <Menu anchorEl={anchorEl} open={openDialogAvatar} onClose={handleClose}
-                          anchorOrigin={{
-                              vertical: 'top',
-                              horizontal: 'right',
-                          }}
-                          transformOrigin={{
-                              vertical: 'top',
-                              horizontal: 'left',
-                          }}
-                          PaperProps={{
-                              sx: {
-                                  ml: 4,
-                              },
-                          }}
+                          // anchorOrigin={{
+                          //     vertical: 'top',
+                          //     horizontal: 'right',
+                          // }}
+                          // transformOrigin={{
+                          //     vertical: 'top',
+                          //     horizontal: 'left',
+                          // }}
+                          // PaperProps={{
+                          //     sx: {
+                          //         ml: 4,
+                          //     },
+                          // }}
                     >
                         {user?.role === SUPER_ADMIN && (
                             <MenuItem component={RouterLink} to="/Dashboard">Dashboard</MenuItem>

@@ -14,12 +14,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HomeIcon from '@mui/icons-material/Home';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
-import type {MenusExtended} from "@/pages/admin/util/navigation.tsx";
+import {DASHBOARD_HOME, DASHBOARD_RESERVATION, type MenusExtended} from "@/pages/admin/util/navigation.tsx";
+import {useNavigate} from "react-router-dom";
 
 const iconMap: Record<string, React.ReactElement> = {
-    home: <HomeIcon />,
-    settings: <SettingsIcon />,
-    reservation: <BookmarkAddIcon />,
+    home: <HomeIcon/>,
+    settings: <SettingsIcon/>,
+    reservation: <BookmarkAddIcon/>,
 };
 
 interface SideMenuProps {
@@ -28,10 +29,21 @@ interface SideMenuProps {
     onItemClick?: (id: string) => void;
 }
 
-export const SideMenu: React.FC<SideMenuProps> = ({ items, selectedId, onItemClick }) => {
+export const SideMenu: React.FC<SideMenuProps> = ({items, selectedId}) => {
+    const navigate = useNavigate();
 
     const handleListItemClick = (id: string) => {
-        onItemClick?.(id);
+        switch (id) {
+            case DASHBOARD_HOME:
+                navigate('/Dashboard');
+                break;
+            case DASHBOARD_RESERVATION:
+                navigate('/Dashboard/Reservation');
+                break;
+            default:
+                navigate('/PageNotFound');
+                break;
+        }
     };
 
     return (
@@ -43,13 +55,13 @@ export const SideMenu: React.FC<SideMenuProps> = ({ items, selectedId, onItemCli
                 if (hasChildren) {
                     return (
                         <Accordion key={item.id} defaultExpanded disableGutters elevation={0}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                                 <Typography color="text.secondary"
                                 >{item.label}</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List disablePadding>
-                                    <SideMenu items={item.children!} onItemClick={onItemClick} selectedId={selectedId} />
+                                    <SideMenu items={item.children!} selectedId={selectedId}/>
                                 </List>
                             </AccordionDetails>
                         </Accordion>
@@ -62,7 +74,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ items, selectedId, onItemCli
                                 onClick={() => handleListItemClick(item.id)}
                             >
                                 {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                                <ListItemText primary={item.label} />
+                                <ListItemText primary={item.label}/>
                             </ListItemButton>
                         </ListItem>
                     );

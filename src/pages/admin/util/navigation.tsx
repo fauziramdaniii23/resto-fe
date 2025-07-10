@@ -1,3 +1,6 @@
+export const DASHBOARD_HOME = '1.1';
+export const DASHBOARD_RESERVATION = '2.1';
+
 export type MenusExtended = {
     id: string;
     label: string;
@@ -5,7 +8,7 @@ export type MenusExtended = {
     children?: MenusExtended[];
 };
 
-export const Menus: MenusExtended[] = [
+export const DashboardMenus: MenusExtended[] = [
     {
         id: '1',
         label: 'Dashboard',

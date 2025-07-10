@@ -8,6 +8,13 @@ export type TApiResponse<T> = {
     readonly data: T;
     readonly info?: string;
 };
+export type TApiPaginateResponse<T> = {
+    readonly success: boolean;
+    readonly status: number;
+    readonly data: T[];
+    readonly info?: string;
+    readonly total?: number;
+};
 
 export type TLoginResponse = {
     user: TUser,
@@ -25,7 +32,7 @@ export type TUser = {
     updated_at: Date;
 }
 
-export type Menus = {
+export type TMenus = {
     id: bigint;
     name: string;
     description: string;
