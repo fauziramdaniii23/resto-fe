@@ -14,7 +14,6 @@ const MapMainComponent: Record<string, React.ComponentType<TPropsSideNav>> = {
 
 export const MainContent = ({ id, openSideNav }: TPropsSideNav) => {
     const Component = MapMainComponent[id];
-    console.log(openSideNav)
 
     if (!Component) {
         return (

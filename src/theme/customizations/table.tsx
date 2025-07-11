@@ -30,8 +30,11 @@ export const tableCustomizations: Components<Theme> = {
                 fontSize: 14,
             }),
             head: ({theme}) => ({
+                zIndex: 99,
                 fontWeight: 600,
                 color: gray[800],
+                backgroundColor: alpha(theme.palette.primary.main, 0.5),
+                backdropFilter: 'blur(8px)',
                 ...theme.applyStyles('dark', {
                     color: 'hsl(0, 0%, 100%)',
                 }),

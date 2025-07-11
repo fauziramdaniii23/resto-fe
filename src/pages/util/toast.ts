@@ -15,7 +15,7 @@ export const showToast = (type: string = 'default', message: string, options?: T
 
     toastFn(message, {
         position: "top-right" as ToastPosition,
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,

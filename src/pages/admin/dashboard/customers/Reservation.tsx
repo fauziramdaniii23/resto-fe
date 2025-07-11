@@ -4,6 +4,7 @@ import {type Column, DataTable} from "@/pages/components/DataTable/Table.tsx";
 import type {TPropsSideNav} from "@/pages/admin/dashboard/components/MainContent.tsx";
 import React from "react";
 import {formatDate} from "@/pages/util/parsingdate.ts";
+import Chip from "@mui/material/Chip";
 
 type TReservation = {
     id: number,
@@ -15,6 +16,7 @@ type TReservation = {
     name: string;
     table_number: number,
     capacity: number,
+    action: () => void;
 }
 
 const columns: Column<TReservation>[] = [
@@ -26,10 +28,6 @@ const columns: Column<TReservation>[] = [
         key: 'reserved_at',
         label: 'Reservation Date',
         format: (val) => formatDate(val),
-    },
-    {
-        key: 'status',
-        label: 'Status',
     },
     {
         key: 'table_number',
@@ -46,17 +44,29 @@ const columns: Column<TReservation>[] = [
         label: 'Note',
         maxWidth: 280
     },
-];
+    {
+        key: 'status',
+        label: 'Status',
+        align: 'center',
+        format: (val) =>
+            <Chip
+                color={
+                    val === 'confirmed' ? 'success' :
+                    val === 'pending' ? 'warning' :
+                    val === 'cancelled' ? 'error' : 'default'
+                }
+                label={val}/>
 
-export const Reservation: React.FC<TPropsSideNav>  = ({id, openSideNav}) => {
+    }
+]
+const onActionClick = (mode: string, data: TReservation) => {
+    console.log(`Action: ${mode} on reservation: ${data.note}`);
+}
+export const Reservation: React.FC<TPropsSideNav>  = ({id}) => {
     return (
-        <Box
-            sx={{
-                width: openSideNav ? `calc(100% - ${20}px)` : '100%',
-            }}
-        >
+        <Box>
             <Typography variant="h6" component="div">Reservation Page {id}</Typography>
-            <DataTable <TReservation> url="/reservation" columns={columns}/>
+            <DataTable <TReservation> url="/reservation" columns={columns} action onActionClick={onActionClick}/>
         </Box>
     );
 }
