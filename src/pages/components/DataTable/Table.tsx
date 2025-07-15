@@ -13,11 +13,16 @@ import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import {Skeleton} from "@mui/material";
+import {ListItemIcon, ListItemText, Skeleton} from "@mui/material";
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditSquareIcon from '@mui/icons-material/EditSquare';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+export type TActionMenu = 'view' | 'edit' | 'delete';
 
 export type Column<T> = {
     key: keyof T;
@@ -32,11 +37,11 @@ export type DataTableProps<T> = {
     columns: Column<T>[];
     maxHeight?: number;
     action?: boolean;
-    onActionClick?: (mode: 'view' | 'edit' | 'delete', data: T) => void;
+    onActionClick?: (mode: TActionMenu, data: T) => void;
 };
 
 type ActionMenuProps = {
-    onClick: (mode: 'view' | 'edit' | 'delete') => void;
+    onClick: (mode: TActionMenu) => void;
 };
 
 function ActionMenu({onClick}: ActionMenuProps) {
@@ -47,10 +52,13 @@ function ActionMenu({onClick}: ActionMenuProps) {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = (mode?: 'view' | 'edit' | 'delete') => {
+    const handleClose = (mode?: TActionMenu) => {
         setAnchorEl(null);
         if (mode) onClick(mode);
     };
+    const actionMenu: TActionMenu[] = [
+        'view', 'edit', 'delete',
+    ]
 
     return (
         <>
@@ -58,9 +66,18 @@ function ActionMenu({onClick}: ActionMenuProps) {
                 <MoreVertIcon/>
             </IconButton>
             <Menu anchorEl={anchorEl} open={open} onClose={() => handleClose()}>
-                <MenuItem onClick={() => handleClose('view')}>View</MenuItem>
-                <MenuItem onClick={() => handleClose('edit')}>Edit</MenuItem>
-                <MenuItem onClick={() => handleClose('delete')}>Delete</MenuItem>
+                {
+                    actionMenu.map((mode) => (
+                        <MenuItem sx={{mr:2}} onClick={() => handleClose(mode)}>
+                            <ListItemIcon>
+                                {mode === 'view' && <VisibilityIcon/>}
+                                {mode === 'edit' && <EditSquareIcon/>}
+                                {mode === 'delete' && <DeleteIcon/>}
+                            </ListItemIcon>
+                            <ListItemText>{mode.charAt(0).toUpperCase() + mode.slice(1)}</ListItemText>
+                        </MenuItem>
+                    ))
+                }
             </Menu>
         </>
     );

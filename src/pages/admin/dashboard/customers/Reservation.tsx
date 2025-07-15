@@ -5,17 +5,22 @@ import type {TPropsSideNav} from "@/pages/admin/dashboard/components/MainContent
 import React from "react";
 import {formatDate} from "@/pages/util/parsingdate.ts";
 import Chip from "@mui/material/Chip";
+import DialogReservationDashboard from "@/pages/admin/dashboard/components/DialogReservationDashboard.tsx";
+import type {TUser} from "@/type/type.ts";
 
-type TReservation = {
+export type TTables = {
+    id: number,
+    table_number: number,
+    capacity: number,
+}
+
+export type TReservation = {
     id: number,
     reserved_at: string,
     status: string,
-    table_id: number,
     note: string,
-    user_id: number;
-    name: string;
-    table_number: number,
-    capacity: number,
+    user: TUser,
+    tables: TTables[],
     action: () => void;
 }
 
@@ -59,12 +64,29 @@ const columns: Column<TReservation>[] = [
 
     }
 ]
-const onActionClick = (mode: string, data: TReservation) => {
-    console.log(`Action: ${mode} on reservation: ${data.note}`);
-}
+
 export const Reservation: React.FC<TPropsSideNav>  = ({id}) => {
+    const [modeDialog, setModeDialog] = React.useState<string>('');
+    const [dataReservation, setDataReservation] = React.useState<TReservation>({} as TReservation);
+    const [openDialog, setOpenDialog] = React.useState<boolean>(true);
+    const onActionClick = (mode: string, data: TReservation) => {
+        setDataReservation(data);
+        setModeDialog(mode);
+        if(data && mode){
+            setOpenDialog(true);
+        }
+    }
     return (
         <Box>
+            {openDialog && modeDialog && (
+                <DialogReservationDashboard
+                    mode={modeDialog}
+                    data={dataReservation}
+                    openDialog={openDialog}
+                    onClose={() => setOpenDialog(false)}
+                />
+            )}
+
             <Typography variant="h6" component="div">Reservation Page {id}</Typography>
             <DataTable <TReservation> url="/reservation" columns={columns} action onActionClick={onActionClick}/>
         </Box>

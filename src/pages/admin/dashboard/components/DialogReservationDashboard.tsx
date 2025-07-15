@@ -17,7 +17,8 @@ import {Autocomplete, CircularProgress} from "@mui/material";
 import {requestGet, requestPost} from "@/api/api.ts";
 import type {TApiResponse, Void} from "@/type/type.ts";
 import {showToast} from "@/pages/util/toast.ts";
-import {useAuthStore} from "@/store/useAuthStore.ts";
+import type {TReservation} from "@/pages/admin/dashboard/customers/Reservation.tsx";
+import dayjs from "dayjs";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -28,30 +29,37 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-type TTables = {
-    id: number;
-    table_number: number;
-    capacity: number;
+export type TTables = {
+    id: number,
+    table_number: number,
+    capacity: number,
     status: string;
 }
 
-export default function ReservasiDialog() {
-    const user = useAuthStore((state) => state.user);
-    const [date, setDate] = React.useState('');
-    const [time, setTime] = React.useState('');
-    const [note, setNote] = React.useState('');
+type DialogReservationDashboardProps = {
+    mode: string;
+    data: TReservation;
+    openDialog: boolean;
+    onClose?: () => void;
+};
+
+export default function DialogReservationDashboard ({mode, data, openDialog, onClose}: DialogReservationDashboardProps) {
+    const reservedDate = dayjs(data.reserved_at)
+    const [date, setDate] = React.useState(reservedDate.format('YYYY-MM-DD'));
+    const [time, setTime] = React.useState(reservedDate.format('HH:mm'));
+    const [note, setNote] = React.useState(data.note);
+
     const [optionTables, setOptionTables] = useState<TTables[]>([]);
-    const [selectedTable, setSelectedTable] = useState<TTables[]>([]);
-    const [open, setOpen] = React.useState(false);
+    const [selectedTable, setSelectedTable] = useState<TTables[]>(
+        (data.tables ?? []).map(table => ({
+            ...table,
+            status: 'available'
+        }))
+    );
+
     const [loading, setLoading] = useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const handleClose = () => onClose?.();
 
     const getDataTables = () => {
         setLoading(true);
@@ -69,10 +77,10 @@ export default function ReservasiDialog() {
     }
 
     useEffect(() => {
-        if(time && date){
+        if(time && date && mode !== 'view') {
             getDataTables();
         }
-    }, [time]);
+    }, [date, time]);
 
     const handleChange = (_: unknown, newValue: TTables[]) => {
         setSelectedTable(newValue);
@@ -81,13 +89,12 @@ export default function ReservasiDialog() {
 
     const submitReservasi = () => {
         const payload = {
-            user: user?.id,
+            user: data.user.id,
             date: date,
             time: time,
             tables: selectedTable,
             note: note,
         }
-        console.log('payload', payload);
         requestPost<TApiResponse<Void>, typeof payload>('/reservation', payload)
             .then((res) => {
                 console.log('Reservasi berhasil:', res);
@@ -104,17 +111,8 @@ export default function ReservasiDialog() {
 
     return (
         <React.Fragment>
-            <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                sx={{minWidth: 'fit-content'}}
-                onClick={handleClickOpen}
-            >
-                Click here to Reservasi
-            </Button>
             <Dialog
-                open={open}
+                open={openDialog}
                 slots={{
                     transition: Transition,
                 }}
@@ -128,23 +126,32 @@ export default function ReservasiDialog() {
                 <DialogContent>
                     <FormControl sx={{width: '100%'}} component="fieldset">
                         <Box sx={{display: 'flex', flexDirection: 'column', gap: 2, mt: 1}}>
+                            <TextField
+                                value={data.user.name}
+                                disabled
+                                label="Customer Name"
+                                variant="outlined" />
                             <DatePickerFormatter
+                                disabled={mode === 'view'}
                                 value={date}
                                 onChange={(newValue) => setDate(newValue)}
                                 label="Reservasi Date"
                                 sx={{width: '100%'}}
                             />
                             <TimePickerFormatter
+                                disabled={mode === 'view'}
                                 value={time}
                                 onChange={(newValue) => setTime(newValue)}
                                 label="Reservasi Time"
                                 sx={{width: '100%'}}
                             />
                             <Autocomplete
+                                disabled={mode === 'view'}
                                 multiple
                                 options={optionTables}
                                 getOptionLabel={(option) => `Meja ${option.table_number} (Kapasitas: ${option.capacity} orang)`}
                                 getOptionDisabled={(option) => option.status !== 'available'}
+                                noOptionsText="Please select a Reservation DateTime first"
                                 loading={loading}
                                 value={selectedTable}
                                 onChange={handleChange}
@@ -166,6 +173,7 @@ export default function ReservasiDialog() {
                                 )}
                             />
                             <TextField
+                                disabled={mode === 'view'}
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
                                 label="Note"

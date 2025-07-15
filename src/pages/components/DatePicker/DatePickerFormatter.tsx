@@ -9,12 +9,14 @@ type DatePickerFormatter = {
     value: string;
     onChange: (value: string) => void;
     sx?: SxProps
+    disabled?: boolean;
 };
 
-const DatePickerFormatter = ({label, value, onChange, sx}: DatePickerFormatter) => {
+const DatePickerFormatter = ({label, value, onChange, sx, disabled}: DatePickerFormatter) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+                disabled={disabled}
                 sx={sx}
                 label={label}
                 value={value ? dayjs(value) : null}

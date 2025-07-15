@@ -9,12 +9,14 @@ type TimePickerFormatter = {
     value: string;
     onChange: (value: string) => void;
     sx?: SxProps
+    disabled?: boolean;
 };
 
-const TimePickerFormatter = ({label, value, onChange, sx}: TimePickerFormatter) => {
+const TimePickerFormatter = ({label, value, onChange, sx, disabled}: TimePickerFormatter) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <MobileTimePicker
+                disabled={disabled}
                 sx={sx}
                 label={label}
                 ampm={false}

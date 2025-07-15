@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import image2 from '@/assets/image2.jpg';
-import ReservasiDialog from "@/pages/customer/components/ReservasiDialog.tsx";
+import DialogReservation from "@/pages/customer/components/DialogReservation.tsx";
 import {useAuthStore} from "@/store/useAuthStore.ts";
 
 const StyledBox = styled('div')(({ theme }) => ({
@@ -106,7 +106,7 @@ export const Hero = () => {
                         useFlexGap
                         sx={{ width: { xs: '100%', sm: '350px' }, justifyContent: 'center' }}
                     >
-                        <ReservasiDialog/>
+                        <DialogReservation/>
                     </Stack>
                     <Typography
                         variant="caption"
