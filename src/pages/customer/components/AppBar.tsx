@@ -20,6 +20,7 @@ import {useState} from "react";
 import ShoppingCart from "./ShoppingCart.tsx";
 import Typography from "@mui/material/Typography";
 import {Profile} from "@/pages/components/Profile.tsx";
+import {SUPER_ADMIN} from "@/constant";
 
 export const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
@@ -41,6 +42,7 @@ export default function AppAppBar() {
     const [open, setOpen] = useState(false);
 
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const user = useAuthStore((state) => state.user);
     const logout = useAuthStore((state) => state.logout);
     const navigate = useNavigate();
     const toggleDrawer = (newOpen: boolean) => () => {
@@ -130,6 +132,9 @@ export default function AppAppBar() {
                                         <CloseRoundedIcon/>
                                     </IconButton>
                                 </Box>
+                                {user?.role === SUPER_ADMIN && (
+                                    <MenuItem component={RouterLink} to="/Dashboard">Dashboard</MenuItem>
+                                )}
                                 <MenuItem>Menus</MenuItem>
                                 <MenuItem>Pesanan</MenuItem>
                                 <MenuItem>Riwayat</MenuItem>
