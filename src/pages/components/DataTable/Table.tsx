@@ -1,4 +1,4 @@
-import {type ReactNode, useEffect, useState} from "react";
+import {forwardRef, type ReactNode, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {requestGet} from "@/api/api.ts";
 import type {TApiPaginateResponse} from "@/type/type.ts";
 import Box from "@mui/material/Box";
@@ -25,7 +25,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 export type TActionMenu = 'view' | 'edit' | 'delete';
 
 export type Column<T> = {
-    key: keyof T;
+    key: string;
     label: string;
     align?: 'left' | 'right' | 'center';
     minWidth?: number;
@@ -83,7 +83,15 @@ function ActionMenu({onClick}: ActionMenuProps) {
     );
 }
 
-export const DataTable = <T, >({url, columns, maxHeight, action, onActionClick}: DataTableProps<T>) => {
+export type DataTableRef = {
+    refresh: () => void;
+};
+
+function InnerDataTable<T>(
+    props: DataTableProps<T>,
+    ref: React.Ref<DataTableRef>
+) {
+    const { url, columns, maxHeight, action, onActionClick } = props;
     const [rows, setRows] = useState<T[]>([]);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -109,7 +117,18 @@ export const DataTable = <T, >({url, columns, maxHeight, action, onActionClick}:
         })
     };
 
+    const isFirstRender = useRef(true);
+
+    useImperativeHandle(ref, () => ({
+        refresh: fetchData
+    }));
+
     useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
         fetchData();
     }, [page, pageSize]);
 
@@ -179,7 +198,8 @@ export const DataTable = <T, >({url, columns, maxHeight, action, onActionClick}:
 
                                     {createColumns.map((col) => {
                                         const isActionCol = col.key === 'action';
-                                        const val = row[col.key as keyof T];
+                                        const rawKey = col.key.includes('.') ? col.key.split('.')[0] : col.key;
+                                        const val = row[rawKey as keyof T];
 
                                         return (
                                             <TableCell
@@ -225,4 +245,8 @@ export const DataTable = <T, >({url, columns, maxHeight, action, onActionClick}:
             </Box>
         </Box>
     );
-};
+}
+
+export const DataTable = forwardRef(InnerDataTable) as <T>(
+    props: DataTableProps<T> & { ref?: React.Ref<DataTableRef> }
+) => React.ReactElement;

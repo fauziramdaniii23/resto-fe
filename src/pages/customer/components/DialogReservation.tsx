@@ -56,8 +56,7 @@ export default function DialogReservation() {
     const getDataTables = () => {
         setLoading(true);
         const params = {
-            date: date,
-            time: time,
+            date: `${date} ${time}`,
         }
         requestGet<TApiResponse<TTables[]>>('/tables', params)
             .then((res) => {
@@ -147,8 +146,8 @@ export default function DialogReservation() {
                             <Autocomplete
                                 multiple
                                 options={optionTables}
-                                getOptionLabel={(option) => `Meja ${option.table_number} (Kapasitas: ${option.capacity} orang)`}
-                                getOptionDisabled={(option) => option.status !== 'available'}
+                                getOptionLabel={(option) => `Meja ${option.table_number} (Kapasitas: ${option.capacity} orang)${option.status === 'booked' ? ' - (booked)' : ''}`}
+                                getOptionDisabled={(option) => option.status === 'booked'}
                                 noOptionsText="Please select a Reservation DateTime first"
                                 loading={loading}
                                 value={selectedTable}

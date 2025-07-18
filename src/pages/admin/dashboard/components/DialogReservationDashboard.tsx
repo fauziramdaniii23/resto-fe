@@ -19,6 +19,7 @@ import type {TApiResponse, Void} from "@/type/type.ts";
 import {showToast} from "@/pages/util/toast.ts";
 import type {TReservation} from "@/pages/admin/dashboard/customers/Reservation.tsx";
 import dayjs from "dayjs";
+import {VIEW} from "@/constant";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -41,43 +42,68 @@ type DialogReservationDashboardProps = {
     data: TReservation;
     openDialog: boolean;
     onClose?: () => void;
+    onRefresh?: () => void;
 };
 
-export default function DialogReservationDashboard ({mode, data, openDialog, onClose}: DialogReservationDashboardProps) {
+export default function DialogReservationDashboard ({mode, data, openDialog, onClose, onRefresh}: DialogReservationDashboardProps) {
     const reservedDate = dayjs(data.reserved_at)
     const [date, setDate] = React.useState(reservedDate.format('YYYY-MM-DD'));
     const [time, setTime] = React.useState(reservedDate.format('HH:mm'));
     const [note, setNote] = React.useState(data.note);
 
+    const mappingOptionsTables : TTables[] = data.tables.map((data) => ({
+        id: data.id,
+        table_number: data.table_number,
+        capacity: data.capacity,
+        status: 'available'
+    }))
+    console.log(data)
+
     const [optionTables, setOptionTables] = useState<TTables[]>([]);
-    const [selectedTable, setSelectedTable] = useState<TTables[]>(
-        (data.tables ?? []).map(table => ({
-            ...table,
-            status: 'available'
-        }))
-    );
+    const [selectedTable, setSelectedTable] = useState<TTables[]>([]);
 
     const [loading, setLoading] = useState(false);
 
     const handleClose = () => onClose?.();
+    const handleRefresh = () => onRefresh?.();
 
     const getDataTables = () => {
         setLoading(true);
         const params = {
-            date: date,
-            time: time,
+            id_reservation: data.id,
+            date: data.reserved_at
         }
         requestGet<TApiResponse<TTables[]>>('/tables', params)
             .then((res) => {
-                setOptionTables(res.data);
+                const dataTables = res.data;
+                const targetIds = mappingOptionsTables.map((table) => table.id);
+
+                const updatedTables = dataTables.map(table =>
+                    targetIds.includes(table.id)
+                        ? { ...table, status: 'available' }
+                        : table
+                );
+
+                const selectedFromData = data.tables
+                    .map((mapped) => updatedTables.find((opt) => opt.id === mapped.id))
+                    .filter(Boolean) as TTables[];
+
+                setOptionTables(updatedTables);
+
+                setSelectedTable(selectedFromData);
             })
             .finally(() => {
                 setLoading(false);
             });
     }
+    useEffect(() => {
+        if (mode === VIEW) {
+            setSelectedTable(mappingOptionsTables)
+        }
+    }, []);
 
     useEffect(() => {
-        if(time && date && mode !== 'view') {
+        if(time && date && mode !== VIEW) {
             getDataTables();
         }
     }, [date, time]);
@@ -89,9 +115,11 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
 
     const submitReservasi = () => {
         const payload = {
-            user: data.user.id,
+            id: data.id,
             date: date,
             time: time,
+            status: data.status,
+            user_id: data.user.id,
             tables: selectedTable,
             note: note,
         }
@@ -99,13 +127,13 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
             .then((res) => {
                 console.log('Reservasi berhasil:', res);
                 if (res.success) {
-                    showToast('success', res.info? res.info : 'Reservation Success');
+                    showToast('success', 'Update Reservation Success');
                 } else {
-                    showToast('error', 'Reservastion Failed');
+                    showToast('error', 'Update Reservastion Failed');
                 }
             }).finally(() => {
                 handleClose();
-                getDataTables()
+                handleRefresh()
         })
     }
 
@@ -149,8 +177,8 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
                                 disabled={mode === 'view'}
                                 multiple
                                 options={optionTables}
-                                getOptionLabel={(option) => `Meja ${option.table_number} (Kapasitas: ${option.capacity} orang)`}
-                                getOptionDisabled={(option) => option.status !== 'available'}
+                                getOptionLabel={(option) => `Meja ${option.table_number} (Kapasitas: ${option.capacity} orang)${option.status === 'booked' ? ' - (booked)' : ''}`}
+                                getOptionDisabled={(option) => option.status == 'booked'}
                                 noOptionsText="Please select a Reservation DateTime first"
                                 loading={loading}
                                 value={selectedTable}
