@@ -37,6 +37,17 @@ export const requestPut = async <T, D = undefined>(url: string, data?: D): Promi
         throw error;
     }
 };
+
+export const requestDelete = async <T>(url: string, params?: Record<string, unknown>): Promise<T> => {
+    try {
+        const response = await api.delete<T>(url, {params});
+        return response.data;
+    } catch (error: unknown) {
+        handleError(error);
+        throw error;
+    }
+};
+
 const handleError = (error: any) => {
     let message = 'Terjadi kesalahan. Silakan hubungi administrator.';
 
