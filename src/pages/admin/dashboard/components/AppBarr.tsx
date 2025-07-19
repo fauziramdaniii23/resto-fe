@@ -11,7 +11,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import {Link as RouterLink} from "react-router-dom";
-import {MainContent} from "@/pages/admin/dashboard/components/MainContent.tsx";
 
 type AppBarrProps = {
     items?: MenusExtended

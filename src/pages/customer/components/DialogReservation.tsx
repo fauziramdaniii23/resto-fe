@@ -73,10 +73,6 @@ export default function DialogReservation() {
         }
     }, [date, time]);
 
-    useEffect(() => {
-        console.log('Selected tables updated:', selectedTable);
-    }, [selectedTable]);
-
     const handleChange = (_: unknown, newValue: TTables[]) => {
         setSelectedTable(newValue);
         console.log('Meja dipilih:', newValue);

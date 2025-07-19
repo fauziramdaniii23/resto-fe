@@ -2,13 +2,11 @@ import Container from '@mui/material/Container';
 import MainContent from './components/MainContent';
 import Latest from './components/Latest';
 import Footer from './components/Footer';
-import {Hero} from "./components/Hero.tsx";
 import Box from "@mui/material/Box";
 
-export default function Home() {
+export default function Orders() {
     return (
         <Box>
-            <Hero/>
             <Container
                 maxWidth={false}
                 component="main"

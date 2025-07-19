@@ -21,6 +21,7 @@ import ShoppingCart from "./ShoppingCart.tsx";
 import Typography from "@mui/material/Typography";
 import {Profile} from "@/pages/components/Profile.tsx";
 import {SUPER_ADMIN} from "@/constant";
+import {CONTACT_US, HISTORY, HOME, ORDERS} from "@/pages/customer/type/CustomerNavigation.tsx";
 
 export const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
@@ -38,7 +39,11 @@ export const StyledToolbar = styled(Toolbar)(({theme}) => ({
     padding: '8px 12px',
 }));
 
-export default function AppAppBar() {
+type Props = {
+    menu: string;
+}
+
+export default function AppAppBar({ menu }: Props) {
     const [open, setOpen] = useState(false);
 
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -58,9 +63,28 @@ export default function AppAppBar() {
         })
     };
 
-    const [active, setActive] = useState<string>('Menus');
+    const appBarNavigations = [HOME, ORDERS, HISTORY, CONTACT_US];
 
-    const buttons = ['Menus', 'Pesanan', 'Riwayat'];
+    const handleNavigationClick = (label: string) => {
+
+        switch (label) {
+            case HOME:
+                navigate('/Home');
+                break;
+            case ORDERS:
+                navigate('/Orders');
+                break;
+            case HISTORY:
+                navigate('/History');
+                break;
+            case CONTACT_US:
+                navigate('/ContactUs');
+                break;
+            default:
+                navigate('/PageNotFound');
+        }
+    }
+
     return (
         <AppBar
             position="fixed"
@@ -89,14 +113,14 @@ export default function AppAppBar() {
                             Resto Bahari
                         </Typography>
                         <Box sx={{display: {xs: 'none', md: 'flex', gap: 1, marginLeft: 10}}}>
-                            {buttons.map((label) => (
+                            {appBarNavigations.map((label) => (
                                 <Button
                                     key={label}
                                     sx={{mx: 1}}
-                                    variant={active === label ? 'contained' : 'text'}
-                                    color={active === label ? 'primary' : 'info'}
+                                    variant={menu === label ? 'contained' : 'text'}
+                                    color={menu === label ? 'primary' : 'info'}
                                     size="small"
-                                    onClick={() => setActive(label)}
+                                    onClick={() => handleNavigationClick(label)}
                                 >
                                     {label}
                                 </Button>
