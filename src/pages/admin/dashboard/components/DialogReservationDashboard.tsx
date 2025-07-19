@@ -4,8 +4,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import type {TransitionProps} from '@mui/material/transitions';
 import SendIcon from "@mui/icons-material/Send";
 import DatePickerFormatter from "@/pages/components/DatePicker/DatePickerFormatter.tsx";
 import TimePickerFormatter from "@/pages/components/DatePicker/TimePickerForrmatter.tsx";
@@ -21,15 +19,6 @@ import type {TReservation} from "@/pages/admin/dashboard/customers/Reservation.t
 import dayjs from "dayjs";
 import {VIEW} from "@/constant";
 import Typography from "@mui/material/Typography";
-
-const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-        children: React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>>;
-    },
-    ref: React.Ref<unknown>,
-) {
-    return <Slide direction="down" ref={ref} {...props} />;
-});
 
 export type TTables = {
     id: number,
@@ -162,9 +151,6 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
         <React.Fragment>
             <Dialog
                 open={openDialog}
-                slots={{
-                    transition: Transition,
-                }}
                 keepMounted
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
