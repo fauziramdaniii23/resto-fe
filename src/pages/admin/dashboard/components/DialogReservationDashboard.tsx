@@ -13,12 +13,12 @@ import FormControl from '@mui/material/FormControl';
 import {useEffect, useState} from "react";
 import {Autocomplete, CircularProgress} from "@mui/material";
 import {requestDelete, requestGet, requestPost} from "@/api/api.ts";
-import type {TApiResponse, Void} from "@/type/type.ts";
+import type {TApiResponse, TReservation, Void} from "@/type/type.ts";
 import {showToast} from "@/pages/util/toast.ts";
-import type {TReservation} from "@/pages/admin/dashboard/customers/Reservation.tsx";
 import dayjs from "dayjs";
 import {VIEW} from "@/constant";
 import Typography from "@mui/material/Typography";
+import {RESERVATION} from "@/api/url.ts";
 
 export type TTables = {
     id: number,
@@ -115,7 +115,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
             tables: selectedTable,
             note: note,
         }
-        requestPost<TApiResponse<Void>, typeof payload>('/reservation', payload)
+        requestPost<TApiResponse<Void>, typeof payload>(RESERVATION, payload)
             .then((res) => {
                 console.log('Reservasi berhasil:', res);
                 if (res.success) {

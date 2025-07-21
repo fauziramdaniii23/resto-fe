@@ -1,35 +1,27 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import {type Column, DataTable, type DataTableRef} from "@/pages/components/DataTable/Table.tsx";
-import type {TPropsSideNav} from "@/pages/admin/dashboard/components/MainContent.tsx";
 import React, {useEffect, useRef, useState} from "react";
 import {formatDate} from "@/pages/util/parsingdate.ts";
 import Chip from "@mui/material/Chip";
 import DialogReservationDashboard from "@/pages/admin/dashboard/components/DialogReservationDashboard.tsx";
-import type {TApiResponse, TUser, Void} from "@/type/type.ts";
+import type {
+    TApiPaginateResponse,
+    TApiResponse,
+    TMetaData,
+    TReservation,
+    TTables,
+    Void
+} from "@/type/type.ts";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from '@mui/material/Menu';
-import {requestPost} from "@/api/api.ts";
+import {requestGet, requestPost} from "@/api/api.ts";
 import {showToast} from "@/pages/util/toast.ts";
 import dayjs from "dayjs";
 import {CircularProgress} from "@mui/material";
-
-export type TTables = {
-    id: number,
-    table_number: number,
-    capacity: number,
-}
-
-export type TReservation = {
-    id: number,
-    reserved_at: string,
-    status: string,
-    note: string,
-    user: TUser,
-    tables: TTables[],
-    action: () => void;
-}
+import SearchInput from "@/pages/components/Search.tsx";
+import {RESERVATION} from "@/api/url.ts";
 
 const columns: Column<TReservation>[] = [
     {
@@ -125,7 +117,7 @@ const ActionUpdateStatus: React.FC<{ data: TReservation }> = ({data}) => {
                                 val === 'canceled' ? 'error' : 'default'
                     }
                     label={val}/>
-                <CircularProgress sx={{ml:2, display: loading ? 'block' : 'none'}} size={20} />
+                <CircularProgress sx={{ml: 2, display: loading ? 'block' : 'none'}} size={20}/>
             </Button>
             <Menu
                 id="basic-menu"
@@ -160,10 +152,32 @@ const ActionUpdateStatus: React.FC<{ data: TReservation }> = ({data}) => {
     )
 }
 
-export const Reservation: React.FC<TPropsSideNav> = ({id}) => {
+export const Reservation: React.FC = () => {
     const [modeDialog, setModeDialog] = React.useState<string>('');
     const [dataReservation, setDataReservation] = React.useState<TReservation>({} as TReservation);
     const [openDialog, setOpenDialog] = React.useState<boolean>(true);
+    const [search, setSearch] = useState("");
+    const [dataTables, setDataTables] = useState<TMetaData<TReservation>>({} as TMetaData<TReservation>);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const tableRef = useRef<DataTableRef>(null);
+
+    const getDataReservation = (name: string) => {
+        setLoading(true);
+        const params = {
+            name: name,
+            page: tableRef.current?.getPage(),
+            pageSize: tableRef.current?.getPageSize(),
+        }
+        requestGet<TApiPaginateResponse<TReservation>>(RESERVATION, params)
+            .then((res) => {
+                if (res.success) {
+                    setDataTables(res.meta_data)
+                }
+            }).finally(() => {
+            setLoading(false);
+        })
+    }
 
     const onActionClick = (mode: string, data: TReservation) => {
         setDataReservation(data);
@@ -172,13 +186,18 @@ export const Reservation: React.FC<TPropsSideNav> = ({id}) => {
             setOpenDialog(true);
         }
     }
-    const tableRef = useRef<DataTableRef>(null);
+
     const handleRefresh = () => {
         tableRef.current?.refresh();
     };
+
     useEffect(() => {
-        handleRefresh()
+        getDataReservation(search)
     }, []);
+
+    const handleSearchEnter = () => {
+        getDataReservation(search)
+    }
     return (
         <Box>
             {openDialog && modeDialog && (
@@ -190,10 +209,16 @@ export const Reservation: React.FC<TPropsSideNav> = ({id}) => {
                     onRefresh={handleRefresh}
                 />
             )}
+            <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2, gap: 1}}>
+                <Typography variant="h6" component="div">Reservation Page</Typography>
+                <SearchInput
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onEnter={handleSearchEnter}
+                />
+            </Box>
 
-            <Typography variant="h6" component="div">Reservation Page {id}</Typography>
-            <DataTable<TReservation> ref={tableRef} url="/reservation" columns={columns} action
-                                     onActionClick={onActionClick}/>
+            <DataTable<TReservation> ref={tableRef} search={search} url={RESERVATION} columns={columns} data={dataTables} loading={loading} action onActionClick={onActionClick}/>
         </Box>
     );
 }

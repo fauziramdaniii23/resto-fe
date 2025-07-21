@@ -7,6 +7,8 @@ import { styled } from '@mui/material/styles';
 import image2 from '@/assets/image2.jpg';
 import DialogReservation from "@/pages/customer/components/DialogReservation.tsx";
 import {useAuthStore} from "@/store/useAuthStore.ts";
+import Button from "@mui/material/Button";
+import * as React from "react";
 
 const StyledBox = styled('div')(({ theme }) => ({
     alignSelf: 'center',
@@ -37,6 +39,10 @@ const StyledBox = styled('div')(({ theme }) => ({
 
 export const Hero = () => {
     const name = useAuthStore((state) => state.user?.name);
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    }
     return (
         <Box
             id="hero"
@@ -106,7 +112,16 @@ export const Hero = () => {
                         useFlexGap
                         sx={{ width: { xs: '100%', sm: '350px' }, justifyContent: 'center' }}
                     >
-                        <DialogReservation/>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            sx={{minWidth: 'fit-content'}}
+                            onClick={handleClickOpen}
+                        >
+                            Click here to Reservasi
+                        </Button>
+                        <DialogReservation open={open} onClose={() => setOpen(false)}/>
                     </Stack>
                     <Typography
                         variant="caption"

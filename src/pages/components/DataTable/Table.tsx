@@ -1,6 +1,6 @@
 import {forwardRef, type ReactNode, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {requestGet} from "@/api/api.ts";
-import type {TApiPaginateResponse} from "@/type/type.ts";
+import type {TApiPaginateResponse, TMetaData} from "@/type/type.ts";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import Select, {type SelectChangeEvent} from "@mui/material/Select";
@@ -32,69 +32,38 @@ export type Column<T> = {
     maxWidth?: number;
     format?: (value: any, row: T) => ReactNode;
 };
-export type DataTableProps<T> = {
-    url: string;
-    columns: Column<T>[];
-    maxHeight?: number;
-    action?: boolean;
-    onActionClick?: (mode: TActionMenu, data: T) => void;
-};
 
 type ActionMenuProps = {
     onClick: (mode: TActionMenu) => void;
 };
 
-function ActionMenu({onClick}: ActionMenuProps) {
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = (mode?: TActionMenu) => {
-        setAnchorEl(null);
-        if (mode) onClick(mode);
-    };
-    const actionMenu: TActionMenu[] = [
-        'view', 'edit', 'delete',
-    ]
-
-    return (
-        <>
-            <IconButton size="small" onClick={handleClick}>
-                <MoreVertIcon/>
-            </IconButton>
-            <Menu anchorEl={anchorEl} open={open} onClose={() => handleClose()}>
-                {
-                    actionMenu.map((mode) => (
-                        <MenuItem sx={{mr:2}} onClick={() => handleClose(mode)}>
-                            <ListItemIcon>
-                                {mode === 'view' && <VisibilityIcon/>}
-                                {mode === 'edit' && <EditSquareIcon/>}
-                                {mode === 'delete' && <DeleteIcon/>}
-                            </ListItemIcon>
-                            <ListItemText>{mode.charAt(0).toUpperCase() + mode.slice(1)}</ListItemText>
-                        </MenuItem>
-                    ))
-                }
-            </Menu>
-        </>
-    );
-}
-
 export type DataTableRef = {
     refresh: () => void;
+    getPage: () => number;
+    getPageSize: () => number;
+    getPagination: () => { page: number; pageSize: number };
 };
 
-function InnerDataTable<T>(
-    props: DataTableProps<T>,
-    ref: React.Ref<DataTableRef>
-) {
+export type DataTableProps<T> = {
+    url: string;
+    search?: string;
+    columns: Column<T>[];
+    data: TMetaData<T>;
+    loading: boolean;
+    maxHeight?: number;
+    action?: boolean;
+    onActionClick?: (mode: TActionMenu, data: T) => void;
+};
+
+export const DataTable = forwardRef(InnerDataTable) as <T>(
+    props: DataTableProps<T> & { ref?: React.Ref<DataTableRef> }
+) => React.ReactElement;
+
+function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRef>) {
     const { url, columns, maxHeight, action, onActionClick } = props;
-    const [rows, setRows] = useState<T[]>([]);
+    const [rows, setRows] = useState<T[]>(props.data.data ?? []);
     const [rowCount, setRowCount] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(props.loading);
 
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(5);
@@ -103,14 +72,15 @@ function InnerDataTable<T>(
     const fetchData = async () => {
         setLoading(true);
         const params = {
+            search: props.search,
             page: page,
             pageSize: pageSize,
         }
         requestGet<TApiPaginateResponse<T>>(url, params)
             .then((res) => {
                 if (res.success) {
-                    setRows(res.data ?? []);
-                    setRowCount(res.total ?? 0);
+                    setRows(res.meta_data.data ?? []);
+                    setRowCount(res.meta_data.total ?? 0);
                 }
             }).finally(() => {
             setLoading(false);
@@ -120,7 +90,10 @@ function InnerDataTable<T>(
     const isFirstRender = useRef(true);
 
     useImperativeHandle(ref, () => ({
-        refresh: fetchData
+        refresh: fetchData,
+        getPage: () => page,
+        getPageSize: () => pageSize,
+        getPagination: () => ({ page, pageSize }),
     }));
 
     useEffect(() => {
@@ -131,6 +104,15 @@ function InnerDataTable<T>(
 
         fetchData();
     }, [page, pageSize]);
+
+    useEffect(() => {
+        setRows(props.data.data ?? []);
+        setRowCount(props.data.total ?? 0);
+    }, [props.data]);
+
+    useEffect(() => {
+        setLoading(props.loading);
+    }, [props.loading]);
 
     const handlePageChange = (_: unknown, value: number) => {
         setPage(value);
@@ -247,6 +229,41 @@ function InnerDataTable<T>(
     );
 }
 
-export const DataTable = forwardRef(InnerDataTable) as <T>(
-    props: DataTableProps<T> & { ref?: React.Ref<DataTableRef> }
-) => React.ReactElement;
+function ActionMenu({onClick}: ActionMenuProps) {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = (mode?: TActionMenu) => {
+        setAnchorEl(null);
+        if (mode) onClick(mode);
+    };
+    const actionMenu: TActionMenu[] = [
+        'view', 'edit', 'delete',
+    ]
+
+    return (
+        <>
+            <IconButton size="small" onClick={handleClick}>
+                <MoreVertIcon/>
+            </IconButton>
+            <Menu anchorEl={anchorEl} open={open} onClose={() => handleClose()}>
+                {
+                    actionMenu.map((mode) => (
+                        <MenuItem sx={{mr:2}} onClick={() => handleClose(mode)}>
+                            <ListItemIcon>
+                                {mode === 'view' && <VisibilityIcon/>}
+                                {mode === 'edit' && <EditSquareIcon/>}
+                                {mode === 'delete' && <DeleteIcon/>}
+                            </ListItemIcon>
+                            <ListItemText>{mode.charAt(0).toUpperCase() + mode.slice(1)}</ListItemText>
+                        </MenuItem>
+                    ))
+                }
+            </Menu>
+        </>
+    );
+}

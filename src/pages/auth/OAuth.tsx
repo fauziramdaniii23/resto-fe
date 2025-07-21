@@ -32,6 +32,7 @@ const OAuth = () => {
 
                 useAuthStore.getState().login({
                     token: tokenParam,
+                    id: user.id,
                     name: user.name,
                     username: user.username,
                     email: user.email,

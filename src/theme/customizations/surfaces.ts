@@ -62,12 +62,15 @@ export const surfacesCustomizations: Components<Theme> = {
           padding: 16,
           gap: 16,
           transition: 'all 100ms ease',
-          backgroundColor: gray[50],
+          backgroundColor: gray[100],
           borderRadius: (theme.vars || theme).shape.borderRadius,
           border: `1px solid ${(theme.vars || theme).palette.divider}`,
           boxShadow: 'none',
+          '&:hover': {
+            transform: 'scale(1.01)',
+          },
           ...theme.applyStyles('dark', {
-            backgroundColor: gray[800],
+            backgroundColor: 'oklch(0.133 0.048 266.07)',
           }),
           variants: [
             {

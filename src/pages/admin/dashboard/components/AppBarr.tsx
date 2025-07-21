@@ -5,7 +5,6 @@ import React, {useEffect, useState} from "react";
 import {getBreadcrumbPath, DashboardMenus, type MenusExtended} from "@/pages/admin/util/navigation.tsx";
 import {Breadcrumbs} from "@mui/material";
 import Box from "@mui/material/Box";
-import { Search } from "@/pages/customer/components/MainContent"
 import IconButton from "@mui/material/IconButton";
 import PersonIcon from '@mui/icons-material/Person';
 import Menu from '@mui/material/Menu';
@@ -76,7 +75,6 @@ export const DashboardAppBarr: React.FC<AppBarrProps> = ({ items }) => {
                  gap: 2,
              }}
             >
-                <Search/>
                 <ColorModeIconDropdown size="medium"/>
                 <IconButton onClick={handleClick}>
                     <PersonIcon/>

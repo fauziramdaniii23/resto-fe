@@ -1,20 +1,20 @@
 import Container from '@mui/material/Container';
+import MainContent from './MainContent.tsx';
+import Latest from '../components/Latest.tsx';
+import {Hero} from "../components/Hero.tsx";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
-export default function Orders() {
+export default function Home() {
     return (
-        <Box
-            sx={{
-                pt: { xs: 16, sm: 16, md: 6 },
-            }}
-        >
+        <Box>
+            <Hero/>
             <Container
                 maxWidth={false}
                 component="main"
                 sx={{display: 'flex', flexDirection: 'column', mb: 16, mt:6, gap: 4}}
             >
-                <Typography component="h1" variant="h5">UI Orders Cooming Soon</Typography>
+                <MainContent/>
+                <Latest/>
             </Container>
         </Box>
     );

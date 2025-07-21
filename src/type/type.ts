@@ -1,7 +1,3 @@
-export type TPaginationResponse<T> = {
-    readonly data: Array<T>;
-    readonly total?: number | string;
-};
 export type TApiResponse<T> = {
     readonly success: boolean;
     readonly status: number;
@@ -11,10 +7,16 @@ export type TApiResponse<T> = {
 export type TApiPaginateResponse<T> = {
     readonly success: boolean;
     readonly status: number;
-    readonly data: T[];
+    readonly meta_data: TMetaData<T>;
     readonly info?: string;
     readonly total?: number;
 };
+export type TMetaData<T> = {
+    readonly data: T[];
+    readonly total: number;
+    readonly page: number;
+    readonly pageSize: number;
+}
 
 export type TLoginResponse = {
     user: TUser,
@@ -42,6 +44,23 @@ export type TMenus = {
     created_at: Date;
     updated_at: Date;
 }
+
+export type TTables = {
+    id: number,
+    table_number: number,
+    capacity: number,
+}
+
+export type TReservation = {
+    id: number,
+    reserved_at: string,
+    status: string,
+    note: string,
+    user: TUser,
+    tables: TTables[],
+    action: () => void;
+}
+
 
 export type Void = {
     (): void;

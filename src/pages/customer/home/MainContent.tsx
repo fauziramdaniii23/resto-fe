@@ -8,16 +8,13 @@ import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
-import InputAdornment from '@mui/material/InputAdornment';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import {styled} from '@mui/material/styles';
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import RssFeedRoundedIcon from '@mui/icons-material/RssFeedRounded';
 import {useEffect, useState} from "react";
 import type {TMenus, TApiResponse} from "@/type/type.ts";
 import {requestGet} from "@/api/api.ts";
 import Loader from "../../components/Loader.tsx";
+import SearchInput from "@/pages/components/Search.tsx";
 
 const cardData = [
     {
@@ -119,32 +116,14 @@ function Author({authors}: { authors: { name: string; avatar: string }[] }) {
     );
 }
 
-export function Search() {
-    return (
-        <FormControl sx={{width: {xs: '100%', md: '25ch'}}} variant="outlined">
-            <OutlinedInput
-                size="small"
-                id="search"
-                placeholder="Search…"
-                sx={{flexGrow: 1}}
-                startAdornment={
-                    <InputAdornment position="start" sx={{color: 'text.primary'}}>
-                        <SearchRoundedIcon fontSize="small"/>
-                    </InputAdornment>
-                }
-                inputProps={{
-                    'aria-label': 'search',
-                }}
-            />
-        </FormControl>
-    );
-}
 
 export default function MainContent() {
     const [focusedCardIndex, setFocusedCardIndex] = useState<number | null>(
         null,
     );
     const [loading, setLoading] = useState(false);
+
+    const [searchQuery, setSearchQuery] = useState("");
 
     const handleFocus = (index: number) => {
         setFocusedCardIndex(index);
@@ -159,14 +138,23 @@ export default function MainContent() {
     };
 
     const [menus, setMenus] = useState<TMenus[]>([]);
-    // useEffect(() => {
-    //     setLoading(true);
-    //     requestGet<TApiResponse<Menus[]>>('/menus')
-    //         .then((res) => setMenus(res.data))
-    //         .finally(() => {
-    //             setLoading(false);
-    //         });
-    // }, []);
+
+    const getDataMenus = () => {
+        const params = {
+            search: searchQuery,
+            page: 1,
+            pageSize: 10,
+        }
+        setLoading(true);
+        requestGet<TApiResponse<TMenus[]>>('/menus', params)
+            .then((res) => setMenus(res.data))
+            .finally(() => {
+                setLoading(false);
+            });
+    }
+    useEffect(() => {
+
+    }, []);
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', gap: 4}}>
             <Loader show={loading}/>
@@ -179,7 +167,11 @@ export default function MainContent() {
                     overflow: 'auto',
                 }}
             >
-                <Search/>
+                <SearchInput
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onEnter={getDataMenus}
+                />
                 <IconButton size="small" aria-label="RSS feed">
                     <RssFeedRoundedIcon/>
                 </IconButton>
@@ -250,7 +242,11 @@ export default function MainContent() {
                         overflow: 'auto',
                     }}
                 >
-                    <Search/>
+                    <SearchInput
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onEnter={getDataMenus}
+                    />
                     <IconButton size="small" aria-label="RSS feed">
                         <RssFeedRoundedIcon/>
                     </IconButton>

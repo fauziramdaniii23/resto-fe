@@ -35,22 +35,22 @@ type TTables = {
     status: string;
 }
 
-export default function DialogReservation() {
+type TPropsDialogReservation = {
+    open: boolean;
+    onClose: () => void;
+}
+
+export default function DialogReservation({open, onClose}: TPropsDialogReservation) {
     const user = useAuthStore((state) => state.user);
     const [date, setDate] = React.useState('');
     const [time, setTime] = React.useState('');
     const [note, setNote] = React.useState('');
     const [optionTables, setOptionTables] = useState<TTables[]>([]);
     const [selectedTable, setSelectedTable] = useState<TTables[]>([]);
-    const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
     const handleClose = () => {
-        setOpen(false);
+        onClose()
     };
 
     const getDataTables = () => {
@@ -75,7 +75,6 @@ export default function DialogReservation() {
 
     const handleChange = (_: unknown, newValue: TTables[]) => {
         setSelectedTable(newValue);
-        console.log('Meja dipilih:', newValue);
     };
 
     const submitReservasi = () => {
@@ -103,15 +102,6 @@ export default function DialogReservation() {
 
     return (
         <React.Fragment>
-            <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                sx={{minWidth: 'fit-content'}}
-                onClick={handleClickOpen}
-            >
-                Click here to Reservasi
-            </Button>
             <Dialog
                 open={open}
                 slots={{
