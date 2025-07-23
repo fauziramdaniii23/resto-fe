@@ -19,7 +19,9 @@ const PaginationViews = ({pageSizeValue = [5, 10, 25, 100], showPageSize = false
 
     const handlePageChange = (_: unknown, value: number) => {
         setPage(value);
-        onChange(value, pageSize);
+        if(value != page){
+            onChange(value, pageSize);
+        }
     };
 
     const handlePageSizeChange = (event: SelectChangeEvent<number>) => {
@@ -30,7 +32,6 @@ const PaginationViews = ({pageSizeValue = [5, 10, 25, 100], showPageSize = false
 
     useEffect(() => {
         onChange(page, pageSize);
-
     }, []);
 
     return (

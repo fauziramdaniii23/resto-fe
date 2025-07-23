@@ -6,7 +6,6 @@ import MuiDrawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AppTheme from "@/theme/AppTheme.tsx";
@@ -18,6 +17,7 @@ import {useTheme} from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import {DashboardAppBarr} from "@/pages/admin/dashboard/components/AppBarr.tsx";
 import {MainContent} from "@/pages/admin/dashboard/components/MainContent.tsx";
+import {IconButtonSideBar} from "@/pages/components/button/iconButtonSideBar.tsx";
 
 const drawerWidth = 240;
 
@@ -149,7 +149,7 @@ export default function Dashboard(props: DashboardProps) {
                     </List>
                     <Divider sx={{marginTop: '1rem'}}/>
                 </Drawer>
-                <IconButton
+                <IconButtonSideBar
                     size="small"
                     onClick={handleClick}
                     sx={{
@@ -165,7 +165,7 @@ export default function Dashboard(props: DashboardProps) {
                     }}
                 >
                     {open ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
-                </IconButton>
+                </IconButtonSideBar>
 
                 <Box
                     sx={{

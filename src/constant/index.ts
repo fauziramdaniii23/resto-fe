@@ -4,3 +4,5 @@ export const SUPER_ADMIN = 'administrator';
 export const CUSTOMER = 'customer';
 export const VIEW = 'view';
 export const EDIT = 'edit';
+
+export const  statusReservation: string[] = ['pending', 'confirmed', 'canceled', 'rejected', 'completed'];

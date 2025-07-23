@@ -46,7 +46,7 @@ export type DataTableRef = {
 
 export type DataTableProps<T> = {
     url: string;
-    search?: string;
+    keyword?: string;
     columns: Column<T>[];
     data: TMetaData<T>;
     loading: boolean;
@@ -72,7 +72,7 @@ function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRe
     const fetchData = async () => {
         setLoading(true);
         const params = {
-            search: props.search,
+            keyword: props.keyword,
             page: page,
             pageSize: pageSize,
         }

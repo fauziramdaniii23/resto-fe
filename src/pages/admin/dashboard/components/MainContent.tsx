@@ -1,5 +1,5 @@
 import {MainDashboard} from "@/pages/admin/dashboard/Main.tsx";
-import {Reservation} from "@/pages/admin/dashboard/customers/Reservation.tsx";
+import {Reservation} from "@/pages/admin/dashboard/customers/reservationDashboard/Reservation.tsx";
 import PageNotFound from "@/pages/PageNotFound.tsx";
 
 export type TPropsSideNav = {

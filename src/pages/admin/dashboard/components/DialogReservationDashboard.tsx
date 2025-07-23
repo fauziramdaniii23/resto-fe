@@ -40,16 +40,18 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
     const [date, setDate] = React.useState(reservedDate.format('YYYY-MM-DD'));
     const [time, setTime] = React.useState(reservedDate.format('HH:mm'));
     const [note, setNote] = React.useState(data.note);
+    const [customerName, setCustomerName] = useState('');
 
-    const title: string = mode === 'view' ? 'View Reservation' : mode === 'edit' ? 'Edit Reservation' : mode === 'delete' ? 'Delete Reservation ?' : 'Create Reservation';
-
-    const mappingOptionsTables : TTables[] = data.tables.map((data) => ({
-        id: data.id,
-        table_number: data.table_number,
-        capacity: data.capacity,
-        status: 'available'
-    }))
-    console.log(data)
+    const title: string = mode === 'create' ? 'Create Reservation': mode=== 'view' ? 'View Reservation' : mode === 'edit' ? 'Edit Reservation' : mode === 'delete' ? 'Delete Reservation ?' : 'Create Reservation';
+    let mappingOptionsTables: TTables[] = [];
+    if (mode != 'create'){
+           mappingOptionsTables = data.tables.map((data) => ({
+            id: data.id,
+            table_number: data.table_number,
+            capacity: data.capacity,
+            status: 'available'
+        }))
+    }
 
     const [optionTables, setOptionTables] = useState<TTables[]>([]);
     const [selectedTable, setSelectedTable] = useState<TTables[]>([]);
@@ -108,6 +110,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
     const submitReservation = () => {
         const payload = {
             id: data.id,
+            customerName : mode === 'create' ? customerName : data.user.name,
             date: date,
             time: time,
             status: data.status,
@@ -167,20 +170,21 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
                             <FormControl sx={{width: '100%'}} component="fieldset">
                                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 2, mt: 1}}>
                                     <TextField
-                                        value={data.user.name}
-                                        disabled
+                                        value={mode === 'create' ? '' : data.user.name}
+                                        disabled={mode != 'create'}
+                                        onChange={(e) => setCustomerName(e.target.value)}
                                         label="Customer Name"
                                         variant="outlined" />
                                     <DatePickerFormatter
                                         disabled={mode === 'view'}
-                                        value={date}
+                                        value={mode === 'create' ? '' : date}
                                         onChange={(newValue) => setDate(newValue)}
                                         label="Reservasi Date"
                                         sx={{width: '100%'}}
                                     />
                                     <TimePickerFormatter
                                         disabled={mode === 'view'}
-                                        value={time}
+                                        value={mode === 'create' ? '' : time}
                                         onChange={(newValue) => setTime(newValue)}
                                         label="Reservasi Time"
                                         sx={{width: '100%'}}
@@ -229,13 +233,13 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
 
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleClose}> {mode === 'view' ? 'Close' : 'Cancel'} </Button>
                     {
                         mode != 'view' && (
                             <>
-                                <Button onClick={handleClose}>Cancel</Button>
                                 <Button
-                                    variant='contained'
                                     onClick={mode === 'edit' ? submitReservation : deleteReservation}
+                                    variant='contained'
                                     endIcon={<SendIcon/>}
                                 >
                                     {mode === 'edit' ? 'Update' : 'Delete'}

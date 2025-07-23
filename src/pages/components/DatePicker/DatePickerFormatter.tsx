@@ -10,32 +10,34 @@ type DatePickerFormatter = {
     onChange: (value: string) => void;
     sx?: SxProps
     disabled?: boolean;
+    size?: "small" | "medium";
 };
 
-const DatePickerFormatter = ({label, value, onChange, sx, disabled}: DatePickerFormatter) => {
+const DatePickerFormatter = ({label, value, onChange, sx, disabled, size = 'medium'}: DatePickerFormatter) => {
     return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-                disabled={disabled}
-                sx={sx}
-                label={label}
-                value={value ? dayjs(value) : null}
-                onChange={(newValue: Dayjs | null) => {
-                    if (newValue) {
-                        onChange(newValue.format('YYYY-MM-DD'));
-                    } else {
-                        onChange('');
-                    }
-                }}
-                slotProps={{
-                    openPickerButton: {
-                        sx: {
-                            borderRadius: 4,
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                    disabled={disabled}
+                    sx={sx}
+                    label={label}
+                    value={value ? dayjs(value) : null}
+                    onChange={(newValue: Dayjs | null) => {
+                        if (newValue) {
+                            onChange(newValue.format('YYYY-MM-DD'));
+                        } else {
+                            onChange('');
+                        }
+                    }}
+                    slotProps={{
+                        textField: {
+                            size: size,
                         },
-                    }
-                }}
-            />
-        </LocalizationProvider>
+                        openPickerButton: {
+                            size: size,
+                        }
+                    }}
+                />
+            </LocalizationProvider>
     );
 };
 
