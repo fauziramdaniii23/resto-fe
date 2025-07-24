@@ -11,9 +11,10 @@ type DatePickerFormatter = {
     sx?: SxProps
     disabled?: boolean;
     size?: "small" | "medium";
+    error?: boolean;
 };
 
-const DatePickerFormatter = ({label, value, onChange, sx, disabled, size = 'medium'}: DatePickerFormatter) => {
+const DatePickerFormatter = ({label, value, onChange, sx, disabled, size = 'medium', error}: DatePickerFormatter) => {
     return (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -31,10 +32,11 @@ const DatePickerFormatter = ({label, value, onChange, sx, disabled, size = 'medi
                     slotProps={{
                         textField: {
                             size: size,
+                            error: error,
                         },
                         openPickerButton: {
                             size: size,
-                        }
+                        },
                     }}
                 />
             </LocalizationProvider>

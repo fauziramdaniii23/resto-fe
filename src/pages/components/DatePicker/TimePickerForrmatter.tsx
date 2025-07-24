@@ -10,9 +10,11 @@ type TimePickerFormatter = {
     onChange: (value: string) => void;
     sx?: SxProps
     disabled?: boolean;
+    size?: "small" | "medium";
+    error?: boolean;
 };
 
-const TimePickerFormatter = ({label, value, onChange, sx, disabled}: TimePickerFormatter) => {
+const TimePickerFormatter = ({label, value, onChange, sx, disabled, size = 'medium', error}: TimePickerFormatter) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <MobileTimePicker
@@ -28,6 +30,15 @@ const TimePickerFormatter = ({label, value, onChange, sx, disabled}: TimePickerF
                     } else {
                         onChange('');
                     }
+                }}
+                slotProps={{
+                    textField: {
+                        size: size,
+                        error: error,
+                    },
+                    openPickerButton: {
+                        size: size,
+                    },
                 }}
             />
         </LocalizationProvider>

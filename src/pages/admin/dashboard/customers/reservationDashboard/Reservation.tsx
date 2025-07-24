@@ -27,9 +27,8 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const columns: Column<TReservation>[] = [
     {
-        key: 'user',
+        key: 'customer_name',
         label: 'Name',
-        format: (val) => val.name,
     },
     {
         key: 'reserved_at',
