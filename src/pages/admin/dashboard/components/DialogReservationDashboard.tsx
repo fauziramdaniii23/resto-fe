@@ -102,7 +102,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
     }, []);
 
     useEffect(() => {
-        if (time && date) {
+        if (time && date && mode !== VIEW) {
             getDataTables();
         }
     }, [date, time]);
@@ -157,7 +157,6 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
         }
         requestPost<TApiResponse<Void>, typeof payload>(RESERVATION, payload)
             .then((res) => {
-                console.log('Reservasi berhasil:', res);
                 if (res.success) {
                     showToast('success', 'Update Reservation Success');
                 } else {
@@ -175,7 +174,6 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
         }
         requestDelete<TApiResponse<Void>>('/reservation/delete', payload)
             .then((res) => {
-                console.log('Reservasi berhasil dihapus:', res);
                 if (res.success) {
                     showToast('success', 'Delete Reservation Success');
                 } else {
