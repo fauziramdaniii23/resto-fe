@@ -24,6 +24,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BlockIcon from '@mui/icons-material/Block';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
+import CircularProgress from '@mui/material/CircularProgress';
+import {statusReservation} from "@/constant";
 
 const columns: Column<TReservation>[] = [
     {
@@ -87,8 +89,10 @@ export const Reservation: React.FC = () => {
                 if (res.success) {
                     setTotalStatusReservation(res.data);
                 }
-            })
+            }).finally(() => {
+        })
     }
+
     React.useEffect(() => {
         getTotalStatusReservation();
     }, []);
@@ -181,14 +185,15 @@ export const Reservation: React.FC = () => {
             )}
             <Box sx={{display: 'flex', gap: 4, mb: 4, mt: 2}}>
                 {
-                    totalStatusReservation.map((val) => (
+                    statusReservation.map((val, idx) => (
                         <Card
-                            onClick={() => {setKeyword(val.status); getDataReservation(val.status)}}
+                            key={idx}
+                            onClick={() => {setKeyword(val); getDataReservation(val)}}
                             sx={{
                                 flex: 1,
                                 minWidth: 240,
                                 maxWidth: 400,
-                                background: `${getStatusGradient(val.status)} !important`,
+                                background: `${getStatusGradient(val)} !important`,
                                 cursor: 'pointer',
                             }}
                         >
@@ -197,20 +202,23 @@ export const Reservation: React.FC = () => {
                                     sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2}}>
                                     <Box>
                                         <Typography variant="h5" color="textSecondary" component="div">
-                                            {val.status.charAt(0).toUpperCase() + val.status.slice(1)}
+                                            {val.charAt(0).toUpperCase() + val.slice(1)}
                                         </Typography>
                                         <Typography color="textSecondary" variant="h2">
-                                            {val.total ?? 0}
+                                            {
+                                                (totalStatusReservation.find((status) => status.status === val)?.total || <CircularProgress size={30} />)
+                                            }
+
                                         </Typography>
                                     </Box>
                                     <Box sx={{
-                                        background: getStatusGradient(val.status),
+                                        background: getStatusGradient(val),
                                         border: '1px solid', borderColor: 'divider', borderRadius: '50%', p: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                        {getStatusIcon(val.status)}
+                                        {getStatusIcon(val)}
                                     </Box>
                                 </Box>
                                 <Typography color="text.secondary" variant="subtitle1">
-                                    Total Reservations {val.status.charAt(0).toUpperCase() + val.status.slice(1)}
+                                    Total Reservations {val.charAt(0).toUpperCase() + val.slice(1)}
                                 </Typography>
                             </CardContent>
                         </Card>

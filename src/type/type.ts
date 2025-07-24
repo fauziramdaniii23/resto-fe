@@ -60,6 +60,7 @@ export type TReservation = {
     tables: TTables[],
     action: () => void;
     customer_name: string;
+    remark: string
 }
 
 

@@ -47,7 +47,8 @@ const ActionUpdateStatus: React.FC<{ data: TReservation }> = ({data}) => {
             date: reservedDate.format('YYYY-MM-DD'),
             time: reservedDate.format('HH:mm'),
             status: sendStatus ? sendStatus : status,
-            user_id: data.user.id,
+            customer_name: data.customer_name,
+            user_id: data.user?.id,
             tables: data.tables,
             note: data.note,
             remark: remark

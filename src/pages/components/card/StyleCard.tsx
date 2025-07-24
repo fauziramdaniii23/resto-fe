@@ -2,11 +2,15 @@ import {styled} from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 
-export const SyledCard = styled(Card)(() => ({
+export const SyledCard = styled(Card)(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
+    background: 'linear-gradient(25deg, transparent 50%, oklch(12.9% 0.042 264.695) 100%)',
     padding: 0,
     height: '100%',
+    ...theme.applyStyles('dark', {
+        background: 'linear-gradient(25deg, transparent 50%, oklch(98.4% 0.003 247.858) 100%)',
+    }),
     '&:hover': {
         backgroundColor: 'transparent',
         cursor: 'pointer',

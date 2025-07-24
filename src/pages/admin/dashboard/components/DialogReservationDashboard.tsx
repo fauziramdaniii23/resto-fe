@@ -128,7 +128,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
     const [errorTime, setErrorTime] = useState(false);
     const [errorTable, setErrorTable] = useState(false);
 
-    const validateForm: boolean = () => {
+    const validateForm = () => {
         let isValid = true;
 
         if (!customerName || customerName.trim() === '') { setErrorCustomerName(true); isValid = false; } else { setErrorCustomerName(false); }
