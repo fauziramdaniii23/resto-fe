@@ -17,7 +17,6 @@ const ContentMap: Record<string, React.ReactElement> = {
 }
 
 export default function CustomerPages(props: CustomerPageProps) {
-    console.log("load page");
 
     const ContentComponent = ContentMap[props.menu];
 

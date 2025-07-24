@@ -13,12 +13,13 @@ interface SearchInputProps {
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
     onEnter: () => void;
+    onRefresh: () => void;
     placeholder?: string;
     fullWidth?: boolean;
     width?: string | number;
 }
 
-export default function SearchInput({value, onChange, onBlur, onEnter, placeholder = "Search…", fullWidth = false, width = "25ch",}: SearchInputProps) {
+export default function SearchInput({value, onChange, onBlur, onEnter, onRefresh, placeholder = "Search…", fullWidth = false, width = "25ch",}: SearchInputProps) {
     const [valueChange, setValueChange] = useState<boolean>(false)
     const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter" && valueChange) {
@@ -67,7 +68,7 @@ export default function SearchInput({value, onChange, onBlur, onEnter, placehold
                 Search
             </Button>
             <Tooltip title="Refresh">
-                <IconButton onClick={() => onEnter()}>
+                <IconButton onClick={() => onRefresh()}>
                     <AutorenewIcon/>
                 </IconButton>
             </Tooltip>

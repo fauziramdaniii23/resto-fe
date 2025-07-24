@@ -1,11 +1,11 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import {type Column, DataTable, type DataTableRef} from "@/pages/components/DataTable/Table.tsx";
-import React, {useEffect, useRef, useState} from "react";
+import React, { useRef, useState} from "react";
 import {formatDate} from "@/pages/util/parsingdate.ts";
 import DialogReservationDashboard from "@/pages/admin/dashboard/components/DialogReservationDashboard.tsx";
 import type {
-    TApiPaginateResponse,
+    TApiPaginateResponse, TApiResponse,
     TMetaData,
     TReservation,
     TTables,
@@ -19,12 +19,11 @@ import DatePickerFormatter from "@/pages/components/DatePicker/DatePickerFormatt
 import ActionUpdateStatus from "@/pages/admin/dashboard/customers/reservationDashboard/ActionUpdateStatus.tsx";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import {statusReservation} from "@/constant";
 import ChecklistIcon from '@mui/icons-material/Checklist';
-import PendingIcon from '@mui/icons-material/Pending';
-import BackspaceIcon from '@mui/icons-material/Backspace';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BlockIcon from '@mui/icons-material/Block';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import CloseIcon from '@mui/icons-material/Close';
 
 const columns: Column<TReservation>[] = [
     {
@@ -61,6 +60,11 @@ const columns: Column<TReservation>[] = [
     }
 ]
 
+type TStatusReservation = {
+    status: string;
+    total: number;
+};
+
 export const Reservation: React.FC = () => {
     const [modeDialog, setModeDialog] = React.useState<string>('');
     const [dataReservation, setDataReservation] = React.useState<TReservation>({} as TReservation);
@@ -69,15 +73,33 @@ export const Reservation: React.FC = () => {
     const [dataTables, setDataTables] = useState<TMetaData<TReservation>>({} as TMetaData<TReservation>);
     const [loading, setLoading] = useState<boolean>(false);
     const [dateFilter, setDateFilter] = useState<string>('');
+    const [totalStatusReservation, setTotalStatusReservation] = useState<TStatusReservation[]>([]);
 
     const tableRef = useRef<DataTableRef>(null);
 
-    const getDataReservation = () => {
+    const paramsFilter =  {
+        keyword : keyword,
+        date: dateFilter
+    }
+
+    const getTotalStatusReservation = () => {
+        requestGet<TApiResponse<TStatusReservation[]>>('/reservation-status')
+            .then((res) => {
+                if (res.success) {
+                    setTotalStatusReservation(res.data);
+                }
+            })
+    }
+    React.useEffect(() => {
+        getTotalStatusReservation();
+    }, []);
+
+    const getDataReservation = (status?: string, date?: string) => {
         setLoading(true);
         const params = {
-            keyword: keyword,
-            date: dateFilter,
-            page: tableRef.current?.getPage(),
+            keyword: status ?? paramsFilter.keyword,
+            date: date?? paramsFilter.date,
+            page: 1,
             pageSize: tableRef.current?.getPageSize(),
         }
         requestGet<TApiPaginateResponse<TReservation>>(RESERVATION, params)
@@ -103,13 +125,14 @@ export const Reservation: React.FC = () => {
         }
     }
 
-    const handleRefresh = () => {
+    const handleRefreshDataTable = () => {
         tableRef.current?.refresh();
     };
-
-    useEffect(() => {
-        getDataReservation()
-    }, [dateFilter]);
+    const clearAndRefresh = () => {
+        setKeyword('');
+        setDateFilter('');
+        getDataReservation('', '');
+    }
 
     const handleSearchEnter = () => {
         getDataReservation()
@@ -117,27 +140,27 @@ export const Reservation: React.FC = () => {
     const getStatusGradient = (status: string): string => {
         switch (status) {
             case 'pending':
-                return 'linear-gradient(25deg, transparent 0%, hsl(39, 100%, 50%) 100%)'; // orange
+                return 'linear-gradient(25deg, transparent 30%, hsl(39, 100%, 50%) 100%)'; // orange
             case 'confirmed':
-                return 'linear-gradient(25deg, transparent 0%, rgba(0, 224, 11, 1) 100%)'; // green
+                return 'linear-gradient(25deg, transparent 30%, rgba(0, 224, 11, 1) 100%)'; // green
             case 'canceled':
-                return 'linear-gradient(25deg, transparent 0%, hsl(0, 80%, 50%) 100%)'; // red
+                return 'linear-gradient(25deg, transparent 30%, hsl(0, 80%, 50%) 100%)'; // red
             case 'rejected':
-                return 'linear-gradient(25deg, transparent 0%, hsl(0, 80%, 50%) 100%)'; // red
+                return 'linear-gradient(25deg, transparent 30%, hsl(0, 80%, 50%) 100%)'; // red
             case 'completed':
-                return 'linear-gradient(25deg, transparent 0%, hsl(210, 98%, 48%) 100%)'; // blue
+                return 'linear-gradient(25deg, transparent 30%, hsl(210, 98%, 48%) 100%)'; // blue
             default:
-                return 'linear-gradient(25deg, transparent 0%, #ccc 100%)'; // gray fallback
+                return 'linear-gradient(25deg, transparent 30%, #ccc 100%)'; // gray fallback
         }
     };
     const getStatusIcon = (status: string) => {
         switch (status) {
             case 'pending':
-                return <PendingIcon color="action" fontSize="large"/>;
+                return <MoreHorizIcon color="action" fontSize="large"/>;
             case 'confirmed':
                 return <ChecklistIcon color="action" fontSize="large"/>;
             case 'canceled':
-                return <BackspaceIcon color="action" fontSize="large"/>;
+                return <CloseIcon color="action" fontSize="large"/>;
             case 'rejected':
                 return <BlockIcon color="action" fontSize="large"/>;
             case 'completed':
@@ -154,18 +177,19 @@ export const Reservation: React.FC = () => {
                     data={dataReservation}
                     openDialog={openDialog}
                     onClose={() => setOpenDialog(false)}
-                    onRefresh={handleRefresh}
+                    onRefresh={handleRefreshDataTable}
                 />
             )}
             <Box sx={{display: 'flex', gap: 4, mb: 4, mt: 2}}>
                 {
-                    statusReservation.map((status) => (
+                    totalStatusReservation.map((val) => (
                         <Card
+                            onClick={() => {setKeyword(val.status); getDataReservation(val.status)}}
                             sx={{
                                 flex: 1,
                                 minWidth: 240,
                                 maxWidth: 400,
-                                background: `${getStatusGradient(status)} !important`,
+                                background: `${getStatusGradient(val.status)} !important`,
                                 cursor: 'pointer',
                             }}
                         >
@@ -174,20 +198,20 @@ export const Reservation: React.FC = () => {
                                     sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2}}>
                                     <Box>
                                         <Typography variant="h5" color="textSecondary" component="div">
-                                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                                            {val.status.charAt(0).toUpperCase() + val.status.slice(1)}
                                         </Typography>
                                         <Typography color="textSecondary" variant="h2">
-                                            234
+                                            {val.total ?? 0}
                                         </Typography>
                                     </Box>
                                     <Box sx={{
-                                        background: getStatusGradient(status),
+                                        background: getStatusGradient(val.status),
                                         border: '1px solid', borderColor: 'divider', borderRadius: '50%', p: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                        {getStatusIcon(status)}
+                                        {getStatusIcon(val.status)}
                                     </Box>
                                 </Box>
                                 <Typography color="text.secondary" variant="subtitle1">
-                                    Total Reservations {status.charAt(0).toUpperCase() + status.slice(1)}
+                                    Total Reservations {val.status.charAt(0).toUpperCase() + val.status.slice(1)}
                                 </Typography>
                             </CardContent>
                         </Card>
@@ -196,7 +220,7 @@ export const Reservation: React.FC = () => {
 
             </Box>
             <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2, gap: 1}}>
-                <Typography variant="h6" component="div">Reservation Page</Typography>
+                <Typography variant="h6" component="div">Data Reservations</Typography>
                 <Box sx={{display: 'flex', justifyContent: 'end', gap: 2}}>
                     <IconButton
                         sx={{
@@ -208,20 +232,21 @@ export const Reservation: React.FC = () => {
                         <AddIcon/>
                     </IconButton>
                     <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <DatePickerFormatter size="small" label="Filter by date" value={dateFilter} onChange={(val) => setDateFilter(val)}/>
+                        <DatePickerFormatter size="small" label="Filter by reservation date" value={dateFilter} onChange={(val) => {setDateFilter(val); getDataReservation(keyword, val)}}/>
                     </Box>
                     <SearchInput
                         fullWidth
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                         onEnter={handleSearchEnter}
+                        onRefresh={clearAndRefresh}
                     />
                 </Box>
             </Box>
 
             <DataTable<TReservation>
                 ref={tableRef}
-                keyword={keyword}
+                params={paramsFilter}
                 url={RESERVATION}
                 columns={columns}
                 data={dataTables}

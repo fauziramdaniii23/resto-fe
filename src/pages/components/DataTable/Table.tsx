@@ -1,4 +1,4 @@
-import {forwardRef, type ReactNode, useEffect, useImperativeHandle, useRef, useState} from "react";
+import {forwardRef, type ReactNode, useEffect, useImperativeHandle, useState} from "react";
 import {requestGet} from "@/api/api.ts";
 import type {TApiPaginateResponse, TMetaData} from "@/type/type.ts";
 import Box from "@mui/material/Box";
@@ -41,12 +41,11 @@ export type DataTableRef = {
     refresh: () => void;
     getPage: () => number;
     getPageSize: () => number;
-    getPagination: () => { page: number; pageSize: number };
 };
 
 export type DataTableProps<T> = {
     url: string;
-    keyword?: string;
+    params?: Record<string, unknown>;
     columns: Column<T>[];
     data: TMetaData<T>;
     loading: boolean;
@@ -65,16 +64,16 @@ function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRe
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(props.loading);
 
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPageSize, setCurrentPageSize] = useState(5);
 
 
-    const fetchData = async () => {
+    const fetchData = async (page?:number, pageSize?:number) => {
         setLoading(true);
         const params = {
-            keyword: props.keyword,
-            page: page,
-            pageSize: pageSize,
+            ...props.params,
+            page: page ?? currentPage,
+            pageSize: pageSize ?? currentPageSize,
         }
         requestGet<TApiPaginateResponse<T>>(url, params)
             .then((res) => {
@@ -87,40 +86,22 @@ function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRe
         })
     };
 
-    const isFirstRender = useRef(true);
-
     useImperativeHandle(ref, () => ({
         refresh: fetchData,
-        getPage: () => page,
-        getPageSize: () => pageSize,
-        getPagination: () => ({ page, pageSize }),
+        getPage: () => currentPage,
+        getPageSize: () => currentPageSize,
     }));
-
-    useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
-
-        fetchData();
-    }, [page, pageSize]);
 
     useEffect(() => {
         setRows(props.data.data ?? []);
         setRowCount(props.data.total ?? 0);
+        setCurrentPage(1)
     }, [props.data]);
 
     useEffect(() => {
         setLoading(props.loading);
     }, [props.loading]);
 
-    const handlePageChange = (_: unknown, value: number) => {
-        setPage(value);
-    };
-
-    const handleChange = (event: SelectChangeEvent<number>) => {
-        setPageSize(Number(event.target.value));
-    };
     const createColumns: Column<T>[] = [
         ...columns,
         ...(action
@@ -133,6 +114,9 @@ function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRe
             }] as Column<T>[]
             : []),
     ];
+    useEffect(() => {
+        fetchData()
+    }, [])
     return (
         <Box>
             <TableContainer component={Paper} sx={{maxHeight: maxHeight ?? 500}}>
@@ -150,7 +134,7 @@ function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRe
                     </TableHead>
                     <TableBody>
                         {loading ? (
-                            Array.from({length: pageSize}).map((_, i) => (
+                            Array.from({length: currentPageSize}).map((_, i) => (
                                 <TableRow key={`skeleton-${i}`}>
                                     <TableCell>
                                         <Skeleton variant="text" width={20}/>
@@ -176,7 +160,7 @@ function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRe
                         ) : (
                             rows.map((row, i) => (
                                 <TableRow key={i}>
-                                    <TableCell>{(page - 1) * pageSize + i + 1}</TableCell>
+                                    <TableCell>{(currentPage - 1) * currentPageSize + i + 1}</TableCell>
 
                                     {createColumns.map((col) => {
                                         const isActionCol = col.key === 'action';
@@ -209,8 +193,8 @@ function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRe
                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mr: 2}}>
                     <Typography component="p">Rows per page</Typography>
                     <Select
-                        value={pageSize}
-                        onChange={handleChange}
+                        value={currentPageSize}
+                        onChange={(event: SelectChangeEvent<number>) => {setCurrentPageSize(event.target.value); fetchData(currentPage,event.target.value)}}
                         size="small"
                     >
                         <MenuItem value={5}>5</MenuItem>
@@ -220,9 +204,9 @@ function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRe
                     </Select>
                 </Box>
 
-                <Pagination count={Math.ceil(rowCount / pageSize)}
-                            page={page}
-                            onChange={handlePageChange}
+                <Pagination count={Math.ceil(rowCount / currentPageSize)}
+                            page={currentPage}
+                            onChange={(_, val) => {setCurrentPage(val); fetchData(val)}}
                 />
             </Box>
         </Box>
