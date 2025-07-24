@@ -172,6 +172,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
     }
 
     const deleteReservation = () => {
+        setLoadSubmit(true)
         const payload = {
             id: data.id,
         }
@@ -183,6 +184,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
                     showToast('error', 'Delete Reservastion Failed');
                 }
             }).finally(() => {
+            setLoadSubmit(false);
             handleClose();
             handleRefresh()
         })
