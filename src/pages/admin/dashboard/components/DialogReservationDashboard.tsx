@@ -58,6 +58,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
     const [selectedTable, setSelectedTable] = useState<TTables[]>([]);
 
     const [loading, setLoading] = useState(false);
+    const [loadSubmit, setLoadSubmit] = useState(false);
 
     const handleClose = () => onClose?.();
     const handleRefresh = () => onRefresh?.();
@@ -144,6 +145,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
             showToast('error', 'Please fill all required fields');
             return;
         }
+        setLoadSubmit(true)
         const payload = {
             id: data.id,
             customer_name: customerName,
@@ -163,8 +165,9 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
                     showToast('error', 'Update Reservastion Failed');
                 }
             }).finally(() => {
-            handleClose();
-            handleRefresh()
+                setLoadSubmit(false);
+                handleClose();
+                handleRefresh()
         })
     }
 
@@ -292,7 +295,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
                                 <Button
                                     onClick={mode === 'delete' ? deleteReservation : submitReservation}
                                     variant='contained'
-                                    endIcon={<SendIcon/>}
+                                    endIcon={loadSubmit ? <CircularProgress size={20} color="inherit"/> : <SendIcon/>}
                                 >
                                     {mode === 'edit' ? 'Update' :
                                         mode === 'delete' ? 'Delete' : 'Submit'}
