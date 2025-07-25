@@ -14,13 +14,13 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import {ListItemIcon, ListItemText, Skeleton} from "@mui/material";
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditSquareIcon from '@mui/icons-material/EditSquare';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DataNotFound from "@/pages/components/DataNotFound.tsx";
 
 export type TActionMenu = 'view' | 'edit' | 'delete';
 
@@ -149,11 +149,8 @@ function InnerDataTable<T>( props: DataTableProps<T>, ref: React.Ref<DataTableRe
                         ) : rows.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={createColumns.length + 1}>
-                                    <Box display="flex" flexDirection="column" alignItems="center" py={4}>
-                                        <SentimentDissatisfiedIcon fontSize="large" color="disabled"/>
-                                        <Typography variant="body1" color="textSecondary">
-                                            Data Not Found
-                                        </Typography>
+                                    <Box display="flex" flexDirection="column" alignItems="center" py={6}>
+                                        <DataNotFound/>
                                     </Box>
                                 </TableCell>
                             </TableRow>

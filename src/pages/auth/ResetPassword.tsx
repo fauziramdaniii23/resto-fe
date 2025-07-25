@@ -8,15 +8,16 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
-import AppTheme from '../../theme/AppTheme';
-import ColorModeSelect from '../../theme/ColorModeSelect';
+import {styled} from '@mui/material/styles';
+import AppTheme from '../../theme/AppTheme.tsx';
+import ColorModeSelect from '../../theme/ColorModeSelect.tsx';
 import {useEffect, useState} from "react";
 import {requestPost} from "../../api/api.ts";
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import {useSearchParams, useNavigate} from 'react-router-dom';
 import {showToast} from "../util/toast.ts";
+import type {TApiResponse, Void} from "@/type/type.ts";
 
-const Card = styled(MuiCard)(({ theme }) => ({
+const Card = styled(MuiCard)(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     alignSelf: 'center',
@@ -35,7 +36,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
     }),
 }));
 
-const SignInContainer = styled(Stack)(({ theme }) => ({
+const SignInContainer = styled(Stack)(({theme}) => ({
     height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
     minHeight: '100%',
     padding: theme.spacing(2),
@@ -58,15 +59,10 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     },
 }));
 
-type ResetPasswordResponse = {
-    status: string;
-}
 
-export default function SignIn(props: { disableCustomTheme?: boolean }) {
+export default function ResetPassword(props: { disableCustomTheme?: boolean }) {
     const [searchParams] = useSearchParams();
 
-    const [emailError, setEmailError] = useState(false);
-    const [emailErrorMessage, setEmailErrorMessage] = useState('');
     const [passwordError, setPasswordError] = useState(false);
     const [passwordConfirmationError, setPasswordConfirmationError] = useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
@@ -82,6 +78,10 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!token) {
+            navigate('/PageNotFound');
+            return;
+        }
         const emailParam = searchParams.get('email');
         if (emailParam) {
             setEmail(emailParam);
@@ -90,10 +90,9 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (emailError || passwordError) {
+        if (passwordError) {
             return;
         }
-        // const data = new FormData(event.currentTarget);
         setLoading(true)
         const payload = {
             token: token,
@@ -102,17 +101,17 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             password_confirmation: passwordConfirmation,
         }
 
-        requestPost<ResetPasswordResponse, typeof payload>('/reset-password', payload)
+        requestPost<TApiResponse<Void>, typeof payload>('/reset-password', payload)
             .then((res) => {
-                if (res.status === 'Your password has been reset.') {
-                    showToast('success', 'Password berhasil direset, silakan masuk menggunakan password baru Anda.');
+                if (res.success) {
+                    showToast('success', res.info ?? 'Password reset successfully.');
                     navigate('/SignIn');
                 }
             })
             .catch(() => {
 
             })
-            .finally(()=> {
+            .finally(() => {
                 setLoading(false)
             })
     };
@@ -121,15 +120,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     const validateInputs = () => {
 
         let isValid = true;
-
-        if (!email || !/\S+@\S+\.\S+/.test(email)) {
-            setEmailError(true);
-            setEmailErrorMessage('Please enter a valid email address.');
-            isValid = false;
-        } else {
-            setEmailError(false);
-            setEmailErrorMessage('');
-        }
 
         if (!password || password.length < 6) {
             setPasswordError(true);
@@ -147,7 +137,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             setPasswordError(false);
             setPasswordErrorMessage('');
         }
-        if( password !== passwordConfirmation) {
+        if (password !== passwordConfirmation) {
             setPasswordError(true);
             setPasswordErrorMessage('Password and confirmation do not match.');
             setPasswordConfirmationErrorMessage('Password and confirmation do not match.');
@@ -158,15 +148,15 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
     return (
         <AppTheme {...props}>
-            <CssBaseline enableColorScheme />
+            <CssBaseline enableColorScheme/>
 
             <SignInContainer direction="column" justifyContent="space-between">
-                <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
+                <ColorModeSelect sx={{position: 'fixed', top: '1rem', right: '1rem'}}/>
                 <Card variant="outlined">
                     <Typography
                         component="h1"
                         variant="h4"
-                        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+                        sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
                     >
                         Reset Password
                     </Typography>
@@ -184,8 +174,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                         <FormControl>
                             <FormLabel htmlFor="email">Email</FormLabel>
                             <TextField
-                                error={emailError}
-                                helperText={emailErrorMessage}
                                 id="email"
                                 type="email"
                                 name="email"
@@ -194,7 +182,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                                 required
                                 fullWidth
                                 variant="outlined"
-                                color={emailError ? 'error' : 'primary'}
                                 value={email}
                                 disabled={true}
                             />

@@ -3,7 +3,7 @@ import SignIn from '../pages/auth/SignIn';
 import SignUp from '../pages/auth/SignUp';
 import Authorization from "../pages/auth/Authorization.tsx";
 import VerifyEmail from "../pages/components/VerifyEmail.tsx";
-import ResetPassword from "../pages/components/ResetPassword.tsx";
+import ResetPassword from "../pages/auth/ResetPassword.tsx";
 import PageNotFound from "@/pages/PageNotFound.tsx";
 import OAuth from "@/pages/auth/OAuth.tsx";
 import SuperAdmin from "@/route/middleware/SuperAdmin.tsx";

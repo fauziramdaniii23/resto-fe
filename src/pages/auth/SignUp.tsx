@@ -21,7 +21,7 @@ import type {TApiResponse, TUser} from "../../type/type.ts";
 import {redirectTo} from "../util/navigation.tsx";
 import {showToast} from "../util/toast.ts";
 import Loader from "../components/Loader.tsx";
-import DialogVerifyEmail from "../components/DialogVerifyEmail.tsx";
+import DialogVerifyEmail from "./DialogVerifyEmail.tsx";
 
 const Card = styled(MuiCard)(({theme}) => ({
     display: 'flex',

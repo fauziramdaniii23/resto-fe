@@ -20,14 +20,14 @@ const ReservationOrders = () => {
     const user = useAuthStore((state) => state.user);
     const [loading, setLoading] = useState(false);
     const [reservation, setReservation] = useState<TMetaData<TReservation>>();
-    const [search, setSearch] = useState("");
+    const [keyword, setKeyword] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
 
-    const getDataReservation = (page?: number, pageSize?: number) => {
+    const getDataReservation = (paramsKeyword?: string, page?: number, pageSize?: number) => {
         setLoading(true);
         const params = {
             user_id: user?.id,
-            search: search,
+            keyword: paramsKeyword ?? keyword,
             page: page ?? 1,
             pageSize: pageSize ?? 4,
         }
@@ -41,6 +41,14 @@ const ReservationOrders = () => {
         })
     }
 
+    const handkeRefresh = () => {
+        setKeyword("");
+        getDataReservation('');
+    }
+    const handleChangePage = (page: number, pageSize: number) => {
+        getDataReservation(keyword, page, pageSize);
+    }
+
     return (
         <Box>
             <Box
@@ -52,10 +60,11 @@ const ReservationOrders = () => {
                 <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
                     <SearchInput
                         placeholder="Search by Note..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
                         onEnter={getDataReservation}
                         fullWidth
+                        onRefresh={handkeRefresh}
                     />
                 </Box>
             </Box>
@@ -158,7 +167,7 @@ const ReservationOrders = () => {
                                     ))
                                 }
                                 <Box sx={{width: '100%', alignItems: 'end'}}>
-                                    <PaginationViews rowCount={reservation?.total ?? 0} onChange={getDataReservation}/>
+                                    <PaginationViews rowCount={reservation?.total ?? 0} onChange={handleChangePage}/>
                                 </Box>
                             </>
                         )

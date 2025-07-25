@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
-import ForgotPassword from '../components/ForgotPassword';
+import ForgotPassword from './ForgotPassword.tsx';
 import AppTheme from '../../theme/AppTheme';
 import { GoogleIcon } from '../components/CustomIcons';
 import ColorModeSelect from '../../theme/ColorModeSelect';
@@ -22,7 +22,7 @@ import {useEffect, useState} from "react";
 import {redirectToGoogle, requestPost} from "../../api/api.ts";
 import type {TApiResponse, TLoginResponse} from "../../type/type.ts";
 import {useAuthStore, useRememberSignIn} from "../../store/useAuthStore.ts";
-import DialogVerifyEmail from "../components/DialogVerifyEmail.tsx";
+import DialogVerifyEmail from "./DialogVerifyEmail.tsx";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',

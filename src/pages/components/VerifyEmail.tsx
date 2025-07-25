@@ -37,7 +37,7 @@ const VerifyEmail = () => {
 
     return (
         <Box>
-            <Loader show={show}/>
+            <Loader fullScreen show={show}/>
         </Box>
     );
 };

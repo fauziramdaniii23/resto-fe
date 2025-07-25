@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from "@mui/material/Box";
-import Loader from "./Loader.tsx";
+import Loader from "../components/Loader.tsx";
 import {useState} from "react";
 import {requestPost} from "@/api/api.ts";
 import type {TApiResponse, Void} from "@/type/type.ts";
@@ -22,19 +22,18 @@ export default function ForgotPassword({open, handleClose}: ForgotPasswordProps)
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const sumbitForgotPassword = () => {
-        console.log('sumbitForgotPassword', email);
         setLoading(true);
         const payload = {
             email: email,
         }
         requestPost<TApiResponse<Void>, typeof payload>('/forgot-password', payload)
             .then((res) => {
-                if(res.status === 200) {
+                if (res.status === 200) {
                     showToast('success', 'Password reset link sent to your email.');
                 }
             }).catch((err) => {
-               const responseError = err.response?.data;
-                showToast('error', responseError?.message || 'Failed to send password reset link.');
+            const responseError = err.response?.data;
+            showToast('error', responseError?.message || 'Failed to send password reset link.');
         })
             .finally(() => {
                 setLoading(false);
@@ -66,12 +65,10 @@ export default function ForgotPassword({open, handleClose}: ForgotPasswordProps)
                         reset your password.
                     </DialogContentText>
                     <OutlinedInput
-                        autoFocus
                         required
                         margin="dense"
                         id="email"
                         name="email"
-                        label="Email address"
                         placeholder="Email address"
                         type="email"
                         fullWidth
