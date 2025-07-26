@@ -9,6 +9,8 @@ import DialogReservation from "@/pages/customer/components/DialogReservation.tsx
 import {useAuthStore} from "@/store/useAuthStore.ts";
 import Button from "@mui/material/Button";
 import * as React from "react";
+import {useNavigate} from "react-router-dom";
+import {showToast} from "@/pages/util/toast.ts";
 
 const StyledBox = styled('div')(({ theme }) => ({
     alignSelf: 'center',
@@ -38,10 +40,17 @@ const StyledBox = styled('div')(({ theme }) => ({
 }));
 
 export const Hero = () => {
-    const name = useAuthStore((state) => state.user?.name);
+    const auth = useAuthStore((state) => state);
     const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate();
     const handleClickOpen = () => {
-        setOpen(true);
+        if(auth.isAuthenticated) {
+            setOpen(true);
+        } else {
+            showToast('error', 'You must be logged in to make a reservation.');
+            auth.logout()
+            navigate('/SignIn');
+        }
     }
     return (
         <Box
@@ -80,7 +89,7 @@ export const Hero = () => {
                         color="text.secondary"
                         sx={{ textAlign: 'center'}}
                     >
-                        Welcome {name}
+                        Welcome {auth.user?.name || ''} to our Restaurant
                     </Typography>
                     <Typography
                         variant="h1"

@@ -80,12 +80,12 @@ export default function DialogReservation({open, onClose}: TPropsDialogReservati
     const submitReservasi = () => {
         const payload = {
             user_id: user?.id,
+            customer_name: user?.name,
             date: date,
             time: time,
             tables: selectedTable,
             note: note,
         }
-        console.log('payload', payload);
         requestPost<TApiResponse<Void>, typeof payload>('/reservation', payload)
             .then((res) => {
                 console.log('Reservasi berhasil:', res);
@@ -117,6 +117,11 @@ export default function DialogReservation({open, onClose}: TPropsDialogReservati
                 <DialogContent>
                     <FormControl sx={{width: '100%'}} component="fieldset">
                         <Box sx={{display: 'flex', flexDirection: 'column', gap: 2, mt: 1}}>
+                            <TextField
+                                value={user?.name || ''}
+                                disabled={true}
+                                label="Customer Name"
+                                variant="outlined"/>
                             <DatePickerFormatter
                                 value={date}
                                 onChange={(newValue) => setDate(newValue)}

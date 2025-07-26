@@ -168,9 +168,11 @@ export default function MainContent() {
                 }}
             >
                 <SearchInput
+                    fullWidth
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onEnter={getDataMenus}
+                    onRefresh={getDataMenus}
                 />
                 <IconButton size="small" aria-label="RSS feed">
                     <RssFeedRoundedIcon/>
@@ -243,9 +245,11 @@ export default function MainContent() {
                     }}
                 >
                     <SearchInput
+                        fullWidth
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onEnter={getDataMenus}
+                        onRefresh={getDataMenus}
                     />
                     <IconButton size="small" aria-label="RSS feed">
                         <RssFeedRoundedIcon/>

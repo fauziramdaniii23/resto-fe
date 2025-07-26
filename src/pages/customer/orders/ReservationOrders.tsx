@@ -41,7 +41,7 @@ const ReservationOrders = () => {
         })
     }
 
-    const handkeRefresh = () => {
+    const handleRefresh = () => {
         setKeyword("");
         getDataReservation('');
     }
@@ -52,11 +52,8 @@ const ReservationOrders = () => {
     return (
         <Box>
             <Box
-                sx={{display: 'flex', justifyContent: 'space-between', pt: 2}}
+                sx={{display: 'flex', justifyContent: 'end'}}
             >
-                <Typography variant="h4" component="h1" gutterBottom>
-                    Reservation
-                </Typography>
                 <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
                     <SearchInput
                         placeholder="Search by Note..."
@@ -64,7 +61,7 @@ const ReservationOrders = () => {
                         onChange={(e) => setKeyword(e.target.value)}
                         onEnter={getDataReservation}
                         fullWidth
-                        onRefresh={handkeRefresh}
+                        onRefresh={handleRefresh}
                     />
                 </Box>
             </Box>

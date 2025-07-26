@@ -1,7 +1,7 @@
 import {Routes, Route, Navigate} from 'react-router-dom';
 import SignIn from '../pages/auth/SignIn';
 import SignUp from '../pages/auth/SignUp';
-import Authorization from "../pages/auth/Authorization.tsx";
+import Authorization from "./middleware/Authorization.tsx";
 import VerifyEmail from "../pages/components/VerifyEmail.tsx";
 import ResetPassword from "../pages/auth/ResetPassword.tsx";
 import PageNotFound from "@/pages/PageNotFound.tsx";
@@ -17,11 +17,11 @@ const AppRoutes = () => {
         <Routes>
             <Route path="*" element={<Navigate to="/PageNotFound" replace />} />
             <Route path="/PageNotFound" element={<PageNotFound/>}/>
-            <Route path="/" element={<Authorization/>}/>
+            <Route path="/" element={<CustomerPages menu={HOME}/>}/>
             <Route path="/email-verification" element={<VerifyEmail/>}/>
-            <Route path="/reset-password" element={<ResetPassword/>}/>
-            <Route path="/SignIn" element={<SignIn/>}/>
-            <Route path="/SignUp" element={<SignUp/>}/>
+            <Route path="/reset-password" element={<Authorization><ResetPassword/></Authorization>}/>
+            <Route path="/SignIn" element={<Authorization><SignIn/></Authorization>}/>
+            <Route path="/SignUp" element={<Authorization><SignUp/></Authorization>}/>
             <Route path="/login-google" element={<OAuth/>}/>
 
             //customer routes

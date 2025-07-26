@@ -5,4 +5,4 @@ export const CUSTOMER = 'customer';
 export const VIEW = 'view';
 export const EDIT = 'edit';
 
-export const  statusReservation: string[] = ['pending', 'confirmed', 'canceled', 'rejected', 'completed'];
+export const  statusReservation: string[] = ['pending', 'confirmed', 'completed', 'canceled', 'rejected'];
