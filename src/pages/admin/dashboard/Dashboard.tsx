@@ -145,6 +145,8 @@ export default function Dashboard(props: DashboardProps) {
                             items={DashboardMenus}
                             // onItemClick={(id) => handleSelectedMenus(id)}
                             selectedId={props.id}
+                            open={open}
+
                         />
                     </List>
                     <Divider sx={{marginTop: '1rem'}}/>
@@ -159,9 +161,6 @@ export default function Dashboard(props: DashboardProps) {
                         top: 45,
                         borderRadius: '50%',
                         transition: 'all 0.2s ease',
-                        // backgroundColor: mode === 'dark'
-                        //     ? 'oklch(12.9% 0.042 264.695)'
-                        //     : 'oklch(98.4% 0.003 247.858)',
                     }}
                 >
                     {open ? <ChevronLeftIcon/> : <ChevronRightIcon/>}

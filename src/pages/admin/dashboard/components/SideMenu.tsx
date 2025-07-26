@@ -16,6 +16,8 @@ import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {DASHBOARD_HOME, DASHBOARD_RESERVATION, type MenusExtended} from "@/pages/admin/util/navigation.tsx";
 import {useNavigate} from "react-router-dom";
+import {IconButtonSideMenu} from "@/pages/components/button/iconButtonSideBar.tsx";
+import Divider from "@mui/material/Divider";
 
 const iconMap: Record<string, React.ReactElement> = {
     home: <HomeIcon/>,
@@ -27,9 +29,10 @@ interface SideMenuProps {
     items: MenusExtended[];
     selectedId: string | null;
     onItemClick?: (id: string) => void;
+    open?: boolean;
 }
 
-export const SideMenu: React.FC<SideMenuProps> = ({items, selectedId}) => {
+export const SideMenu = ({items, selectedId, open}: SideMenuProps) => {
     const navigate = useNavigate();
 
     const handleListItemClick = (id: string) => {
@@ -54,29 +57,49 @@ export const SideMenu: React.FC<SideMenuProps> = ({items, selectedId}) => {
 
                 if (hasChildren) {
                     return (
+                        <>
                         <Accordion key={item.id} defaultExpanded disableGutters elevation={0}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                                <Typography color="text.secondary"
-                                >{item.label}</Typography>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon/>}
+                                  sx={{
+                                      '& .MuiAccordionSummary-content': {
+                                          display: open ? 'flex' : 'none',
+                                      }
+                                  }}
+                            >
+                                {open && <Typography color="text.secondary">{item.label}</Typography>}
                             </AccordionSummary>
-                            <AccordionDetails>
+                            <AccordionDetails sx={{padding: 0}}>
                                 <List disablePadding>
-                                    <SideMenu items={item.children!} selectedId={selectedId}/>
+                                    <SideMenu items={item.children!} selectedId={selectedId} open={open}/>
                                 </List>
                             </AccordionDetails>
-                        </Accordion>
+                        </Accordion><Divider/>
+                        </>
                     );
                 } else {
                     return (
-                        <ListItem key={item.id} component="div" disablePadding>
-                            <ListItemButton
-                                selected={selectedId === item.id}
-                                onClick={() => handleListItemClick(item.id)}
-                            >
-                                {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                                <ListItemText primary={item.label}/>
-                            </ListItemButton>
+                        <ListItem key={item.id} component="div" disablePadding
+                            sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                        >
+                            {
+                                open ? (
+                                    <ListItemButton
+                                        selected={selectedId === item.id}
+                                        onClick={() => handleListItemClick(item.id)}
+                                    >
+                                        {icon && <ListItemIcon>{icon}</ListItemIcon>}
+                                        <ListItemText primary={item.label}/>
+                                    </ListItemButton>
+                                ) : (
+                                    <IconButtonSideMenu
+                                        onClick={() => handleListItemClick(item.id)}
+                                    >
+                                        {icon}
+                                    </IconButtonSideMenu>
+                                )
+                            }
                         </ListItem>
+
                     );
                 }
             })}
