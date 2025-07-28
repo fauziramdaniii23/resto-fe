@@ -12,9 +12,12 @@ import Chip from "@mui/material/Chip";
 import SearchInput from "@/pages/components/Search.tsx";
 import DataNotFound from "@/pages/components/DataNotFound.tsx";
 import Link from '@mui/material/Link';
-import DialogReservation from "@/pages/customer/components/DialogReservation.tsx";
 import PaginationViews from "@/pages/components/PaginationView.tsx";
 import {SyledCard, SyledCardContent} from "@/pages/components/card/StyleCard.tsx";
+import DialogReservation from "@/pages/components/DialogReservation.tsx";
+import {CREATE, VIEW, EDIT} from "@/constant";
+import EditSquareIcon from '@mui/icons-material/EditSquare';
+import {IconButtonEdit} from "@/pages/components/button/styleIconButton.tsx";
 
 const ReservationOrders = () => {
     const user = useAuthStore((state) => state.user);
@@ -22,6 +25,7 @@ const ReservationOrders = () => {
     const [reservation, setReservation] = useState<TMetaData<TReservation>>();
     const [keyword, setKeyword] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
+    const [mode, setMode] = useState(CREATE);
 
     const getDataReservation = (paramsKeyword?: string, page?: number, pageSize?: number) => {
         setLoading(true);
@@ -49,8 +53,18 @@ const ReservationOrders = () => {
         getDataReservation(keyword, page, pageSize);
     }
 
+    const [dataReservation, setDataReservation] = useState<TReservation>({} as TReservation);
+    const openDialogReservation = (mode: string, data : TReservation) => {
+        setDataReservation(data);
+        setMode(mode);
+        setOpenDialog(true);
+        console.log(mode);
+    }
+
+
     return (
         <Box>
+            <DialogReservation mode={mode} data={dataReservation} openDialog={openDialog} onClose={() => setOpenDialog(false)}/>
             <Box
                 sx={{display: 'flex', justifyContent: 'end'}}
             >
@@ -96,29 +110,31 @@ const ReservationOrders = () => {
                                     <Link
                                         underline="hover"
                                         component="button"
-                                        onClick={() => setOpenDialog(true)}
+                                        onClick={() => openDialogReservation(CREATE ,{} as TReservation)}
                                         sx={{color: 'primary.main', mr: 0.5}}
                                     >
                                         Click here
                                     </Link>
                                     <Typography>to Reservation</Typography>
                                 </Box>
-                                <DialogReservation open={openDialog} onClose={() => setOpenDialog(false)}/>
                             </Box>
 
                         ) : (
                             <>
                                 {
-                                    reservation?.data?.map((item: TReservation) => (
-                                        <Grid size={2}>
+                                    reservation?.data?.map((item: TReservation, idx) => (
+                                        <Grid size={2} key={idx}>
                                             <SyledCard
+                                                onClick={ () => openDialogReservation(VIEW, item) }
                                                 key={item.id}
                                                 sx={{
                                                     flex: '1 1 calc(50%)',
-                                                    boxSizing: 'border-box'
+                                                    boxSizing: 'border-box',
+                                                    position : 'relative',
                                                 }}
                                             >
                                                 <SyledCardContent>
+                                                    <IconButtonEdit sx={{position: 'absolute', right: 10, top: 10}} onClick={(e) => {e.stopPropagation(); openDialogReservation(EDIT, item)}}><EditSquareIcon/></IconButtonEdit>
                                                     <Typography variant="h6" component="div">
                                                         {formatDate(item.reserved_at)}
                                                     </Typography>

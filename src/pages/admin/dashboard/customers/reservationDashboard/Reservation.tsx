@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import {type Column, DataTable, type DataTableRef} from "@/pages/components/DataTable/Table.tsx";
 import React, { useRef, useState} from "react";
 import {formatDate} from "@/pages/util/parsingdate.ts";
-import DialogReservationDashboard from "@/pages/admin/dashboard/components/DialogReservationDashboard.tsx";
+import DialogReservation from "@/pages/components/DialogReservation.tsx";
 import type {
     TApiPaginateResponse, TApiResponse,
     TMetaData,
@@ -35,6 +35,11 @@ const columns: Column<TReservation>[] = [
     {
         key: 'reserved_at',
         label: 'Reservation Date',
+        format: (val) => formatDate(val),
+    },
+    {
+        key: 'created_at',
+        label: 'Created Date',
         format: (val) => formatDate(val),
     },
     {
@@ -175,7 +180,7 @@ export const Reservation: React.FC = () => {
     return (
         <Box>
             {openDialog && modeDialog && (
-                <DialogReservationDashboard
+                <DialogReservation
                     mode={modeDialog}
                     data={dataReservation}
                     openDialog={openDialog}

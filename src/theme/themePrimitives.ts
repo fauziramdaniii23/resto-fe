@@ -393,3 +393,8 @@ export const typography = {
 export const shape = {
   borderRadius: 8,
 };
+
+export const backgroundTheme = {
+  dark: 'oklch(12.9% 0.042 264.695)',
+  light: 'oklch(98.4% 0.003 247.858)'
+}

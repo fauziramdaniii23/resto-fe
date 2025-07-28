@@ -16,7 +16,7 @@ import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {DASHBOARD_HOME, DASHBOARD_RESERVATION, type MenusExtended} from "@/pages/admin/util/navigation.tsx";
 import {useNavigate} from "react-router-dom";
-import {IconButtonSideMenu} from "@/pages/components/button/iconButtonSideBar.tsx";
+import {IconButtonSideMenu} from "@/pages/components/button/styleIconButton.tsx";
 import Divider from "@mui/material/Divider";
 
 const iconMap: Record<string, React.ReactElement> = {

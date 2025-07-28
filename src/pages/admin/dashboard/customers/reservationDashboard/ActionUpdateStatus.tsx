@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import type {TApiResponse, TReservation, Void} from "@/type/type.ts";
+import type {TApiResponse, TReservation} from "@/type/type.ts";
 import type {DataTableRef} from "@/pages/components/DataTable/Table.tsx";
 import dayjs from "dayjs";
 import {requestPost} from "@/api/api.ts";
@@ -16,7 +16,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
-import {statusReservation} from "@/constant";
+import { statusReservation} from "@/constant";
 
 const ActionUpdateStatus: React.FC<{ data: TReservation }> = ({data}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -53,13 +53,15 @@ const ActionUpdateStatus: React.FC<{ data: TReservation }> = ({data}) => {
             note: data.note,
             remark: remark
         }
-        requestPost<TApiResponse<Void>, typeof payload>('/reservation', payload)
+
+        requestPost<TApiResponse<TReservation>, typeof payload>('/reservation', payload)
             .then((res) => {
                 if (res.success) {
                     showToast('success', 'Update Status Success');
                     data.status = sendStatus ? sendStatus : status;
-                } else {
-                    showToast('error', 'Update Status Failed');
+                    if (data.status === 'rejected' || data.status === 'canceled') {
+                        data.remark = res.data.remark;
+                    }
                 }
             }).finally(() => {
             handleRefresh()

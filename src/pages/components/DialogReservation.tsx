@@ -16,7 +16,7 @@ import {requestDelete, requestGet, requestPost} from "@/api/api.ts";
 import type {TApiResponse, TReservation, Void} from "@/type/type.ts";
 import {showToast} from "@/pages/util/toast.ts";
 import dayjs from "dayjs";
-import {VIEW} from "@/constant";
+import {VIEW, EDIT, CREATE, DELETE, SUCCESS, ERROR} from "@/constant";
 import Typography from "@mui/material/Typography";
 import {RESERVATION} from "@/api/url.ts";
 
@@ -35,17 +35,17 @@ type DialogReservationDashboardProps = {
     onRefresh?: () => void;
 };
 
-export default function DialogReservationDashboard ({mode, data, openDialog, onClose, onRefresh}: DialogReservationDashboardProps) {
+export default function DialogReservation ({mode, data, openDialog, onClose, onRefresh}: DialogReservationDashboardProps) {
 
     const [date, setDate] = React.useState('');
     const [time, setTime] = React.useState('');
-    const [note, setNote] = React.useState(data.note);
-    const [customerName, setCustomerName] = useState(data.customer_name);
-    const [remark, setRemark] = useState(data.remark || '');
+    const [note, setNote] = React.useState('');
+    const [customerName, setCustomerName] = useState('');
+    const [remark, setRemark] = useState('');
 
-    const title: string = mode === 'create' ? 'Create Reservation' : mode === 'view' ? 'View Reservation' : mode === 'edit' ? 'Edit Reservation' : mode === 'delete' ? 'Delete Reservation ?' : 'Create Reservation';
+    const title: string = mode === CREATE ? 'Create Reservation' : mode === VIEW ? 'View Reservation' : mode === EDIT ? 'Edit Reservation' : mode === 'delete' ? 'Delete Reservation ?' : 'Create Reservation';
     let mappingOptionsTables: TTables[] = [];
-    if (mode != 'create') {
+    if (mode != CREATE) {
         mappingOptionsTables = data.tables.map((data) => ({
             id: data.id,
             table_number: data.table_number,
@@ -72,7 +72,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
         requestGet<TApiResponse<TTables[]>>('/tables', params)
             .then((res) => {
                 const dataTables = res.data;
-                if (mode === 'create') {
+                if (mode === CREATE) {
                     setOptionTables(dataTables);
                 } else {
                     const targetIds = mappingOptionsTables.map((table) => table.id);
@@ -96,6 +96,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
                 setLoading(false);
             });
     }
+
     useEffect(() => {
         if (mode === VIEW) {
             setSelectedTable(mappingOptionsTables)
@@ -109,17 +110,21 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
     }, [date, time]);
 
     useEffect(() => {
-        if (mode === 'create') {
+        if (mode === CREATE) {
             setDate('');
             setTime('');
             setNote('');
         }
-        if(data.reserved_at){
+        if(data && Object.keys(data).length > 0) {
             const reservedDate = dayjs(data.reserved_at)
             setDate(reservedDate.format('YYYY-MM-DD'));
             setTime(reservedDate.format('HH:mm'));
+            setCustomerName(data.customer_name || '');
+            setSelectedTable(mappingOptionsTables)
+            setNote(data.note || '');
+            setRemark(data.remark || '');
         }
-    }, [])
+    }, [data])
 
     const handleChange = (_: unknown, newValue: TTables[]) => {
         setSelectedTable(newValue);
@@ -142,7 +147,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
 
     const submitReservation = () => {
         if (!validateForm()) {
-            showToast('error', 'Please fill all required fields');
+            showToast(ERROR, 'Please fill all required fields');
             return;
         }
         setLoadSubmit(true)
@@ -160,9 +165,9 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
         requestPost<TApiResponse<Void>, typeof payload>(RESERVATION, payload)
             .then((res) => {
                 if (res.success) {
-                    showToast('success', 'Update Reservation Success');
+                    showToast(SUCCESS, 'Update Reservation Success');
                 } else {
-                    showToast('error', 'Update Reservastion Failed');
+                    showToast(ERROR, 'Update Reservastion Failed');
                 }
             }).finally(() => {
                 setLoadSubmit(false);
@@ -179,9 +184,9 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
         requestDelete<TApiResponse<Void>>('/reservation/delete', payload)
             .then((res) => {
                 if (res.success) {
-                    showToast('success', 'Delete Reservation Success');
+                    showToast(SUCCESS, 'Delete Reservation Success');
                 } else {
-                    showToast('error', 'Delete Reservastion Failed');
+                    showToast(ERROR, 'Delete Reservastion Failed');
                 }
             }).finally(() => {
             setLoadSubmit(false);
@@ -261,7 +266,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
                                         )}
                                     />
                                     <TextField
-                                        disabled={mode === 'view'}
+                                        disabled={mode === VIEW}
                                         value={note}
                                         onChange={(e) => setNote(e.target.value)}
                                         label="Note"
@@ -272,7 +277,7 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
                                     />
                                     {(data.status === 'canceled' || data.status === 'rejected') && (
                                         <TextField
-                                            disabled={mode === 'view'}
+                                            disabled={mode === VIEW}
                                             value={remark}
                                             onChange={(e) => setRemark(e.target.value)}
                                             label="Remark"
@@ -290,17 +295,17 @@ export default function DialogReservationDashboard ({mode, data, openDialog, onC
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}> {mode === 'view' ? 'Close' : 'Cancel'} </Button>
+                    <Button onClick={handleClose}> {mode === VIEW ? 'Close' : 'Cancel'} </Button>
                     {
                         mode != 'view' && (
                             <>
                                 <Button
-                                    onClick={mode === 'delete' ? deleteReservation : submitReservation}
+                                    onClick={mode === DELETE ? deleteReservation : submitReservation}
                                     variant='contained'
                                     endIcon={loadSubmit ? <CircularProgress size={20} color="inherit"/> : <SendIcon/>}
                                 >
-                                    {mode === 'edit' ? 'Update' :
-                                        mode === 'delete' ? 'Delete' : 'Submit'}
+                                    {mode === EDIT ? 'Update' :
+                                        mode === DELETE ? 'Delete' : 'Submit'}
                                 </Button>
                             </>
                         )

@@ -17,7 +17,7 @@ import {useTheme} from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import {DashboardAppBarr} from "@/pages/admin/dashboard/components/AppBarr.tsx";
 import {MainContent} from "@/pages/admin/dashboard/components/MainContent.tsx";
-import {IconButtonSideBar} from "@/pages/components/button/iconButtonSideBar.tsx";
+import {IconButtonSideBar} from "@/pages/components/button/styleIconButton.tsx";
 
 const drawerWidth = 240;
 

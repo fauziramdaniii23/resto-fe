@@ -5,12 +5,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import image2 from '@/assets/image2.jpg';
-import DialogReservation from "@/pages/customer/components/DialogReservation.tsx";
 import {useAuthStore} from "@/store/useAuthStore.ts";
 import Button from "@mui/material/Button";
 import * as React from "react";
 import {useNavigate} from "react-router-dom";
 import {showToast} from "@/pages/util/toast.ts";
+import DialogReservation from "@/pages/components/DialogReservation.tsx";
+import {CREATE} from "@/constant";
+import type {TReservation} from "@/type/type.ts";
 
 const StyledBox = styled('div')(({ theme }) => ({
     alignSelf: 'center',
@@ -130,7 +132,7 @@ export const Hero = () => {
                         >
                             Click here to Reservasi
                         </Button>
-                        <DialogReservation open={open} onClose={() => setOpen(false)}/>
+                        <DialogReservation mode={CREATE} data={{} as TReservation} openDialog={open} onClose={() => setOpen(false)}/>
                     </Stack>
                     <Typography
                         variant="caption"

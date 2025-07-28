@@ -21,6 +21,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditSquareIcon from '@mui/icons-material/EditSquare';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DataNotFound from "@/pages/components/DataNotFound.tsx";
+import {VIEW, EDIT, DELETE} from "@/constant";
 
 export type TActionMenu = 'view' | 'edit' | 'delete';
 
@@ -223,7 +224,7 @@ function ActionMenu({onClick}: ActionMenuProps) {
         if (mode) onClick(mode);
     };
     const actionMenu: TActionMenu[] = [
-        'view', 'edit', 'delete',
+        VIEW , EDIT, DELETE,
     ]
 
     return (
@@ -236,9 +237,9 @@ function ActionMenu({onClick}: ActionMenuProps) {
                     actionMenu.map((mode) => (
                         <MenuItem sx={{mr:2}} onClick={() => handleClose(mode)}>
                             <ListItemIcon>
-                                {mode === 'view' && <VisibilityIcon/>}
-                                {mode === 'edit' && <EditSquareIcon/>}
-                                {mode === 'delete' && <DeleteIcon/>}
+                                {mode === VIEW && <VisibilityIcon/>}
+                                {mode === EDIT && <EditSquareIcon/>}
+                                {mode === DELETE && <DeleteIcon/>}
                             </ListItemIcon>
                             <ListItemText>{mode.charAt(0).toUpperCase() + mode.slice(1)}</ListItemText>
                         </MenuItem>
