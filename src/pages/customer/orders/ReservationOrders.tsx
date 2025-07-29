@@ -18,6 +18,7 @@ import DialogReservation from "@/pages/components/DialogReservation.tsx";
 import {CREATE, VIEW, EDIT} from "@/constant";
 import EditSquareIcon from '@mui/icons-material/EditSquare';
 import {IconButtonEdit} from "@/pages/components/button/styleIconButton.tsx";
+import {RESERVATION} from "@/api/url.ts";
 
 const ReservationOrders = () => {
     const user = useAuthStore((state) => state.user);
@@ -35,7 +36,7 @@ const ReservationOrders = () => {
             page: page ?? 1,
             pageSize: pageSize ?? 4,
         }
-        requestGet<TApiPaginateResponse<TReservation>>('/reservation-customer', params)
+        requestGet<TApiPaginateResponse<TReservation>>(`${RESERVATION}/customer`, params)
             .then((res) => {
                 if (res.success) {
                     setReservation(res.meta_data);
@@ -58,19 +59,18 @@ const ReservationOrders = () => {
         setDataReservation(data);
         setMode(mode);
         setOpenDialog(true);
-        console.log(mode);
     }
 
 
     return (
         <Box>
-            <DialogReservation mode={mode} data={dataReservation} openDialog={openDialog} onClose={() => setOpenDialog(false)}/>
+            <DialogReservation mode={mode} data={dataReservation} openDialog={openDialog} onClose={() => setOpenDialog(false)} onRefresh={handleRefresh}/>
             <Box
                 sx={{display: 'flex', justifyContent: 'end'}}
             >
                 <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
                     <SearchInput
-                        placeholder="Search by Note..."
+                        placeholder="Search..."
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                         onEnter={getDataReservation}

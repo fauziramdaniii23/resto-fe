@@ -53,8 +53,7 @@ const ActionUpdateStatus: React.FC<{ data: TReservation }> = ({data}) => {
             note: data.note,
             remark: remark
         }
-
-        requestPost<TApiResponse<TReservation>, typeof payload>('/reservation', payload)
+        requestPost<TApiResponse<TReservation>, typeof payload>('/reservation/update-status', payload)
             .then((res) => {
                 if (res.success) {
                     showToast('success', 'Update Status Success');

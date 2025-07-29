@@ -123,6 +123,7 @@ export default function DialogReservation ({mode, data, openDialog, onClose, onR
             setSelectedTable(mappingOptionsTables)
             setNote(data.note || '');
             setRemark(data.remark || '');
+            console.log(data);
         }
     }, [data])
 

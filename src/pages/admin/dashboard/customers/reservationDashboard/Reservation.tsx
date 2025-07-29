@@ -38,8 +38,8 @@ const columns: Column<TReservation>[] = [
         format: (val) => formatDate(val),
     },
     {
-        key: 'created_at',
-        label: 'Created Date',
+        key: 'updated_at',
+        label: 'Updated Date',
         format: (val) => formatDate(val),
     },
     {
@@ -89,7 +89,7 @@ export const Reservation: React.FC = () => {
     }
 
     const getTotalStatusReservation = () => {
-        requestGet<TApiResponse<TStatusReservation[]>>('/reservation-status')
+        requestGet<TApiResponse<TStatusReservation[]>>(`${RESERVATION}/status`)
             .then((res) => {
                 if (res.success) {
                     setTotalStatusReservation(res.data);
