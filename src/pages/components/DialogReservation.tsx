@@ -13,7 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import {useEffect, useState} from "react";
 import {Autocomplete, CircularProgress} from "@mui/material";
 import {requestDelete, requestGet, requestPost} from "@/api/api.ts";
-import type {TApiResponse, TReservation, Void} from "@/type/type.ts";
+import type {TApiResponse, TReservation, TUser, Void} from "@/type/type.ts";
 import {showToast} from "@/pages/util/toast.ts";
 import dayjs from "dayjs";
 import {VIEW, EDIT, CREATE, DELETE, SUCCESS, ERROR} from "@/constant";
@@ -27,7 +27,8 @@ export type TTables = {
     status: string;
 }
 
-type DialogReservationDashboardProps = {
+type DialogReservationProps = {
+    user?: TUser | null;
     mode: string;
     data: TReservation;
     openDialog: boolean;
@@ -35,13 +36,14 @@ type DialogReservationDashboardProps = {
     onRefresh?: () => void;
 };
 
-export default function DialogReservation ({mode, data, openDialog, onClose, onRefresh}: DialogReservationDashboardProps) {
+export default function DialogReservation ({user ,mode, data, openDialog, onClose, onRefresh}: DialogReservationProps) {
 
     const [date, setDate] = React.useState('');
     const [time, setTime] = React.useState('');
     const [note, setNote] = React.useState('');
     const [customerName, setCustomerName] = useState('');
     const [remark, setRemark] = useState('');
+    const [guestCount, setGuestCount] = useState('');
 
     const title: string = mode === CREATE ? 'Create Reservation' : mode === VIEW ? 'View Reservation' : mode === EDIT ? 'Edit Reservation' : mode === 'delete' ? 'Delete Reservation ?' : 'Create Reservation';
     let mappingOptionsTables: TTables[] = [];
@@ -101,6 +103,9 @@ export default function DialogReservation ({mode, data, openDialog, onClose, onR
         if (mode === VIEW) {
             setSelectedTable(mappingOptionsTables)
         }
+        if(user){
+            setCustomerName(user.name);
+        }
     }, []);
 
     useEffect(() => {
@@ -119,11 +124,11 @@ export default function DialogReservation ({mode, data, openDialog, onClose, onR
             const reservedDate = dayjs(data.reserved_at)
             setDate(reservedDate.format('YYYY-MM-DD'));
             setTime(reservedDate.format('HH:mm'));
+            setGuestCount(String(data.guest_count) || '');
             setCustomerName(data.customer_name || '');
             setSelectedTable(mappingOptionsTables)
             setNote(data.note || '');
             setRemark(data.remark || '');
-            console.log(data);
         }
     }, [data])
 
@@ -157,6 +162,7 @@ export default function DialogReservation ({mode, data, openDialog, onClose, onR
             customer_name: customerName,
             date: date,
             time: time,
+            guest_count: parseInt(guestCount),
             status: data.status,
             user_id: data.user?.id,
             tables: selectedTable,
@@ -218,7 +224,7 @@ export default function DialogReservation ({mode, data, openDialog, onClose, onR
                                     <TextField
                                         error={errorCustomerName}
                                         value={customerName}
-                                        disabled={mode != 'create'}
+                                        disabled={user != null || mode != CREATE}
                                         onChange={(e) => setCustomerName(e.target.value)}
                                         label="Customer Name"
                                         variant="outlined"/>
@@ -229,6 +235,9 @@ export default function DialogReservation ({mode, data, openDialog, onClose, onR
                                         onChange={(newValue) => setDate(newValue)}
                                         label="Reservasi Date"
                                         sx={{width: '100%'}}
+                                        shouldDisableDate={(date) =>
+                                            date.isSame(dayjs(), 'day') || date.isBefore(dayjs(), 'day')
+                                        }
                                     />
                                     <TimePickerFormatter
                                         error={errorTime}
@@ -238,6 +247,14 @@ export default function DialogReservation ({mode, data, openDialog, onClose, onR
                                         label="Reservasi Time"
                                         sx={{width: '100%'}}
                                     />
+                                    <TextField
+                                        type="number"
+                                        error={errorCustomerName}
+                                        value={guestCount}
+                                        disabled={mode === 'view'}
+                                        onChange={(e) => setGuestCount(e.target.value)}
+                                        label="Guest Count"
+                                        variant="outlined"/>
                                     <Autocomplete
                                         disabled={mode === 'view'}
                                         multiple

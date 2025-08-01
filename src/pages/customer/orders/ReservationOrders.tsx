@@ -19,6 +19,9 @@ import {CREATE, VIEW, EDIT} from "@/constant";
 import EditSquareIcon from '@mui/icons-material/EditSquare';
 import {IconButtonEdit} from "@/pages/components/button/styleIconButton.tsx";
 import {RESERVATION} from "@/api/url.ts";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import dayjs from "dayjs";
 
 const ReservationOrders = () => {
     const user = useAuthStore((state) => state.user);
@@ -38,8 +41,9 @@ const ReservationOrders = () => {
         }
         requestGet<TApiPaginateResponse<TReservation>>(`${RESERVATION}/customer`, params)
             .then((res) => {
+                const data = res.meta_data;
                 if (res.success) {
-                    setReservation(res.meta_data);
+                    setReservation(data);
                 }
             }).finally(() => {
             setLoading(false);
@@ -61,14 +65,30 @@ const ReservationOrders = () => {
         setOpenDialog(true);
     }
 
+    const isDisable = (date: string): boolean => {
+        const inputDate = dayjs(date).startOf('day');
+        const today = dayjs().startOf('day');
+
+        return inputDate.isBefore(today);
+    };
+
 
     return (
         <Box>
-            <DialogReservation mode={mode} data={dataReservation} openDialog={openDialog} onClose={() => setOpenDialog(false)} onRefresh={handleRefresh}/>
+            <DialogReservation user={user} mode={mode} data={dataReservation} openDialog={openDialog} onClose={() => setOpenDialog(false)} onRefresh={handleRefresh}/>
             <Box
                 sx={{display: 'flex', justifyContent: 'end'}}
             >
                 <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
+                    <IconButton
+                        sx={{
+                            width: 40,
+                        }}
+                        size="small"
+                        onClick={() => openDialogReservation(CREATE, {} as TReservation)}
+                    >
+                        <AddIcon/>
+                    </IconButton>
                     <SearchInput
                         placeholder="Search..."
                         value={keyword}
@@ -134,7 +154,7 @@ const ReservationOrders = () => {
                                                 }}
                                             >
                                                 <SyledCardContent>
-                                                    <IconButtonEdit sx={{position: 'absolute', right: 10, top: 10}} onClick={(e) => {e.stopPropagation(); openDialogReservation(EDIT, item)}}><EditSquareIcon/></IconButtonEdit>
+                                                    <IconButtonEdit disabled={isDisable(item.reserved_at) || item.status === 'confirmed'} sx={{position: 'absolute', right: 10, top: 10}} onClick={(e) => {e.stopPropagation(); openDialogReservation(EDIT, item)}}><EditSquareIcon/></IconButtonEdit>
                                                     <Typography variant="h6" component="div">
                                                         {formatDate(item.reserved_at)}
                                                     </Typography>

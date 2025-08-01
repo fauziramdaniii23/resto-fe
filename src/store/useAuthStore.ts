@@ -1,26 +1,15 @@
 import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 import {createEncryptedStorage} from "../pages/util/encryptor.ts";
-
-type User = {
-    id: number | null;
-    name: string | null;
-    username: string | null;
-    email: string | null;
-    role: string | null;
-};
+import type {TUser} from "@/type/type.ts";
 
 type AuthState = {
     isAuthenticated: boolean;
     token: string | null;
-    user: User | null;
+    user: TUser | null;
     login: (data: {
         token: string;
-        id: number;
-        name: string;
-        username: string;
-        email: string;
-        role: string;
+        user : TUser;
     }) => void;
     logout: () => void;
 };
@@ -31,17 +20,11 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: false,
             token: null,
             user: null,
-            login: ({token, id, name, username, email, role}) =>
+            login: ({token, user}) =>
                 set({
                     isAuthenticated: true,
                     token: token,
-                    user: {
-                        id,
-                        name,
-                        username,
-                        email,
-                        role,
-                    },
+                    user : user
                 }),
             logout: () =>
                 set({

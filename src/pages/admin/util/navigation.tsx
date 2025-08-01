@@ -24,8 +24,8 @@ export const DashboardMenus: MenusExtended[] = [
         icon: 'pinned',
         children: [
             {id: '2.1', label: 'Reservation', icon: 'reservation'},
-            {id: '2.2', label: 'News', icon: 'folder'},
-            {id: '2.3', label: 'Forums', icon: 'folder'},
+            {id: '2.2', label: 'Orders', icon: 'orders'},
+            {id: '2.3', label: 'Management Menus', icon: 'menus'},
             {id: '2.4', label: 'Travel documents', icon: 'pdf'},
         ],
     },

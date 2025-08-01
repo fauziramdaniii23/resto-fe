@@ -12,9 +12,10 @@ type DatePickerFormatter = {
     disabled?: boolean;
     size?: "small" | "medium";
     error?: boolean;
+    shouldDisableDate?: (date: Dayjs) => boolean;
 };
 
-const DatePickerFormatter = ({label, value, onChange, sx, disabled, size = 'medium', error}: DatePickerFormatter) => {
+const DatePickerFormatter = ({label, value, onChange, sx, disabled, size = 'medium', error, shouldDisableDate}: DatePickerFormatter) => {
     return (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -38,6 +39,7 @@ const DatePickerFormatter = ({label, value, onChange, sx, disabled, size = 'medi
                             size: size,
                         },
                     }}
+                    shouldDisableDate={shouldDisableDate}
                 />
             </LocalizationProvider>
     );

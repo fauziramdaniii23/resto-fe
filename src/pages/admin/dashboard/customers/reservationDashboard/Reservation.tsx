@@ -49,9 +49,9 @@ const columns: Column<TReservation>[] = [
         format: (val: TTables[]) => val.map((t) => `${t.table_number}`).join(', '),
     },
     {
-        key: 'tables.capacity',
+        key: 'guest_count',
         label: 'Amount Person',
-        format: (val: TTables[]) => `${val.reduce((sum, t) => sum + t.capacity, 0)} person`,
+        format: (val) =>  (`${val} Person`),
     },
     {
         key: 'note',

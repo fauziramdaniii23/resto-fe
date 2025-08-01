@@ -12,17 +12,23 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HomeIcon from '@mui/icons-material/Home';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
+import FormatListBulletedAddIcon from '@mui/icons-material/FormatListBulletedAdd';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {DASHBOARD_HOME, DASHBOARD_RESERVATION, type MenusExtended} from "@/pages/admin/util/navigation.tsx";
 import {useNavigate} from "react-router-dom";
 import {IconButtonSideMenu} from "@/pages/components/button/styleIconButton.tsx";
 import Divider from "@mui/material/Divider";
+import NotInterestedIcon from '@mui/icons-material/NotInterested';
 
 const iconMap: Record<string, React.ReactElement> = {
     home: <HomeIcon/>,
     settings: <SettingsIcon/>,
     reservation: <BookmarkAddIcon/>,
+    orders: <FormatListBulletedAddIcon/>,
+    menus: <FastfoodIcon/>,
+    notFound: <NotInterestedIcon/>,
 };
 
 interface SideMenuProps {
@@ -53,7 +59,7 @@ export const SideMenu = ({items, selectedId, open}: SideMenuProps) => {
         <>
             {items.map((item) => {
                 const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-                const icon = item.icon && iconMap[item.icon];
+                const icon = item.icon && iconMap[item.icon] ? iconMap[item.icon] : iconMap['notFound'];
 
                 if (hasChildren) {
                     return (
