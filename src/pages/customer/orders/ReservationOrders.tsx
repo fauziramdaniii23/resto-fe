@@ -75,7 +75,7 @@ const ReservationOrders = () => {
 
     return (
         <Box>
-            <DialogReservation user={user} mode={mode} data={dataReservation} openDialog={openDialog} onClose={() => setOpenDialog(false)} onRefresh={handleRefresh}/>
+            <DialogReservation authUser={user} mode={mode} data={dataReservation} openDialog={openDialog} onClose={() => setOpenDialog(false)} onRefresh={handleRefresh}/>
             <Box
                 sx={{display: 'flex', justifyContent: 'end'}}
             >
@@ -200,7 +200,7 @@ const ReservationOrders = () => {
                                     ))
                                 }
                                 <Box sx={{width: '100%', alignItems: 'end'}}>
-                                    <PaginationViews rowCount={reservation?.total ?? 0} onChange={handleChangePage}/>
+                                    <PaginationViews showPageSize pageSizeValue={[4, 8, 24, 40]} rowCount={reservation?.total ?? 0} onChange={handleChangePage}/>
                                 </Box>
                             </>
                         )

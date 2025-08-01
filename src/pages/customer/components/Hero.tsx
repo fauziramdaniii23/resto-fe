@@ -132,7 +132,7 @@ export const Hero = () => {
                         >
                             Click here to Reservasi
                         </Button>
-                        <DialogReservation user={auth.user} mode={CREATE} data={{} as TReservation} openDialog={open} onClose={() => setOpen(false)}/>
+                        <DialogReservation authUser={auth.user} mode={CREATE} data={{} as TReservation} openDialog={open} onClose={() => setOpen(false)}/>
                     </Stack>
                     <Typography
                         variant="caption"

@@ -28,7 +28,7 @@ export type TTables = {
 }
 
 type DialogReservationProps = {
-    user?: TUser | null;
+    authUser?: TUser | null;
     mode: string;
     data: TReservation;
     openDialog: boolean;
@@ -36,8 +36,8 @@ type DialogReservationProps = {
     onRefresh?: () => void;
 };
 
-export default function DialogReservation ({user ,mode, data, openDialog, onClose, onRefresh}: DialogReservationProps) {
-
+export default function DialogReservation ({authUser ,mode, data, openDialog, onClose, onRefresh}: DialogReservationProps) {
+    const [user, setUser] = useState<TUser>({} as TUser);
     const [date, setDate] = React.useState('');
     const [time, setTime] = React.useState('');
     const [note, setNote] = React.useState('');
@@ -103,8 +103,8 @@ export default function DialogReservation ({user ,mode, data, openDialog, onClos
         if (mode === VIEW) {
             setSelectedTable(mappingOptionsTables)
         }
-        if(user){
-            setCustomerName(user.name);
+        if(authUser){
+            setCustomerName(authUser.name);
         }
     }, []);
 
@@ -119,6 +119,8 @@ export default function DialogReservation ({user ,mode, data, openDialog, onClos
             setDate('');
             setTime('');
             setNote('');
+            setGuestCount('');
+            setSelectedTable([])
         }
         if(data && Object.keys(data).length > 0) {
             const reservedDate = dayjs(data.reserved_at)
@@ -130,12 +132,14 @@ export default function DialogReservation ({user ,mode, data, openDialog, onClos
             setNote(data.note || '');
             setRemark(data.remark || '');
         }
+        setUser(authUser ? authUser : data.user);
     }, [data])
 
     const handleChange = (_: unknown, newValue: TTables[]) => {
         setSelectedTable(newValue);
     };
     const [errorCustomerName, setErrorCustomerName] = useState(false);
+    const [errorGuestCount, setErrorGuestCount] = useState(false);
     const [errorDate, setErrorDate] = useState(false);
     const [errorTime, setErrorTime] = useState(false);
     const [errorTable, setErrorTable] = useState(false);
@@ -144,12 +148,19 @@ export default function DialogReservation ({user ,mode, data, openDialog, onClos
         let isValid = true;
 
         if (!customerName || customerName.trim() === '') { setErrorCustomerName(true); isValid = false; } else { setErrorCustomerName(false); }
+        if (!guestCount || guestCount.trim() === '' || Number(guestCount) <= 0) {setErrorGuestCount(true); isValid = false;} else {setErrorGuestCount(false);}
         if (!date || date.trim() === '') { setErrorDate(true); isValid = false; } else { setErrorDate(false); }
         if (!time || time.trim() === '') { setErrorTime(true); isValid = false; } else { setErrorTime(false); }
         if (selectedTable.length === 0) { setErrorTable(true); isValid = false; } else { setErrorTable(false); }
 
         return isValid;
     };
+
+    useEffect(() => {
+        if( errorCustomerName || errorGuestCount || errorDate || errorTime || errorTable) {
+            validateForm()
+        }
+    }, [customerName, date, time, guestCount, selectedTable]);
 
     const submitReservation = () => {
         if (!validateForm()) {
@@ -164,7 +175,7 @@ export default function DialogReservation ({user ,mode, data, openDialog, onClos
             time: time,
             guest_count: parseInt(guestCount),
             status: data.status,
-            user_id: data.user?.id,
+            user_id: user.id,
             tables: selectedTable,
             note: note,
             remark: remark
@@ -224,7 +235,7 @@ export default function DialogReservation ({user ,mode, data, openDialog, onClos
                                     <TextField
                                         error={errorCustomerName}
                                         value={customerName}
-                                        disabled={user != null || mode != CREATE}
+                                        disabled={authUser != null || mode != CREATE}
                                         onChange={(e) => setCustomerName(e.target.value)}
                                         label="Customer Name"
                                         variant="outlined"/>
@@ -249,7 +260,7 @@ export default function DialogReservation ({user ,mode, data, openDialog, onClos
                                     />
                                     <TextField
                                         type="number"
-                                        error={errorCustomerName}
+                                        error={errorGuestCount}
                                         value={guestCount}
                                         disabled={mode === 'view'}
                                         onChange={(e) => setGuestCount(e.target.value)}

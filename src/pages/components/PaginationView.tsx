@@ -35,7 +35,7 @@ const PaginationViews = ({pageSizeValue = [5, 10, 25, 100], showPageSize = false
     }, []);
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, alignItems: 'center' }}>
             {showPageSize && (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
                     <Typography component="p">Rows per page</Typography>
