@@ -5,13 +5,6 @@ import Loader from "@/pages/components/Loader.tsx";
 import {useAuthStore} from "@/store/useAuthStore.ts";
 import {showToast} from "@/pages/util/toast.ts";
 
-type user = {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    role: string;
-}
 
 const OAuth = () => {
     const navigate = useNavigate();
@@ -28,15 +21,11 @@ const OAuth = () => {
                 }
             }).then((response) => {
                 const res = response.data;
-                const user: user = res.data as user;
+                const user = res.data;
 
                 useAuthStore.getState().login({
                     token: tokenParam,
-                    id: user.id,
-                    name: user.name,
-                    username: user.username,
-                    email: user.email,
-                    role: user.role,
+                    user : user
                 });
                 navigate('/Home', {replace: true});
             }).catch((error) => {
