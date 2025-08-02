@@ -44,11 +44,11 @@ export const Profile = () => {
                 alignItems: 'center',
             }}
         >
-            <Box sx={{mr: 4}}>
-                <ShoppingCart/>
-            </Box>
             {isAuthenticated ? (
                 <>
+                    <Box sx={{mr: 4}}>
+                        <ShoppingCart/>
+                    </Box>
                     <IconButton
                         sx={{
                             p: 0,

@@ -8,7 +8,7 @@ import PageNotFound from "@/pages/PageNotFound.tsx";
 import OAuth from "@/pages/auth/OAuth.tsx";
 import SuperAdmin from "@/route/middleware/SuperAdmin.tsx";
 import Dashboard from "@/pages/admin/dashboard/Dashboard.tsx";
-import {DASHBOARD_HOME, DASHBOARD_RESERVATION} from "@/pages/admin/util/navigation.tsx";
+import {DASHBOARD_HOME, DASHBOARD_RESERVATION, DASHBOARD_TABLES} from "@/pages/admin/util/navigation.tsx";
 import CustomerPages from "@/pages/customer/Customer.tsx";
 import {HOME, ORDERS} from "@/pages/customer/type/CustomerNavigation.tsx";
 
@@ -31,6 +31,7 @@ const AppRoutes = () => {
             //administrator routes
             <Route path="/Dashboard" element={<SuperAdmin><Dashboard id={DASHBOARD_HOME}/></SuperAdmin>}/>
             <Route path="/Dashboard/Reservation" element={<SuperAdmin><Dashboard id={DASHBOARD_RESERVATION}/></SuperAdmin>}/>
+            <Route path="/Dashboard/Tables" element={<SuperAdmin><Dashboard id={DASHBOARD_TABLES}/></SuperAdmin>}/>
         </Routes>
     );
 };

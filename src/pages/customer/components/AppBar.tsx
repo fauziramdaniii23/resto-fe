@@ -46,8 +46,7 @@ type Props = {
 export default function AppAppBar({ menu }: Props) {
     const [open, setOpen] = useState(false);
 
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-    const user = useAuthStore((state) => state.user);
+    const auth = useAuthStore((state) => state);
     const logout = useAuthStore((state) => state.logout);
     const navigate = useNavigate();
     const toggleDrawer = (newOpen: boolean) => () => {
@@ -130,7 +129,11 @@ export default function AppAppBar({ menu }: Props) {
                     <Profile/>
 
                     <Box sx={{display: {xs: 'flex', md: 'none'}, gap: 1}}>
-                        <ShoppingCart/>
+                        {
+                            auth.isAuthenticated && (
+                                <ShoppingCart/>
+                            )
+                        }
                         <ColorModeIconDropdown size="medium"/>
                         <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
                             <MenuIcon/>
@@ -156,14 +159,21 @@ export default function AppAppBar({ menu }: Props) {
                                         <CloseRoundedIcon/>
                                     </IconButton>
                                 </Box>
-                                {user?.role === SUPER_ADMIN && (
+                                {auth.user?.role === SUPER_ADMIN && (
                                     <MenuItem component={RouterLink} to="/Dashboard">Dashboard</MenuItem>
                                 )}
-                                <MenuItem>Menus</MenuItem>
-                                <MenuItem>Pesanan</MenuItem>
-                                <MenuItem>Riwayat</MenuItem>
+                                {
+                                    appBarNavigations.map((label) => (
+                                        <MenuItem
+                                            key={label}
+                                            onClick={() => handleNavigationClick(label)}
+                                        >
+                                            {label}
+                                        </MenuItem>
+                                    ))
+                                }
                                 <Divider sx={{my: 3}}/>
-                                {isAuthenticated ? (
+                                {auth.isAuthenticated ? (
                                     <>
                                         <MenuItem>
                                             <Button color="primary" variant="contained" fullWidth>

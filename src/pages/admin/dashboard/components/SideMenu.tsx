@@ -16,7 +16,13 @@ import FastfoodIcon from '@mui/icons-material/Fastfood';
 import FormatListBulletedAddIcon from '@mui/icons-material/FormatListBulletedAdd';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
-import {DASHBOARD_HOME, DASHBOARD_RESERVATION, type MenusExtended} from "@/pages/admin/util/navigation.tsx";
+import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
+import {
+    DASHBOARD_HOME,
+    DASHBOARD_RESERVATION,
+    DASHBOARD_TABLES,
+    type MenusExtended
+} from "@/pages/admin/util/navigation.tsx";
 import {useNavigate} from "react-router-dom";
 import {IconButtonSideMenu} from "@/pages/components/button/styleIconButton.tsx";
 import Divider from "@mui/material/Divider";
@@ -28,6 +34,7 @@ const iconMap: Record<string, React.ReactElement> = {
     reservation: <BookmarkAddIcon/>,
     orders: <FormatListBulletedAddIcon/>,
     menus: <FastfoodIcon/>,
+    tables: <TableRestaurantIcon/>,
     notFound: <NotInterestedIcon/>,
 };
 
@@ -48,6 +55,9 @@ export const SideMenu = ({items, selectedId, open}: SideMenuProps) => {
                 break;
             case DASHBOARD_RESERVATION:
                 navigate('/Dashboard/Reservation');
+                break;
+            case DASHBOARD_TABLES:
+                navigate('/Dashboard/Tables');
                 break;
             default:
                 navigate('/PageNotFound');

@@ -49,6 +49,8 @@ export type TTables = {
     id: number,
     table_number: number,
     capacity: number,
+    created_at: Date,
+    updated_at: Date,
 }
 
 export type TReservation = {
@@ -63,7 +65,6 @@ export type TReservation = {
     guest_count: number;
     remark: string
 }
-
 
 export type Void = {
     (): void;

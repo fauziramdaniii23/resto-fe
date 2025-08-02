@@ -1,5 +1,8 @@
 export const DASHBOARD_HOME = '1.1';
 export const DASHBOARD_RESERVATION = '2.1';
+export const DASHBOARD_ORDERS = '2.2';
+export const DASHBOARD_MENUS = '2.3';
+export const DASHBOARD_TABLES = '2.4';
 
 export type MenusExtended = {
     id: string;
@@ -26,7 +29,7 @@ export const DashboardMenus: MenusExtended[] = [
             {id: '2.1', label: 'Reservation', icon: 'reservation'},
             {id: '2.2', label: 'Orders', icon: 'orders'},
             {id: '2.3', label: 'Management Menus', icon: 'menus'},
-            {id: '2.4', label: 'Travel documents', icon: 'pdf'},
+            {id: '2.4', label: 'Tables', icon: 'tables'},
         ],
     },
     {id: '3', label: 'Catatan Keuangan', icon: 'folder'},

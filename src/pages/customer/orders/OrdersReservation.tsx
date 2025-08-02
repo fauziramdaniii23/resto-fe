@@ -23,7 +23,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import dayjs from "dayjs";
 
-const ReservationOrders = () => {
+const OrdersReservation = () => {
     const user = useAuthStore((state) => state.user);
     const [loading, setLoading] = useState(false);
     const [reservation, setReservation] = useState<TMetaData<TReservation>>();
@@ -211,4 +211,4 @@ const ReservationOrders = () => {
     )
 }
 
-export default ReservationOrders;
+export default OrdersReservation;

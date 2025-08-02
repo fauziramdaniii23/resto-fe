@@ -71,7 +71,7 @@ export default function DialogReservation ({authUser ,mode, data, openDialog, on
             id_reservation: data.id,
             date: `${date} ${time}`
         }
-        requestGet<TApiResponse<TTables[]>>('/tables', params)
+        requestGet<TApiResponse<TTables[]>>('/tables-available', params)
             .then((res) => {
                 const dataTables = res.data;
                 if (mode === CREATE) {
@@ -183,7 +183,7 @@ export default function DialogReservation ({authUser ,mode, data, openDialog, on
         requestPost<TApiResponse<Void>, typeof payload>(RESERVATION, payload)
             .then((res) => {
                 if (res.success) {
-                    showToast(SUCCESS, 'Update Reservation Success');
+                    showToast(SUCCESS, `${mode === CREATE ? 'Create' : 'Update'} Reservation Success`);
                 } else {
                     showToast(ERROR, 'Update Reservastion Failed');
                 }
