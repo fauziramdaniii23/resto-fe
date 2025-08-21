@@ -4,7 +4,7 @@ import type {ThemeOptions} from '@mui/material/styles';
 import {inputsCustomizations} from './customizations/inputs';
 import {feedbackCustomizations} from './customizations/feedback';
 import {navigationCustomizations} from './customizations/navigation';
-import {surfacesCustomizations} from './customizations/surfaces';
+import {surfacesCustomizations} from './customizations/surfaces.tsx';
 import {colorSchemes, typography, shape} from './themePrimitives';
 import {useMemo} from "react";
 import {tableCustomizations} from "@/theme/customizations/table.tsx";

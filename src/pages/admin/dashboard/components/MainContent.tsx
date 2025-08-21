@@ -2,20 +2,23 @@ import {MainDashboard} from "@/pages/admin/dashboard/Main.tsx";
 import {Reservation} from "@/pages/admin/dashboard/customers/reservationDashboard/Reservation.tsx";
 import PageNotFound from "@/pages/PageNotFound.tsx";
 import {Tables} from "@/pages/admin/dashboard/customers/TablesDashboard/Tables.tsx";
+import {Menus} from "@/pages/admin/dashboard/customers/menusDashboard/Menus.tsx";
+import {Orders} from "@/pages/admin/dashboard/customers/ordersDashboard/Orders.tsx";
+import {useMenuStore} from "@/store/useMenuStore.ts";
+import {DetailMenus} from "@/pages/admin/dashboard/customers/menusDashboard/DetailMenus.tsx";
 
-export type TPropsSideNav = {
-    id: string;
-    openSideNav: boolean;
-}
-
-const MapMainComponent: Record<string, React.ComponentType<TPropsSideNav>> = {
+const MapMainComponent: Record<string, React.ComponentType>= {
     '1.1': MainDashboard,
     '2.1': Reservation,
+    '2.2': Orders,
+    '2.3': Menus,
+    '2.3.1' : DetailMenus,
     '2.4': Tables
 }
 
-export const MainContent = ({ id, openSideNav }: TPropsSideNav) => {
-    const Component = MapMainComponent[id];
+export const MainContent = () => {
+    const menu = useMenuStore((state) => state);
+    const Component = MapMainComponent[menu.id || ''];
 
     if (!Component) {
         return (
@@ -23,5 +26,5 @@ export const MainContent = ({ id, openSideNav }: TPropsSideNav) => {
         )
     }
 
-    return <Component id={id} openSideNav={openSideNav}/>;
+    return <Component/>;
 }

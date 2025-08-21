@@ -6,7 +6,7 @@ import {useAuthStore} from "@/store/useAuthStore.ts";
 import type {TApiPaginateResponse, TMetaData, TReservation} from "@/type/type.ts";
 import Grid from "@mui/material/Grid";
 import Loader from "@/pages/components/Loader.tsx";
-import {formatDate} from "@/pages/util/parsingdate.ts";
+import {formatDate} from "@/pages/util/formatter.ts";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import SearchInput from "@/pages/components/Search.tsx";

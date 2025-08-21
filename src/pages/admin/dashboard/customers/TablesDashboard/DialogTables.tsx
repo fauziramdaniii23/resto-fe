@@ -17,7 +17,6 @@ import {VIEW, EDIT, CREATE, DELETE, SUCCESS, ERROR} from "@/constant";
 import Typography from "@mui/material/Typography";
 import {TABLES} from "@/api/url.ts";
 
-
 type DialogTablesProps = {
     mode: string;
     data: TTables;

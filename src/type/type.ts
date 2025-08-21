@@ -9,8 +9,8 @@ export type TApiPaginateResponse<T> = {
     readonly status: number;
     readonly meta_data: TMetaData<T>;
     readonly info?: string;
-    readonly total?: number;
 };
+
 export type TMetaData<T> = {
     readonly data: T[];
     readonly total: number;
@@ -34,13 +34,25 @@ export type TUser = {
     updated_at: Date;
 }
 
+export type TCategories = {
+    id: number;
+    name: string;
+    description: string;
+}
+export type TImages = {
+    id: number;
+    menu_id: number;
+    image_url: string;
+}
+
+
 export type TMenus = {
     id: bigint;
     name: string;
     description: string;
     price: number;
-    category: string;
-    image_url: string;
+    categories: TCategories;
+    images: TImages[];
     created_at: Date;
     updated_at: Date;
 }

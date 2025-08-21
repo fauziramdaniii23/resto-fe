@@ -234,8 +234,8 @@ function ActionMenu({onClick}: ActionMenuProps) {
             </IconButton>
             <Menu anchorEl={anchorEl} open={open} onClose={() => handleClose()}>
                 {
-                    actionMenu.map((mode) => (
-                        <MenuItem sx={{mr:2}} onClick={() => handleClose(mode)}>
+                    actionMenu.map((mode, index) => (
+                        <MenuItem key={index} sx={{mr:2}} onClick={() => handleClose(mode)}>
                             <ListItemIcon>
                                 {mode === VIEW && <VisibilityIcon/>}
                                 {mode === EDIT && <EditSquareIcon/>}

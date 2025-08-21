@@ -3,7 +3,7 @@ import type {TApiPaginateResponse, TMetaData, TTables} from "@/type/type.ts";
 import {TABLES} from "@/api/url.ts";
 import {type Column, DataTable, type DataTableRef} from "@/pages/components/DataTable/Table.tsx";
 import React, {useRef, useState} from "react";
-import {formatDate} from "@/pages/util/parsingdate.ts";
+import {formatDate} from "@/pages/util/formatter.ts";
 import DialogTables from "@/pages/admin/dashboard/customers/TablesDashboard/DialogTables.tsx";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";

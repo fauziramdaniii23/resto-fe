@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import {type Column, DataTable, type DataTableRef} from "@/pages/components/DataTable/Table.tsx";
 import React, { useRef, useState} from "react";
-import {formatDate} from "@/pages/util/parsingdate.ts";
+import {formatDate} from "@/pages/util/formatter.ts";
 import DialogReservation from "@/pages/components/DialogReservation.tsx";
 import type {
     TApiPaginateResponse, TApiResponse,

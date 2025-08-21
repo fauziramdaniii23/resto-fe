@@ -10,7 +10,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AppTheme from "@/theme/AppTheme.tsx";
 import Logo from "@/pages/customer/components/Logo.tsx";
-import {getMenuById, DashboardMenus} from "@/pages/admin/util/navigation.tsx";
+import {getMenuById, DashboardMenus, BreadcrumbsMenus} from "@/pages/admin/util/navigation.tsx";
 import {SideMenu} from "@/pages/admin/dashboard/components/SideMenu.tsx";
 import {List} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
@@ -18,6 +18,7 @@ import Container from "@mui/material/Container";
 import {DashboardAppBarr} from "@/pages/admin/dashboard/components/AppBarr.tsx";
 import {MainContent} from "@/pages/admin/dashboard/components/MainContent.tsx";
 import {IconButtonSideBar} from "@/pages/components/button/styleIconButton.tsx";
+import {useMenuStore} from "@/store/useMenuStore.ts";
 
 const drawerWidth = 240;
 
@@ -76,13 +77,9 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 );
 
-type DashboardProps = {
-    id: string;
-    disableCustomTheme?: boolean;
-}
 
-
-export default function Dashboard(props: DashboardProps) {
+export default function Dashboard () {
+    const menu = useMenuStore((state) => state);
     const [open, setOpen] = React.useState(true);
     const theme = useTheme();
 
@@ -99,7 +96,7 @@ export default function Dashboard(props: DashboardProps) {
     };
 
     return (
-        <AppTheme {...props}>
+        <AppTheme>
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
                 <Drawer variant="permanent" open={open}
@@ -143,8 +140,6 @@ export default function Dashboard(props: DashboardProps) {
                     <List>
                         <SideMenu
                             items={DashboardMenus}
-                            // onItemClick={(id) => handleSelectedMenus(id)}
-                            selectedId={props.id}
                             open={open}
 
                         />
@@ -172,13 +167,13 @@ export default function Dashboard(props: DashboardProps) {
                     }}
                 >
                     <DashboardAppBarr
-                        items={getMenuById(DashboardMenus,props.id)}
+                        items={getMenuById(BreadcrumbsMenus, menu.id ? menu.id : '')}
                     />
                     <Container
                         maxWidth={false}
                         sx={{p:2, ml: 0, mr: 0}}
                     >
-                        <MainContent id={props.id} openSideNav={open}/>
+                        <MainContent/>
                     </Container>
                 </Box>
             </Box>

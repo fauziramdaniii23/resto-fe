@@ -2,7 +2,11 @@ import Typography from "@mui/material/Typography";
 import ColorModeIconDropdown from "@/theme/ColorModeIconDropdown.tsx";
 import Container from "@mui/material/Container";
 import React, {useEffect, useState} from "react";
-import {getBreadcrumbPath, DashboardMenus, type MenusExtended} from "@/pages/admin/util/navigation.tsx";
+import {
+    getBreadcrumbPath,
+    type MenusExtended,
+    BreadcrumbsMenus
+} from "@/pages/admin/util/navigation.tsx";
 import {Breadcrumbs} from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -25,7 +29,7 @@ export const DashboardAppBarr: React.FC<AppBarrProps> = ({ items }) => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-    const path = getBreadcrumbPath(DashboardMenus, items?.id) || [];
+    const path = getBreadcrumbPath(BreadcrumbsMenus, items?.id) || [];
 
     const breadcrumbs = path.map((item, index) => {
         const isLast = index === path.length - 1;
