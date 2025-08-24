@@ -17,8 +17,8 @@ import {VIEW, EDIT, CREATE, DELETE, SUCCESS, ERROR} from "@/constant";
 import Typography from "@mui/material/Typography";
 import {MENUS} from "@/api/url.ts";
 import Input from '@mui/material/Input';
-import {useNavigate} from "react-router-dom";
-import {useMenuStore} from "@/store/useMenuStore.ts";
+import type {MenusExtended} from "@/pages/admin/util/navigation.tsx";
+import {useRedirect} from "@/pages/util/useRedirect.tsx";
 
 type DialogMenusProps = {
     mode: string;
@@ -29,8 +29,7 @@ type DialogMenusProps = {
 };
 
 export default function DialogMenus ({mode, data, openDialog, onClose, onRefresh}: DialogMenusProps) {
-    const navigate = useNavigate();
-    const menu = useMenuStore((state) => state);
+    const redirect = useRedirect()
     const title: string = mode === CREATE ? 'Create Menu' : mode === VIEW ? 'View Menu' : mode === EDIT ? 'Edit Menu' : mode === 'delete' ? 'Delete Menu ?' : 'Create Menu';
     const [name, setName] = useState<string>(data.name);
     const [description, setDescription] = useState<string>(data.description);
@@ -124,8 +123,12 @@ export default function DialogMenus ({mode, data, openDialog, onClose, onRefresh
     };
 
     const detailMenus = () => {
-        menu.setMenu('2.3.1', data.name, data)
-        navigate('/Dashboard/Menus/DetailMenu')
+        const menu : MenusExtended = {
+            id: '2.3.1',
+            label: data.name,
+            route: '/Dashboard/Menus/DetailMenu',
+        }
+        redirect(menu, data)
     }
 
     return (

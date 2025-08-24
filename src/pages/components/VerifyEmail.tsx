@@ -4,8 +4,8 @@ import Loader from "./Loader.tsx";
 import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import {showToast} from "../util/toast.ts";
-import {requestPost} from "../../api/api.ts";
-import type {TApiResponse} from "../../type/type.ts";
+import {requestPost} from "@/api/api.ts";
+import type {TApiResponse} from "@/type/type.ts";
 
 const VerifyEmail = () => {
     const navigate = useNavigate();

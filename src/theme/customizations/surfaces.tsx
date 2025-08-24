@@ -66,9 +66,6 @@ export const surfacesCustomizations: Components<Theme> = {
           borderRadius: (theme.vars || theme).shape.borderRadius,
           border: `1px solid ${(theme.vars || theme).palette.divider}`,
           boxShadow: 'none',
-          '&:hover': {
-            transform: 'scale(1.01)',
-          },
           ...theme.applyStyles('dark', {
             backgroundColor: 'oklch(0.133 0.048 266.07)',
           }),

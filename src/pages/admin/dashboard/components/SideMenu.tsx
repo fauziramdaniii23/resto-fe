@@ -18,16 +18,13 @@ import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import {
-    DASHBOARD_HOME, DASHBOARD_MENUS, DASHBOARD_ORDERS,
-    DASHBOARD_RESERVATION,
-    DASHBOARD_TABLES,
     type MenusExtended
 } from "@/pages/admin/util/navigation.tsx";
-import {useNavigate} from "react-router-dom";
 import {IconButtonSideMenu} from "@/pages/components/button/styleIconButton.tsx";
 import Divider from "@mui/material/Divider";
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import {useMenuStore} from "@/store/useMenuStore.ts";
+import {useRedirect} from "@/pages/util/useRedirect.tsx";
 
 const iconMap: Record<string, React.ReactElement> = {
     home: <HomeIcon/>,
@@ -46,31 +43,10 @@ interface SideMenuProps {
 }
 
 export const SideMenu = ({items, open}: SideMenuProps) => {
-    const navigate = useNavigate();
     const menuStore = useMenuStore((state) => state);
-
+    const redirect = useRedirect()
     const handleListItemClick = (menu : MenusExtended) => {
-        menuStore.setMenu(menu.id, menu.label)
-        switch (menu.id) {
-            case DASHBOARD_HOME:
-                navigate('/Dashboard');
-                break;
-            case DASHBOARD_RESERVATION:
-                navigate('/Dashboard/Reservation');
-                break;
-            case DASHBOARD_ORDERS:
-                navigate('/Dashboard/Orders');
-                break;
-            case DASHBOARD_MENUS:
-                navigate('/Dashboard/Menus');
-                break;
-            case DASHBOARD_TABLES:
-                navigate('/Dashboard/Tables');
-                break;
-            default:
-                navigate('/PageNotFound');
-                break;
-        }
+        redirect(menu)
     };
 
     return (

@@ -12,7 +12,7 @@ const MapMainComponent: Record<string, React.ComponentType>= {
     '2.1': Reservation,
     '2.2': Orders,
     '2.3': Menus,
-    '2.3.1' : DetailMenus,
+    '2.3.1': DetailMenus,
     '2.4': Tables
 }
 

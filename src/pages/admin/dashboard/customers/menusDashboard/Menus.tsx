@@ -10,8 +10,9 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import SearchInput from "@/pages/components/Search.tsx";
 import {formatRupiah} from "@/pages/util/formatter.ts";
-import DialogMenus from "@/pages/admin/dashboard/customers/menusDashboard/DialogMenus.tsx";
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
+import type {MenusExtended} from "@/pages/admin/util/navigation.tsx";
+import {useRedirect} from "@/pages/util/useRedirect.tsx";
 
 const columns: Column<TMenus>[] = [
     {
@@ -58,19 +59,24 @@ const columns: Column<TMenus>[] = [
 ]
 
 export const Menus = () => {
+    const redirect = useRedirect()
     const tableRef = useRef<DataTableRef>(null);
     const [dataMenus, setDataMenus] = useState<TMetaData<TMenus>>({} as TMetaData<TMenus>);
-    const [dataDialogMenus, setDataDialogMenus] = useState<TMenus>({} as TMenus);
     const [loading, setLoading] = useState<boolean>(false);
-    const [openDialog, setOpenDialog] = useState<boolean>(false);
-    const [modeDialog, setModeDialog] = useState<string>('');
     const [keyword, setKeyword] = useState<string>('');
 
     const onActionClick = (mode: string, data: TMenus) => {
-        setDataDialogMenus(data);
-        setModeDialog(mode);
         if (data && mode) {
-            setOpenDialog(true);
+            const detailMenu = {
+                mode: mode,
+                data: data,
+            }
+            const menu : MenusExtended = {
+                id: '2.3.1',
+                label: data.name,
+                route: '/Dashboard/Menus/DetailMenu',
+            }
+            redirect(menu, detailMenu)
         }
     }
 
@@ -79,9 +85,7 @@ export const Menus = () => {
     }
 
     const handleAddMenus = () => {
-        setModeDialog(CREATE);
-        setDataDialogMenus({} as TMenus);
-        setOpenDialog(true);
+        onActionClick(CREATE, {} as TMenus);
     }
 
     const handleSearchEnter = () => {
@@ -90,9 +94,6 @@ export const Menus = () => {
     const clearAndRefresh = () => {
         setKeyword('');
         getDataMenus('');
-    }
-    const handleRefresh = () => {
-        tableRef.current?.refresh();
     }
 
     const getDataMenus = (paramsKeyword?:string) => {
@@ -114,15 +115,6 @@ export const Menus = () => {
 
     return (
         <Box>
-            {openDialog && modeDialog && (
-                <DialogMenus
-                    mode={modeDialog}
-                    data={dataDialogMenus}
-                    openDialog={openDialog}
-                    onClose={() => setOpenDialog(false)}
-                    onRefresh={handleRefresh}
-                />
-            )}
             <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2, gap: 1}}>
                 <Typography variant="h6" component="div">Data Menus</Typography>
                 <Box sx={{display: 'flex', justifyContent: 'end', gap: 2}}>

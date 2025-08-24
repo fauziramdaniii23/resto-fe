@@ -4,8 +4,7 @@ import Container from "@mui/material/Container";
 import React, {useEffect, useState} from "react";
 import {
     getBreadcrumbPath,
-    type MenusExtended,
-    BreadcrumbsMenus
+    type MenusExtended
 } from "@/pages/admin/util/navigation.tsx";
 import {Breadcrumbs} from "@mui/material";
 import Box from "@mui/material/Box";
@@ -13,13 +12,18 @@ import IconButton from "@mui/material/IconButton";
 import PersonIcon from '@mui/icons-material/Person';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import {Link as RouterLink} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import Link from "@mui/material/Link";
+import {BreadcrumbsMenus} from "@/pages/admin/util/breadcrumbsMenus.tsx";
+import {useRedirect} from "@/pages/util/useRedirect.tsx";
 
 type AppBarrProps = {
     items?: MenusExtended
 }
 
 export const DashboardAppBarr: React.FC<AppBarrProps> = ({ items }) => {
+    const navigate = useNavigate();
+    const redirect = useRedirect()
     const [scrolled, setScrolled] = useState(false);
     useEffect(() => {
         const handleScroll = () => {
@@ -31,6 +35,10 @@ export const DashboardAppBarr: React.FC<AppBarrProps> = ({ items }) => {
     }, []);
     const path = getBreadcrumbPath(BreadcrumbsMenus, items?.id) || [];
 
+    const handleBreadcrumbClick = (selectedMenus : MenusExtended) => {
+        redirect(selectedMenus);
+    }
+
     const breadcrumbs = path.map((item, index) => {
         const isLast = index === path.length - 1;
         return isLast ? (
@@ -38,9 +46,9 @@ export const DashboardAppBarr: React.FC<AppBarrProps> = ({ items }) => {
                 {item.label}
             </Typography>
         ) : (
-            <Typography variant="h6" key={item.id} color="inherit">
+            <Link sx={{ cursor: "pointer", fontSize: "1.25rem" }} onClick={() => item.route && handleBreadcrumbClick(item)} variant="h6" key={item.id} color="inherit">
                 {item.label}
-            </Typography>
+            </Link>
         );
     });
 
@@ -72,7 +80,7 @@ export const DashboardAppBarr: React.FC<AppBarrProps> = ({ items }) => {
                 boxShadow: scrolled? 1 : 'none',
             }}
         >
-            <Breadcrumbs separator=">" >{breadcrumbs}</Breadcrumbs>
+            <Breadcrumbs separator="›" >{breadcrumbs}</Breadcrumbs>
             <Box
              sx={{
                  display: 'flex',
@@ -89,7 +97,7 @@ export const DashboardAppBarr: React.FC<AppBarrProps> = ({ items }) => {
                     open={open}
                     onClose={handleClose}
                 >
-                    <MenuItem component={RouterLink} to="/Home">Home</MenuItem>
+                    <MenuItem onClick={() => navigate('/Home')}>Home</MenuItem>
                     <MenuItem onClick={handleClose}>My account</MenuItem>
                     <MenuItem onClick={handleClose}>Logout</MenuItem>
                 </Menu>

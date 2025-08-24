@@ -43,11 +43,13 @@ export type TImages = {
     id: number;
     menu_id: number;
     image_url: string;
+    cloud_id: string;
+    is_primary: boolean;
 }
 
 
 export type TMenus = {
-    id: bigint;
+    id: number;
     name: string;
     description: string;
     price: number;

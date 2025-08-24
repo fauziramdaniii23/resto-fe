@@ -10,7 +10,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AppTheme from "@/theme/AppTheme.tsx";
 import Logo from "@/pages/customer/components/Logo.tsx";
-import {getMenuById, DashboardMenus, BreadcrumbsMenus} from "@/pages/admin/util/navigation.tsx";
+import {getMenuById} from "@/pages/admin/util/navigation.tsx";
 import {SideMenu} from "@/pages/admin/dashboard/components/SideMenu.tsx";
 import {List} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
@@ -19,6 +19,8 @@ import {DashboardAppBarr} from "@/pages/admin/dashboard/components/AppBarr.tsx";
 import {MainContent} from "@/pages/admin/dashboard/components/MainContent.tsx";
 import {IconButtonSideBar} from "@/pages/components/button/styleIconButton.tsx";
 import {useMenuStore} from "@/store/useMenuStore.ts";
+import {DashboardMenus} from "@/pages/admin/util/dashboardMenus.tsx";
+import {BreadcrumbsMenus} from "@/pages/admin/util/breadcrumbsMenus.tsx";
 
 const drawerWidth = 240;
 
