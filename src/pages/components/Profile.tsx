@@ -14,7 +14,11 @@ import {useAuthStore} from "@/store/useAuthStore.ts";
 import {requestPost} from "@/api/api.ts";
 import type {TApiResponse, Void} from "@/type/type.ts";
 
-export const Profile = () => {
+type ProfileProps = {
+    navigateToDashboard?: () => void;
+}
+
+export const Profile = (props : ProfileProps) => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const user = useAuthStore((state) => state.user);
     const logout = useAuthStore((state) => state.logout);
@@ -36,6 +40,7 @@ export const Profile = () => {
             navigate('/SignIn');
         })
     };
+    const navigateToDashboard = () => props.navigateToDashboard?.();
     return (
         <Box
             sx={{
@@ -75,7 +80,7 @@ export const Profile = () => {
                           // }}
                     >
                         {user?.role === SUPER_ADMIN && (
-                            <MenuItem component={RouterLink} to="/Dashboard">Dashboard</MenuItem>
+                            <MenuItem onClick={navigateToDashboard}>Dashboard</MenuItem>
                         )}
                         <MenuItem component={RouterLink} to="/profile">Profile</MenuItem>
                         <MenuItem onClick={() => {

@@ -10,6 +10,12 @@ import SuperAdmin from "@/route/middleware/SuperAdmin.tsx";
 import Dashboard from "@/pages/admin/dashboard/Dashboard.tsx";
 import CustomerPages from "@/pages/customer/Customer.tsx";
 import {HOME, ORDERS} from "@/pages/customer/type/CustomerNavigation.tsx";
+import {
+        DASHBOARD_HOME,
+        DASHBOARD_MENUS,
+        DASHBOARD_ORDERS,
+        DASHBOARD_RESERVATION, DASHBOARD_TABLES
+} from "@/pages/admin/util/navigation.tsx";
 
 const AppRoutes = () => {
     return (
@@ -28,12 +34,12 @@ const AppRoutes = () => {
             <Route path="/Orders" element={<CustomerPages menu={ORDERS}/>}/>
 
             //administrator routes
-            <Route path="/Dashboard" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
-            <Route path="/Dashboard/Reservation" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
-            <Route path="/Dashboard/Orders" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
-            <Route path="/Dashboard/Menus" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
-            <Route path="/Dashboard/Menus/DetailMenu" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
-            <Route path="/Dashboard/Tables" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>
+            <Route path="/Dashboard" element={<SuperAdmin><Dashboard idMenu={DASHBOARD_HOME}/></SuperAdmin>}/>
+            <Route path="/Dashboard/Reservation" element={<SuperAdmin><Dashboard idMenu={DASHBOARD_RESERVATION}/></SuperAdmin>}/>
+            <Route path="/Dashboard/Orders" element={<SuperAdmin><Dashboard idMenu={DASHBOARD_ORDERS}/></SuperAdmin>}/>
+            <Route path="/Dashboard/Menus" element={<SuperAdmin><Dashboard idMenu={DASHBOARD_MENUS}/></SuperAdmin>}/>
+            {/*<Route path="/Dashboard/Menus/DetailMenu" element={<SuperAdmin><Dashboard/></SuperAdmin>}/>*/}
+            <Route path="/Dashboard/Tables" element={<SuperAdmin><Dashboard idMenu={DASHBOARD_TABLES}/></SuperAdmin>}/>
         </Routes>
     );
 };

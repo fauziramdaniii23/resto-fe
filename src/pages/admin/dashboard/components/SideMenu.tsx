@@ -23,7 +23,6 @@ import {
 import {IconButtonSideMenu} from "@/pages/components/button/styleIconButton.tsx";
 import Divider from "@mui/material/Divider";
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
-import {useMenuStore} from "@/store/useMenuStore.ts";
 import {useRedirect} from "@/pages/util/useRedirect.tsx";
 
 const iconMap: Record<string, React.ReactElement> = {
@@ -37,13 +36,13 @@ const iconMap: Record<string, React.ReactElement> = {
 };
 
 interface SideMenuProps {
-    items: MenusExtended[];
+    menus: MenusExtended[];
+    idMenu?: string;
     onItemClick?: (id: string) => void;
     open?: boolean;
 }
 
-export const SideMenu = ({items, open}: SideMenuProps) => {
-    const menuStore = useMenuStore((state) => state);
+export const SideMenu = ({menus, idMenu, open}: SideMenuProps) => {
     const redirect = useRedirect()
     const handleListItemClick = (menu : MenusExtended) => {
         redirect(menu)
@@ -51,7 +50,7 @@ export const SideMenu = ({items, open}: SideMenuProps) => {
 
     return (
         <>
-            {items.map((item) => {
+            {menus.map((item) => {
                 const hasChildren = Array.isArray(item.children) && item.children.length > 0;
                 const icon = item.icon && iconMap[item.icon] ? iconMap[item.icon] : iconMap['notFound'];
 
@@ -70,7 +69,7 @@ export const SideMenu = ({items, open}: SideMenuProps) => {
                             </AccordionSummary>
                             <AccordionDetails sx={{padding: 0}}>
                                 <List disablePadding>
-                                    <SideMenu items={item.children!} open={open}/>
+                                    <SideMenu menus={item.children!} idMenu={idMenu} open={open}/>
                                 </List>
                             </AccordionDetails>
                         </Accordion><Divider/>
@@ -84,7 +83,7 @@ export const SideMenu = ({items, open}: SideMenuProps) => {
                             {
                                 open ? (
                                     <ListItemButton
-                                        selected={menuStore.id === item.id}
+                                        selected={idMenu === item.id}
                                         onClick={() => handleListItemClick(item)}
                                     >
                                         {icon && <ListItemIcon>{icon}</ListItemIcon>}

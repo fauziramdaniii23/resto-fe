@@ -11,8 +11,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchInput from "@/pages/components/Search.tsx";
 import {formatRupiah} from "@/pages/util/formatter.ts";
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
-import type {MenusExtended} from "@/pages/admin/util/navigation.tsx";
-import {useRedirect} from "@/pages/util/useRedirect.tsx";
+import {DetailMenus} from "@/pages/admin/dashboard/customers/menusDashboard/DetailMenus.tsx";
 
 const columns: Column<TMenus>[] = [
     {
@@ -58,26 +57,38 @@ const columns: Column<TMenus>[] = [
     }
 ]
 
+
 export const Menus = () => {
-    const redirect = useRedirect()
+    const [mode, setMode] = useState<string>('MAIN');
+    const [dataMenus, setDataMenus] = useState<TMenus>({} as TMenus);
+    const changeMode = (newMode: string, data: TMenus) => {
+        setDataMenus(data);
+        setMode(newMode);
+    }
+    const handleBack = () => {
+        setMode('MAIN');
+    }
+    return (
+        <Box>
+            {
+                mode === 'MAIN' ? <Main changeMode={changeMode}/> : <DetailMenus mode={mode} data={dataMenus} handleBack={handleBack}/>
+            }
+        </Box>
+    )
+}
+
+type MenusProps = {
+    changeMode: (mode: string, data : TMenus) => void;
+}
+
+const Main = (props : MenusProps) => {
     const tableRef = useRef<DataTableRef>(null);
     const [dataMenus, setDataMenus] = useState<TMetaData<TMenus>>({} as TMetaData<TMenus>);
     const [loading, setLoading] = useState<boolean>(false);
     const [keyword, setKeyword] = useState<string>('');
 
     const onActionClick = (mode: string, data: TMenus) => {
-        if (data && mode) {
-            const detailMenu = {
-                mode: mode,
-                data: data,
-            }
-            const menu : MenusExtended = {
-                id: '2.3.1',
-                label: data.name,
-                route: '/Dashboard/Menus/DetailMenu',
-            }
-            redirect(menu, detailMenu)
-        }
+        props.changeMode(mode, data);
     }
 
     const paramsTables = {

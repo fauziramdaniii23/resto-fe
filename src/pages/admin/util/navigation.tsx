@@ -1,3 +1,5 @@
+import {DashboardMenus} from "@/pages/admin/util/dashboardMenus.tsx";
+
 export const DASHBOARD_HOME = '1.1';
 export const DASHBOARD_RESERVATION = '2.1';
 export const DASHBOARD_ORDERS = '2.2';
@@ -45,4 +47,15 @@ export function getBreadcrumbPath(
     }
     return undefined;
 }
+
+function flattenMenus(menus: MenusExtended[]): MenusExtended[] {
+    return menus.flatMap(menu => {
+        if (menu.children && menu.children.length > 0) {
+            return [{ ...menu, children: undefined }, ...flattenMenus(menu.children)];
+        }
+        return menu;
+    });
+}
+
+export const DashboardMenusNavigation: MenusExtended[] = flattenMenus(DashboardMenus)
 

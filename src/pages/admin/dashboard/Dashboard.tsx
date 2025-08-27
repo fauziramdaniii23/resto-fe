@@ -18,7 +18,6 @@ import Container from "@mui/material/Container";
 import {DashboardAppBarr} from "@/pages/admin/dashboard/components/AppBarr.tsx";
 import {MainContent} from "@/pages/admin/dashboard/components/MainContent.tsx";
 import {IconButtonSideBar} from "@/pages/components/button/styleIconButton.tsx";
-import {useMenuStore} from "@/store/useMenuStore.ts";
 import {DashboardMenus} from "@/pages/admin/util/dashboardMenus.tsx";
 import {BreadcrumbsMenus} from "@/pages/admin/util/breadcrumbsMenus.tsx";
 
@@ -80,8 +79,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 );
 
 
-export default function Dashboard () {
-    const menu = useMenuStore((state) => state);
+export default function Dashboard ({idMenu}: {idMenu: string}) {
     const [open, setOpen] = React.useState(true);
     const theme = useTheme();
 
@@ -141,9 +139,9 @@ export default function Dashboard () {
                     <Divider/>
                     <List>
                         <SideMenu
-                            items={DashboardMenus}
+                            menus={DashboardMenus}
+                            idMenu={idMenu}
                             open={open}
-
                         />
                     </List>
                     <Divider sx={{marginTop: '1rem'}}/>
@@ -169,13 +167,13 @@ export default function Dashboard () {
                     }}
                 >
                     <DashboardAppBarr
-                        items={getMenuById(BreadcrumbsMenus, menu.id ? menu.id : '')}
+                        items={getMenuById(BreadcrumbsMenus, idMenu)}
                     />
                     <Container
                         maxWidth={false}
                         sx={{p:2, ml: 0, mr: 0}}
                     >
-                        <MainContent/>
+                        <MainContent idMenu={idMenu}/>
                     </Container>
                 </Box>
             </Box>

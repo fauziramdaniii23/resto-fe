@@ -4,8 +4,8 @@ import PageNotFound from "@/pages/PageNotFound.tsx";
 import {Tables} from "@/pages/admin/dashboard/customers/TablesDashboard/Tables.tsx";
 import {Menus} from "@/pages/admin/dashboard/customers/menusDashboard/Menus.tsx";
 import {Orders} from "@/pages/admin/dashboard/customers/ordersDashboard/Orders.tsx";
-import {useMenuStore} from "@/store/useMenuStore.ts";
 import {DetailMenus} from "@/pages/admin/dashboard/customers/menusDashboard/DetailMenus.tsx";
+import {DashboardMenusNavigation} from "@/pages/admin/util/navigation.tsx";
 
 const MapMainComponent: Record<string, React.ComponentType>= {
     '1.1': MainDashboard,
@@ -16,9 +16,10 @@ const MapMainComponent: Record<string, React.ComponentType>= {
     '2.4': Tables
 }
 
-export const MainContent = () => {
-    const menu = useMenuStore((state) => state);
-    const Component = MapMainComponent[menu.id || ''];
+export const MainContent = ({idMenu} : {idMenu?: string}) => {
+    // const menu = useMenuStore((state) => state);
+    const menu = DashboardMenusNavigation.find((menu) => menu.id === idMenu);
+    const Component = MapMainComponent[menu?.id || ''];
 
     if (!Component) {
         return (

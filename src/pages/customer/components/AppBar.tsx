@@ -22,6 +22,8 @@ import Typography from "@mui/material/Typography";
 import {Profile} from "@/pages/components/Profile.tsx";
 import {SUPER_ADMIN} from "@/constant";
 import {CONTACT_US, HISTORY, HOME, ORDERS} from "@/pages/customer/type/CustomerNavigation.tsx";
+import {useRedirect} from "@/pages/util/useRedirect.tsx";
+import type {MenusExtended} from "@/pages/admin/util/navigation.tsx";
 
 export const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
@@ -44,6 +46,7 @@ type Props = {
 }
 
 export default function AppAppBar({ menu }: Props) {
+    const redirect = useRedirect();
     const [open, setOpen] = useState(false);
 
     const auth = useAuthStore((state) => state);
@@ -82,6 +85,12 @@ export default function AppAppBar({ menu }: Props) {
             default:
                 navigate('/PageNotFound');
         }
+    }
+
+    const navigateToDashboard = () => {
+        console.log('navigateToDashboard');
+        const dashboardMenu : MenusExtended = {id: '1.1', label: 'Company', icon: 'home', route: '/Dashboard'}
+        redirect(dashboardMenu);
     }
 
     return (
@@ -126,7 +135,7 @@ export default function AppAppBar({ menu }: Props) {
                             ))}
                         </Box>
                     </Box>
-                    <Profile/>
+                    <Profile navigateToDashboard={navigateToDashboard} />
 
                     <Box sx={{display: {xs: 'flex', md: 'none'}, gap: 1}}>
                         {
@@ -146,8 +155,7 @@ export default function AppAppBar({ menu }: Props) {
                                 sx: {
                                     top: 'var(--template-frame-height, 0px)',
                                 },
-                            }}
-                        >
+                            }}>
                             <Box sx={{p: 2, backgroundColor: 'background.default'}}>
                                 <Box
                                     sx={{
@@ -160,7 +168,7 @@ export default function AppAppBar({ menu }: Props) {
                                     </IconButton>
                                 </Box>
                                 {auth.user?.role === SUPER_ADMIN && (
-                                    <MenuItem component={RouterLink} to="/Dashboard">Dashboard</MenuItem>
+                                    <MenuItem onClick={navigateToDashboard}>Dashboard</MenuItem>
                                 )}
                                 {
                                     appBarNavigations.map((label) => (
